@@ -60,3 +60,4 @@ module.exports = {
         "vue/attribute-hyphenation": "off",
     }
 }
+ 
