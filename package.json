@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "vue-tsc && vite build",
+    "commitlint": "commitlint --config commitlint.config.cjs -e -V",
     "dev": "vite",
     "fix": "eslint src --fix",
     "format": "prettier --write \"./**/*.{html,vue,ts,js,json,md}\"",
@@ -25,6 +26,8 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.9",
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
     "@typescript-eslint/parser": "^6.1.0",
     "@vitejs/plugin-vue": "^4.2.3",
