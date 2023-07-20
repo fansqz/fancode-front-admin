@@ -1,16 +1,20 @@
 {
   "name": "authset_ui",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview",
+    "dev": "vite",
+    "fix": "eslint src --fix",
+    "format": "prettier --write \"./**/*.{html,vue,ts,js,json,md}\"",
     "lint": "eslint src",
-    "fix": "eslint src --fix"
+    "lint:eslint": "eslint src/**/*.{ts,vue} --cache --fix",
+    "lint:style": "stylelint src/**/*.{css,scss,vue} --cache --fix",
+    "preview": "vite preview"
   },
   "dependencies": {
+    "prettier-plugin-packagejson": "^2.4.5",
     "stylelint": "^15.10.2",
     "stylelint-config-recess-order": "^4.3.0",
     "stylelint-config-standard": "^34.0.0",
