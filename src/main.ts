@@ -1,10 +1,11 @@
-import { createApp } from 'vue';
-import './style.css';
-import App from './App.vue';
+import { createApp } from 'vue'
+import './style.css'
+import App from './App.vue'
+// 引入element-plus插件
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
-createApp(App).mount('#app');
+const app = createApp(App)
 
-const fun = () => {
-  console.log('sdfsdf');
-};
-fun();
+app.use(ElementPlus)
+app.mount('#app')

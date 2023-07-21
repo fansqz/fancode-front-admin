@@ -17,6 +17,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "element-plus": "^2.3.8",
     "prettier-plugin-packagejson": "^2.4.5",
     "stylelint": "^15.10.2",
     "stylelint-config-recess-order": "^4.3.0",
