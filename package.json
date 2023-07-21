@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "vue-tsc && vite build",
+    "build:pro": "vue-tsc && vite build --mode production",
+    "build:test": "vue-tsc && vite build --mode test",
     "commitlint": "commitlint --config commitlint.config.cjs -e -V",
     "dev": "vite",
     "fix": "eslint src --fix",
@@ -14,9 +16,7 @@
     "lint:eslint": "eslint src/**/*.{ts,vue} --cache --fix",
     "lint:style": "stylelint src/**/*.{css,scss,vue} --cache --fix",
     "prepare": "husky install",
-    "preview": "vite preview",
-    "build:test": "vue-tsc && vite build --mode test",
-    "build:pro": "vue-tsc && vite build --mode production"
+    "preview": "vite preview"
   },
   "dependencies": {
     "element-plus": "^2.3.8",
@@ -45,6 +45,7 @@
     "prettier": "^3.0.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.4",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vue-tsc": "^1.8.3"
   }
 }
