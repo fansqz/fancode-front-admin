@@ -3,7 +3,6 @@
 </script>
 
 <template>
-
   <div>
     <h1> hhhh </h1>
     <a href="https://vitejs.dev" target="_blank">
@@ -17,9 +16,9 @@
 </template>
 
 <style scoped lang="scss">
-div {
-  h1{
-    color: red;
+  div {
+    h1 {
+      color: red;
+    }
   }
-}
 </style>
