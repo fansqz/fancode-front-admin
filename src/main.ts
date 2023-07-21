@@ -8,9 +8,12 @@ import 'element-plus/dist/index.css';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
-//svg配置
+// svg配置
 import 'virtual:svg-icons-register';
+// 全局组件
 import gloalComponent from '@/components';
+
+import '@/styles/index.scss'
 
 const app = createApp(App);
 

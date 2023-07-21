@@ -18,7 +18,7 @@
 <style scoped lang="scss">
   div {
     h1 {
-      color: red;
+      color: $color;
     }
   }
 </style>
