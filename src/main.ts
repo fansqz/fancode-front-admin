@@ -10,7 +10,7 @@ import 'element-plus/dist/index.css';
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
 //svg配置
 import 'virtual:svg-icons-register';
-import SvgIcon from '@/components/Svgicon/index.vue'
+import gloalComponent from '@/components';
 
 const app = createApp(App);
 
@@ -18,6 +18,6 @@ app.use(ElementPlus, {
   locale: zhCn, //element-plus国际化
 });
 
-app.component('SvgIcon', SvgIcon)
+app.use(gloalComponent);
 
 app.mount('#app');
