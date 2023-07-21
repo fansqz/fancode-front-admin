@@ -3,7 +3,9 @@
 </script>
 
 <template>
+
   <div>
+    <h1> hhhh </h1>
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
@@ -14,22 +16,10 @@
   <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
+<style scoped lang="scss">
+div {
+  h1{
+    color: red;
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.vue:hover {
-    filter: drop-shadow(0 0 2em #42b883aa);
-  }
-  .box {
-    width: 600px;
-    height: 400px;
-    background: black;
-  }
+}
 </style>
