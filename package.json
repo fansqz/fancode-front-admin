@@ -9,12 +9,12 @@
     "dev": "vite",
     "fix": "eslint src --fix",
     "format": "prettier --write \"./**/*.{html,vue,ts,js,json,md}\"",
+    "preinstall": "node ./scripts/preinstall.js",
     "lint": "eslint src",
     "lint:eslint": "eslint src/**/*.{ts,vue} --cache --fix",
     "lint:style": "stylelint src/**/*.{css,scss,vue} --cache --fix",
     "prepare": "husky install",
-    "preview": "vite preview",
-    "preinstall": "node ./scripts/preinstall.js"
+    "preview": "vite preview"
   },
   "dependencies": {
     "prettier-plugin-packagejson": "^2.4.5",
