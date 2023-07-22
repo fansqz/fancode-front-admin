@@ -13,6 +13,9 @@ import 'virtual:svg-icons-register';
 import gloalComponent from '@/components';
 // 路由
 import router from '@/router';
+// 仓库
+import pinia from '@/store'
+
 import '@/styles/index.scss';
 
 const app = createApp(App);
@@ -23,4 +26,5 @@ app.use(ElementPlus, {
 });
 app.use(gloalComponent);
 app.use(router);
+app.use(pinia);
 app.mount('#app');

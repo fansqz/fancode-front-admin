@@ -8,7 +8,7 @@ export interface loginForm {
 export interface loginResponseData {
   code: number;
   message: string;
-  data: string;
+  data: any;
 }
 
 // 获取用户信息返回相关数据类型

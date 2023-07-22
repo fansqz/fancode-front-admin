@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import type { loginForm } from './type';
+import type { loginForm,loginResponseData } from './type';
 
 enum API {
   LOGIN_URL = '/user/login',
@@ -7,7 +7,7 @@ enum API {
 }
 
 // 暴露请求函数
-export const reqLogin = (data: loginForm) => {
+export const reqLogin = (data: loginForm): Promise<loginResponseData> => {
   const formdata = new FormData();
   formdata.append('number', data.number);
   formdata.append('password', data.password);
