@@ -1,4 +1,4 @@
-export const getDayPeriod = ():string => {
+export const getDayPeriod = (): string => {
   let message = '';
   const hours = new Date().getHours();
   if (hours <= 9) {
@@ -11,4 +11,4 @@ export const getDayPeriod = ():string => {
     message = '晚上';
   }
   return message;
-}
+};

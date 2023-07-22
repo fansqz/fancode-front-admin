@@ -14,7 +14,7 @@ import gloalComponent from '@/components';
 // 路由
 import router from '@/router';
 // 仓库
-import pinia from '@/store'
+import pinia from '@/store';
 
 import '@/styles/index.scss';
 
