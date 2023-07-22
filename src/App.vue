@@ -1,5 +1,10 @@
 <script setup lang="ts">
   import HelloWorld from './components/HelloWorld.vue';
+  import { reqLogin } from './api/user';
+  reqLogin({
+    number: 'niliu2',
+    password: "123456",
+  })
 </script>
 
 <template>
