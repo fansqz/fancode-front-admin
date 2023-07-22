@@ -1,29 +1,5 @@
-<script setup lang="ts">
-  import HelloWorld from './components/HelloWorld.vue';
-  import { reqLogin } from './api/user';
-  reqLogin({
-    number: 'niliu2',
-    password: '123456',
-  });
-</script>
-
 <template>
-  <div>
-    <h1> hhhh </h1>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <router-view></router-view>
 </template>
 
-<style scoped lang="scss">
-  div {
-    h1 {
-      color: $color;
-    }
-  }
-</style>
+<style scoped lang="scss"></style>

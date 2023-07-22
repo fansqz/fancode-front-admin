@@ -19,6 +19,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/vue-router": "^2.0.0",
     "axios": "^1.4.0",
     "element-plus": "^2.3.8",
     "prettier-plugin-packagejson": "^2.4.5",
@@ -28,7 +29,8 @@
     "stylelint-config-standard": "^34.0.0",
     "stylelint-order": "^6.0.3",
     "stylelint-scss": "^5.0.1",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.9",
