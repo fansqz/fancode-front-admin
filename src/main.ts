@@ -18,7 +18,8 @@ import '@/styles/index.scss';
 const app = createApp(App);
 
 app.use(ElementPlus, {
-  locale: zhCn, //element-plus国际化
+  //element-plus国际化
+  locale: zhCn, 
 });
 
 app.use(gloalComponent);

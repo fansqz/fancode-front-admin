@@ -5,10 +5,10 @@ import path from 'path';
 // 引入svg需要用的插件
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    // svg插件
     createSvgIconsPlugin({
       iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
       symbolId: 'icon-[dir]-[name]',
