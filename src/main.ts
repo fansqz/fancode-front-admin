@@ -13,7 +13,7 @@ import 'virtual:svg-icons-register';
 // 全局组件
 import gloalComponent from '@/components';
 
-import '@/styles/index.scss'
+import '@/styles/index.scss';
 
 const app = createApp(App);
 
