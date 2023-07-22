@@ -19,7 +19,7 @@ const app = createApp(App);
 
 app.use(ElementPlus, {
   //element-plus国际化
-  locale: zhCn, 
+  locale: zhCn,
 });
 
 app.use(gloalComponent);
