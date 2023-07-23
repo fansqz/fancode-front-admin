@@ -21,7 +21,7 @@ export const constantRoute = [
         meta: {
           title: '首页',
           hidden: false,
-          icon: 'HomeFilled'
+          icon: 'HomeFilled',
         },
       },
       {
@@ -31,7 +31,7 @@ export const constantRoute = [
         meta: {
           title: '题目管理',
           hidden: false,
-          icon: 'Tickets'
+          icon: 'Tickets',
         },
       },
       {
@@ -41,9 +41,9 @@ export const constantRoute = [
         meta: {
           title: '题库管理',
           hidden: false,
-          icon: 'Notebook'
+          icon: 'Notebook',
         },
-      }
+      },
     ],
   },
   {
@@ -52,7 +52,7 @@ export const constantRoute = [
     name: '404',
     meta: {
       title: '404',
-      hidden: true
+      hidden: true,
     },
   },
   {
@@ -61,7 +61,7 @@ export const constantRoute = [
     name: 'Any',
     meta: {
       title: '任意路由',
-      hidden: true
+      hidden: true,
     },
   },
 ];

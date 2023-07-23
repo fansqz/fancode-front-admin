@@ -55,7 +55,7 @@
       menu = element.children;
     }
   });
- 
+
   let $router = useRouter();
   //点击菜单回调
   const goRoute = (vc: any) => {

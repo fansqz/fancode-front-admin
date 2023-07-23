@@ -1,12 +1,7 @@
 <template>
-  <div>
-    题目管理
-  </div>
+  <div> 题目管理 </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
-
-<style>
-</style>
+<style></style>
