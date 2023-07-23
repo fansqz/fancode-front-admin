@@ -16,7 +16,9 @@
     </div>
 
     <!--展示栏-->
-    <div class="layout_main"> </div>
+    <div class="layout_main">
+      <RouterView></RouterView>
+    </div>
   </div>
 </template>
 

@@ -4,19 +4,16 @@ export const constantRoute = [
     path: '/login',
     component: () => import('@/views/login/index.vue'),
     name: 'login',
-    meta: {
-      title: '登录', //菜单标题
-      hidden: true, //代表在菜单中要隐藏
-    },
   },
+  // 首页
   {
     path: '/',
     component: () => import('@/layout/index.vue'),
     name: 'layout',
     meta: {
-      title: 'layout',
       hidden: false,
     },
+    redirect: '/home',
     children: [
       {
         path: '/home',
@@ -24,16 +21,29 @@ export const constantRoute = [
         meta: {
           title: '首页',
           hidden: false,
+          icon: 'HomeFilled'
         },
       },
       {
-        path: '/ceshi',
-        component: () => import('@/views/home/index.vue'),
+        path: '/problem',
+        name: 'problem',
+        component: () => import('@/views/problem/problem/index.vue'),
         meta: {
-          title: '测试',
+          title: '题目管理',
           hidden: false,
+          icon: 'Tickets'
         },
       },
+      {
+        path: '/bank',
+        name: 'bank',
+        component: () => import('@/views/problem/bank/index.vue'),
+        meta: {
+          title: '题库管理',
+          hidden: false,
+          icon: 'Notebook'
+        },
+      }
     ],
   },
   {
@@ -42,7 +52,7 @@ export const constantRoute = [
     name: '404',
     meta: {
       title: '404',
-      hidden: true,
+      hidden: true
     },
   },
   {
@@ -51,7 +61,7 @@ export const constantRoute = [
     name: 'Any',
     meta: {
       title: '任意路由',
-      hidden: true,
+      hidden: true
     },
   },
 ];
