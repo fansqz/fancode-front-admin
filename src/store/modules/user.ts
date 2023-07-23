@@ -2,11 +2,14 @@ import { defineStore } from 'pinia';
 import { reqLogin } from '@/api/user';
 import type { loginForm } from '@/api/user/type';
 import type { UserState } from './types/type';
+// 引入路由
+import { constantRoute } from '@/router/routers';
 
 const useUserStore = defineStore('User', {
   state: (): UserState => {
     return {
       token: localStorage.getItem('TOKEN'),
+      menuRoutes: constantRoute,
     };
   },
   actions: {

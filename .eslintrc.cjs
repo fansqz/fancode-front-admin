@@ -52,12 +52,12 @@ module.exports = {
         "@typescript-eslint/no-explicit-any": "off", //禁止使用any
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-namespace": "off", //禁止使用自定义ts模块
-        "@typescript-eslint/semi": "off",
+        "@typescript-eslint/semi": "error",
 
         "vue/multi-word-component-names": "off", //要求组件以“-”链接单词
         "vue/script-setup-uses-vars": "error",
         "vue/no-mutation-props": "off",
         "vue/attribute-hyphenation": "off",
+
     }
-}
- 
+};
