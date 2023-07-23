@@ -8,14 +8,12 @@
 
 <style scoped lang="scss">
   .logo {
-    position: relative;
-    width: 170px;
-    height: 100%;
     img {
       position: relative;
       width: 70%;
       height: 70%;
       top: 15%;
+      left: 8%;
     }
   }
 </style>

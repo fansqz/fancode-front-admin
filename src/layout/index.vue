@@ -4,7 +4,7 @@
     <div class="layout_slider">
       <div class=""></div>
       <el-scrollbar class="scrollbar">
-        <el-menu>
+        <el-menu :default-active="$route.path">
           <Menu :menuList="userStore.menuRoutes"></Menu>
         </el-menu>
       </el-scrollbar>
@@ -12,22 +12,26 @@
 
     <!--顶部tabbar-->
     <div class="layout_tabbar">
-      <Logo></Logo>
+      <Tabbar></Tabbar>
     </div>
 
     <!--展示栏-->
     <div class="layout_main">
-      <RouterView></RouterView>
+      <Main></Main>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import Logo from './logo/index.vue';
+  import { useRoute } from 'vue-router';
   import Menu from './menu/index.vue';
   // 获取用户仓库
   import useUserStore from '@/store/modules/user';
+  import Main from './main/index.vue';
+  import Tabbar from './tabbar/index.vue';
+
   let userStore = useUserStore();
+  let $route = useRoute();
 </script>
 
 <style scoped lang="scss">
