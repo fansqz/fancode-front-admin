@@ -4,9 +4,7 @@
     <div class="layout_slider">
       <div class=""></div>
       <el-scrollbar class="scrollbar">
-        <el-menu :default-active="$route.path">
-          <Menu :menuList="userStore.menuRoutes"></Menu>
-        </el-menu>
+        <Menu :menuList="userStore.menuRoutes"></Menu>
       </el-scrollbar>
     </div>
 
@@ -23,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-  import { useRoute } from 'vue-router';
   import Menu from './menu/index.vue';
   // 获取用户仓库
   import useUserStore from '@/store/modules/user';
@@ -31,7 +28,6 @@
   import Tabbar from './tabbar/index.vue';
 
   let userStore = useUserStore();
-  let $route = useRoute();
 </script>
 
 <style scoped lang="scss">
@@ -52,9 +48,6 @@
         width: $base-menu-width - 1px;
         height: calc(100% - $base-tabbar-height);
         bottom: 0%;
-        .el-menu {
-          border-right: none;
-        }
       }
     }
     .layout_tabbar {
@@ -71,7 +64,6 @@
       position: fixed;
       width: calc(100vw - $base-menu-width);
       height: calc(100vh - $base-tabbar-height);
-      background-color: aliceblue;
       top: $base-tabbar-height;
       left: $base-menu-width;
       padding: 20px;

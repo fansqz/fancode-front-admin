@@ -1,5 +1,5 @@
 <template>
-  <router-view v-slot="{ Component }">
+  <router-view v-slot="{ Component }" class="main">
     <!--过渡动画-->
     <transition name="fade">
       <component :is="Component" />

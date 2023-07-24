@@ -1,67 +1,58 @@
 <template>
-  <div>
-    <template v-for="item in menu" :key="item.path">
-      <!--没有子路由-->
-      <template v-if="!item.children">
-        <el-menu-item v-if="!item.meta.hidden" :index="item.path" @click="goRoute">
+  <el-menu :default-active="defaultActive">
+    <div>
+      <template v-for="item in constantMenu" :key="item.index">
+        <!--没有子路由-->
+        <el-menu-item :index="item.index" @click="goRoute(item.path)">
           <template #title>
             <el-icon>
-              <component :is="item.meta.icon"></component>
+              <component :is="item.icon"></component>
             </el-icon>
-            <span>{{ item.meta.title }}</span>
+            <span>{{ item.title }}</span>
           </template>
         </el-menu-item>
       </template>
-      <!--有子路由，但是只有一个-->
-      <template v-if="item.children && item.children.length == 1">
-        <el-menu-item
-          v-if="!item.meta.hidden && !item.children[0].meta.hidden"
-          :index="item.children[0].path"
-          @click="goRoute"
-        >
-          <template #title>
-            <el-icon>
-              <component :is="item.children[0].meta.icon"></component>
-            </el-icon>
-            <span>{{ item.children[0].meta.title }}</span>
-          </template>
-        </el-menu-item>
-      </template>
-      <!--有子路由，且个数大于1-->
-      <template v-if="item.children && item.children.length > 1">
-        <el-sub-menu v-if="!item.meta.hidden" :index="item.path">
-          <template #title>
-            <el-icon>
-              <component :is="item.meta.icon"></component>
-            </el-icon>
-            <span>{{ item.meta.title }}</span>
-          </template>
-          <FanMenu :menuList="item.children"></FanMenu>
-        </el-sub-menu>
-      </template>
-    </template>
-  </div>
+    </div>
+  </el-menu>
 </template>
 
 <script setup lang="ts">
-  import { useRouter } from 'vue-router';
-  import { reactive } from 'vue';
-  import { RouteRecordRaw } from 'vue-router';
-  //获取父组件传递过来的路由
-  const props = defineProps(['menuList']);
-  let menu: any[] = reactive([]);
-  props.menuList.forEach((element: RouteRecordRaw) => {
-    if (element.name == 'layout' && element.children) {
-      menu = element.children;
-    }
-  });
+  import { constantMenu } from '@/router/menu';
+  import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router';
+  import { ref } from 'vue';
 
   let $router = useRouter();
+  let $route = useRoute();
   //点击菜单回调
-  const goRoute = (vc: any) => {
-    console.log(vc.index);
-    $router.push(vc.index);
+  const goRoute = (path: string) => {
+    $router.push(path);
   };
+
+  // 根据不同的路由，让不同的menu-item高亮
+  const getActive = (path: string) => {
+    let activeItem = 'home';
+    for (const index in constantMenu) {
+      const menuItem = constantMenu[index];
+      if (menuItem.path === path) {
+        activeItem = menuItem.index;
+        break;
+      }
+      for (const subIndex in menuItem.morePaths) {
+        const subPath = menuItem.morePaths[subIndex];
+        if (subPath === path) {
+          activeItem = menuItem.index;
+          break;
+        }
+      }
+    }
+    return activeItem;
+  };
+  // 默认高亮menu-item
+  let defaultActive = ref<string>(getActive($route.path));
+  onBeforeRouteUpdate((to) => {
+    console.log(to.path);
+    defaultActive.value = getActive(to.path);
+  });
 </script>
 
 <script lang="ts">
@@ -70,4 +61,8 @@
   };
 </script>
 
-<style scoped></style>
+<style scoped>
+  .el-menu {
+    border-right: none;
+  }
+</style>
