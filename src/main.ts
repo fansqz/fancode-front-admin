@@ -15,7 +15,9 @@ import gloalComponent from '@/components';
 import router from '@/router';
 // 仓库
 import pinia from '@/store';
-
+// 引入路由鉴权文件
+import './premisstion';
+// 全局样式
 import '@/styles/index.scss';
 
 const app = createApp(App);
