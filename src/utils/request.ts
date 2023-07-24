@@ -1,6 +1,7 @@
 // 进行axios二次封装
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
+import useUserStore from '@/store/modules/user';
 
 const request = axios.create({
   baseURL: import.meta.env.VITE_SERVE + import.meta.env.BASE_URL,
@@ -10,6 +11,8 @@ const request = axios.create({
 
 // 添加请求和响应拦截器
 request.interceptors.request.use((config) => {
+  const userStore = useUserStore();
+  config.headers.token = userStore.token;
   // 返回配置对象
   return config;
 });

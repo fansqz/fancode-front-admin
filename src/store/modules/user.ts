@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { reqLogin } from '@/api/user';
+import { reqLogin, reqUserInfo } from '@/api/user';
 import type { loginForm } from '@/api/user/type';
 import type { UserState } from './types/type';
 // 引入路由
@@ -10,6 +10,11 @@ const useUserStore = defineStore('User', {
     return {
       token: localStorage.getItem('TOKEN'),
       menuRoutes: constantRoute,
+      email: '',
+      phone: '',
+      sex: '',
+      username: '',
+      number: '',
     };
   },
   actions: {
@@ -23,6 +28,25 @@ const useUserStore = defineStore('User', {
       } else {
         return Promise.reject(new Error(result.message));
       }
+    },
+    async userInfo() {
+      const result = await reqUserInfo();
+      if (result.code == 200) {
+        this.username = result.data.username;
+        this.email = result.data.email;
+        this.sex = result.data.email;
+        this.phone = result.data.phone;
+        this.number = result.data.number;
+      }
+    },
+    userLogout() {
+      this.token = '';
+      this.username = '';
+      this.email = '';
+      this.sex = '';
+      this.phone = '';
+      this.number = '';
+      localStorage.removeItem('TOKEN');
     },
   },
   getters: {},
