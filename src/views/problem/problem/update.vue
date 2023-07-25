@@ -4,81 +4,122 @@
       <template #header>
         <div class="card-header">
           <span>修改题目</span>
-          <el-button class="button" type="danger" icon="Close" plain circle></el-button>
+          <el-button
+            class="button"
+            type="danger"
+            icon="Close"
+            plain
+            circle
+            @click="closePage"
+          ></el-button>
         </div>
       </template>
-      <div>
-        <el-form :model="form" label-width="120px">
+      <div class="card-body">
+        <el-form :model="problem" label-width="120px">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="名称">
-                <el-input v-model="form.name" />
+              <el-form-item label="名称" label-width="auto" style="margin-right: 10px">
+                <el-input v-model="problem.name" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="编号">
-                <el-input v-model="form.number" />
+              <el-form-item label="编号" label-width="auto " style="margin-left: 10px">
+                <el-input v-model="problem.code" />
               </el-form-item>
             </el-col>
           </el-row>
-          <el-form-item label="标题">
-            <el-input v-model="form.title" />
+          <el-form-item label="标题" label-width="auto">
+            <el-input v-model="problem.title" />
           </el-form-item>
-          <el-form-item label="描述">
-            <el-input v-model="form.desc" type="textarea" />
-          </el-form-item>
-
-          <el-form-item label="文件">
-            <el-checkbox-group v-model="form.type">
-              <el-checkbox label="Online activities" name="type" />
-              <el-checkbox label="Promotion activities" name="type" />
-              <el-checkbox label="Offline activities" name="type" />
-              <el-checkbox label="Simple brand exposure" name="type" />
-            </el-checkbox-group>
-          </el-form-item>
-          <el-form-item label="Resources">
-            <el-radio-group v-model="form.resource">
-              <el-radio label="Sponsor" />
-              <el-radio label="Venue" />
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="Activity form">
-            <el-input v-model="form.desc" type="textarea" />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">Create</el-button>
-            <el-button>Cancel</el-button>
+          <el-form-item label="描述" label-width="auto">
+            <el-input v-model="problem.description" type="textarea" :rows="15" />
           </el-form-item>
         </el-form>
+      </div>
+      <div class="problem-submit">
+        <el-button type="primary" @click="changeProblemSubmit">提交</el-button>
       </div>
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { reactive } from 'vue';
+  import { reactive, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
-
+  import { ElMessage } from 'element-plus';
+  import { getProblem, updateProblem } from '@/api/problem';
+  import { ProblemForGet } from '@/api/problem/type';
   let $router = useRouter();
   const { id } = $router.currentRoute.value.params;
 
-    // do not use same name with ref
-    const form = reactive({
-      name: '',
-      number: '',
-      title:'',
-      region: '',
-      date1: '',
-      date2: '',`1`
-      delivery: false,
-      type: [],
-      resource: '',
-      desc: '',
-    });
+  // do not use same name with ref
+  let problem = reactive<ProblemForGet>({
+    id: Number(id as string),
+    name: '',
+    code: '',
+    title: '',
+    description: '',
+  });
 
-    const onSubmit = () => {
-      console.log('submit!');
-    };
+  // 获取题目
+  const readProblem = async (id: string) => {
+    try {
+      let result = await getProblem(id);
+      if (result.code == 200) {
+        problem.id = result.data.id;
+        problem.code = result.data.code;
+        problem.description = result.data.description;
+        problem.name = result.data.name;
+        problem.title = result.data.title;
+      }
+    } catch (err) {
+      ElMessage({
+        showClose: true,
+        message: '题目读取失败',
+        type: 'error',
+      });
+    }
+  };
+  onMounted(() => {
+    readProblem(id as string);
+  });
+
+  // 提交题目修改
+  const changeProblemSubmit = async () => {
+    try {
+      let result = await updateProblem({
+        id: problem.id,
+        name: problem.name,
+        code: problem.code,
+        description: problem.description,
+        title: problem.title,
+      });
+      if (result.code == 200) {
+        ElMessage({
+          showClose: true,
+          message: '提交成功',
+          type: 'success',
+        });
+      } else {
+        ElMessage({
+          showClose: true,
+          message: '提交失败',
+          type: 'error',
+        });
+      }
+    } catch {
+      ElMessage({
+        showClose: true,
+        message: '提交失败',
+        type: 'error',
+      });
+    }
+  };
+
+  // closePage 关闭修改页面
+  const closePage = () => {
+    $router.push('/problem');
+  };
 </script>
 
 <style scoped>
@@ -89,5 +130,14 @@
     .button {
       margin: 0px 10px;
     }
+  }
+  .card-body {
+    padding: 0px 30px;
+  }
+  .problem-submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: auto;
   }
 </style>

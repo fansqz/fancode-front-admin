@@ -8,7 +8,7 @@
         <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
         <el-table-column label="题目编号" align="center">
           <template v-slot="{ row }">
-            <pre>{{ row.number }}</pre>
+            <pre>{{ row.code }}</pre>
           </template>
         </el-table-column>
         <el-table-column label="题目名称" align="center">
@@ -22,8 +22,10 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
-          <template v-slot="{}">
-            <el-button type="primary" size="small" icon="Edit">修改</el-button>
+          <template v-slot="{ row }">
+            <el-button type="primary" size="small" icon="Edit" @click="changeProblem(row.id)"
+              >修改</el-button
+            >
             <el-button type="danger" size="small" icon="Delete">删除</el-button>
           </template>
         </el-table-column>
@@ -47,9 +49,10 @@
 
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
-  import { reqProblemList } from '@/api/problem';
-  import type { ProblemListResponseDate, ProblemForList } from '@/api/problem/type';
+  import { reqProblemList, createProblem } from '@/api/problem';
+  import type { ProblemListResponseData, ProblemForList } from '@/api/problem/type';
   import router from '@/router';
+  import { ElMessage } from 'element-plus';
 
   //当前页码
   let pageNo = ref<number>(1);
@@ -60,7 +63,7 @@
   let problemList = ref<ProblemForList[]>([]);
 
   const getProblemList = async () => {
-    let result: ProblemListResponseDate = await reqProblemList(pageNo.value, limit.value);
+    let result: ProblemListResponseData = await reqProblemList(pageNo.value, limit.value);
     if (result.code == 200) {
       total.value = result.data.total;
       problemList.value = result.data.list;
@@ -68,8 +71,22 @@
     console.log(result);
   };
 
-  const addProblem = () => {
-    router.push('/problem/add');
+  const addProblem = async () => {
+    // 创建题目
+    let result = await createProblem();
+    if (result.code == 200) {
+      router.push('/problem/update/' + result.data);
+    } else {
+      ElMessage({
+        showClose: true,
+        message: '题目创建失败',
+        type: 'error',
+      });
+    }
+  };
+
+  const changeProblem = (id: string) => {
+    router.push('/problem/update/' + id);
   };
 
   //组件挂载完毕以后获取数据

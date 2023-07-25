@@ -25,11 +25,7 @@ export const constantRoute = [
         component: () => import('@/views/problem/problem/index.vue'),
       },
       {
-        path: '/problem/add',
-        component: () => import('@/views/problem/problem/add.vue'),
-      },
-      {
-        path: '/problem/update',
+        path: '/problem/update/:id',
         component: () => import('@/views/problem/problem/update.vue'),
       },
       {

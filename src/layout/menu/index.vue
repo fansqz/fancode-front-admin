@@ -20,6 +20,7 @@
   import { constantMenu } from '@/router/menu';
   import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router';
   import { ref } from 'vue';
+  import { matchPattern } from '@/utils/url_match';
 
   let $router = useRouter();
   let $route = useRoute();
@@ -33,13 +34,13 @@
     let activeItem = 'home';
     for (const index in constantMenu) {
       const menuItem = constantMenu[index];
-      if (menuItem.path === path) {
+      if (matchPattern(menuItem.path, path)) {
         activeItem = menuItem.index;
         break;
       }
       for (const subIndex in menuItem.morePaths) {
         const subPath = menuItem.morePaths[subIndex];
-        if (subPath === path) {
+        if (matchPattern(subPath, path)) {
           activeItem = menuItem.index;
           break;
         }
@@ -49,6 +50,7 @@
   };
   // 默认高亮menu-item
   let defaultActive = ref<string>(getActive($route.path));
+  console.log($route.path);
   onBeforeRouteUpdate((to) => {
     console.log(to.path);
     defaultActive.value = getActive(to.path);

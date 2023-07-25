@@ -12,7 +12,7 @@ export const constantMenu = [
     title: '题目管理',
     icon: 'Tickets',
     path: '/problem',
-    morePaths: ['/problem/add', '/problem/update'],
+    morePaths: ['/problem/add', '/problem/update/:id'],
   },
   {
     index: 'bank',
