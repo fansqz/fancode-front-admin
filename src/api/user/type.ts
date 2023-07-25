@@ -1,6 +1,6 @@
 // 登录接口需要携带的ts类型
 export interface loginForm {
-  number: string;
+  code: string;
   password: string;
 }
 
@@ -18,7 +18,7 @@ interface user {
   phone: string;
   sex: number;
   role: string;
-  number: string;
+  code: string;
 }
 
 export interface userResponseData {

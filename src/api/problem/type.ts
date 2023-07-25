@@ -6,7 +6,7 @@ export interface ResponseData {
 export interface ProblemForList {
   id?: number;
   name: string;
-  number: string;
+  code: string;
   createdAt: string;
   title: string;
 }

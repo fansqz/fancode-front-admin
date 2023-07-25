@@ -9,7 +9,7 @@ enum API {
 // 暴露请求函数
 export const reqLogin = (data: loginForm): Promise<loginResponseData> => {
   const formdata = new FormData();
-  formdata.append('number', data.number);
+  formdata.append('code', data.code);
   formdata.append('password', data.password);
   return request({
     method: 'post',
