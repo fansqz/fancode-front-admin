@@ -33,6 +33,7 @@
       <!--分页器组件-->
       <el-pagination
         @current-change="changePageNo"
+        @size-change="changePageSize"
         v-model:current-page="pageNo"
         v-model:page-size="limit"
         :page-sizes="[10, 20, 30, 50]"
@@ -68,7 +69,6 @@
       total.value = result.data.total;
       problemList.value = result.data.list;
     }
-    console.log(result);
   };
 
   const addProblem = async () => {
@@ -97,6 +97,10 @@
   //页码改变时触发
   const changePageNo = () => {
     // 页面变化时，页面归一
+    getProblemList();
+  };
+
+  const changePageSize = () => {
     pageNo.value = 1;
     getProblemList();
   };
