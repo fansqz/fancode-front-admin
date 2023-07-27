@@ -17,6 +17,7 @@ export interface ProblemForGet {
   code: string;
   title: string;
   description: string;
+  path: string;
 }
 
 // 获取题目列表的类型
@@ -46,6 +47,7 @@ export interface ProblemUpdateRequestData {
   name: string;
   description: string;
   title: string;
+  file: File;
 }
 
 export interface ProblemUpdateResponseData extends ResponseData {

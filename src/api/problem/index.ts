@@ -12,6 +12,8 @@ enum API {
   GET_PROBLEM_URL = '/problem/get',
   // 更新题目
   UPDATE_PROBLEM_URL = '/problem/update',
+  // 下载题目编程文件
+  DOWNLOAD_PROBLEM_FILE_URL = '/problem/file/download',
 }
 
 // 获取题目列表
@@ -41,4 +43,9 @@ export const updateProblem = (
       'Content-Type': 'multipart/form-data',
     },
   });
+};
+
+// 下载题目的编程文件
+export const reqDownloadProblemFile = (id: number) => {
+  return request.get<any, any>(API.DOWNLOAD_PROBLEM_FILE_URL + '/' + id, { responseType: 'blob' });
 };
