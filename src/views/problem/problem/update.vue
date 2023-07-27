@@ -34,6 +34,21 @@
           <el-form-item label="描述" label-width="auto">
             <el-input v-model="problem.description" type="textarea" :rows="15" />
           </el-form-item>
+          <el-form-item label="难度" label-width="auto">
+            <el-radio-group v-model="problem.difficulty">
+              <el-radio border :label="1">简单</el-radio>
+              <el-radio border :label="2">偏易</el-radio>
+              <el-radio border :label="3">中等</el-radio>
+              <el-radio border :label="4">偏难</el-radio>
+              <el-radio border :label="5">困难</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="是否启用" label-width="auto">
+            <el-switch
+              v-model="problem.enable"
+              style="--el-switch-on-color: #13ce66; --el-switch-off-color: #646765"
+            />
+          </el-form-item>
         </el-form>
         <div class="file">
           <el-upload
@@ -55,9 +70,7 @@
             >点击下载</el-link
           >
           <el-text type="info"> 或者你希望下载模板文件 </el-text>
-          <el-link type="primary" @click="downloadProblemTemplateFile"
-            >点击下载</el-link
-          >
+          <el-link type="primary" @click="downloadProblemTemplateFile">点击下载</el-link>
         </div>
       </div>
       <div class="problem-submit">
@@ -78,20 +91,19 @@
     reqDownloadProblemTemplateFile,
   } from '@/api/problem';
   import download from '@/utils/download';
-  import { ProblemForGet } from '@/api/problem/type';
   let $router = useRouter();
   const { id } = $router.currentRoute.value.params;
-
   // do not use same name with ref
-  let problem = reactive<ProblemForGet>({
+  let problem = reactive({
     id: Number(id as string),
     name: '',
     code: '',
+    difficulty: 1,
+    enable: false,
     title: '',
     description: '',
     path: '',
   });
-
   let problemFile: File;
   // 获取题目
   const readProblem = async (id: string) => {
@@ -100,10 +112,13 @@
       if (result.code == 200) {
         problem.id = result.data.id;
         problem.code = result.data.code;
+        problem.difficulty = result.data.difficulty;
+        problem.enable = result.data.enable;
         problem.description = result.data.description;
         problem.name = result.data.name;
         problem.path = result.data.path;
         problem.title = result.data.title;
+        console.log(problem);
       }
     } catch (err) {
       ElMessage({
@@ -130,6 +145,8 @@
         id: problem.id,
         name: problem.name,
         code: problem.code,
+        difficulty: problem.difficulty,
+        enable: problem.enable,
         description: problem.description,
         title: problem.title,
         file: problemFile,
@@ -140,6 +157,7 @@
           message: '提交成功',
           type: 'success',
         });
+        $router.push('/problem');
       } else {
         ElMessage({
           showClose: true,

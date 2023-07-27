@@ -9,6 +9,8 @@ export interface ProblemForList {
   code: string;
   createdAt: string;
   title: string;
+  difficulty: number;
+  enable: boolean;
 }
 
 export interface ProblemForGet {
@@ -17,6 +19,8 @@ export interface ProblemForGet {
   code: string;
   title: string;
   description: string;
+  difficulty: number;
+  enable: boolean;
   path: string;
 }
 
@@ -46,16 +50,13 @@ export interface ProblemUpdateRequestData {
   code: string;
   name: string;
   description: string;
+  difficulty: number;
+  enable: boolean;
   title: string;
   file: File;
 }
 
 // 更新题目返回类型
 export interface ProblemUpdateResponseData extends ResponseData {
-  data: string;
-}
-
-// 删除题目返回类型
-export interface ProblemDeleteResponseData extends ResponseData {
   data: string;
 }

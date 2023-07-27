@@ -16,6 +16,21 @@
             <pre>{{ row.name }}</pre>
           </template>
         </el-table-column>
+        <el-table-column label="难度" width="100px" align="center">
+          <template v-slot="{ row }">
+            <pre>{{ row.difficulty }}</pre>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否启用" width="150px" align="center">
+          <template v-slot="{ row }">
+            <el-switch
+              v-model="row.enable"
+              class="ml-2"
+              style="--el-switch-on-color: #13ce66; --el-switch-off-color: #646765"
+              @click="enableProblem(row.id, row.enable)"
+            />
+          </template>
+        </el-table-column>
         <el-table-column label="创建时间" align="center">
           <template v-slot="{ row }">
             <pre>{{ row.createdAt }}</pre>
@@ -26,7 +41,9 @@
             <el-button type="primary" size="small" icon="Edit" @click="changeProblem(row.id)"
               >修改</el-button
             >
-            <el-button type="danger" size="small" icon="Delete" @click="deleteProblem(row.id)">删除</el-button>
+            <el-button type="danger" size="small" icon="Delete" @click="deleteProblem(row.id)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -50,8 +67,12 @@
 
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
-  import { reqProblemList, reqCreateProblem,reqDeleteProblem } from '@/api/problem';
-  import type { ProblemListResponseData, ProblemForList } from '@/api/problem/type';
+  import {
+    reqProblemList,
+    reqCreateProblem,
+    reqDeleteProblem,
+    reqUpdateProblemEnable,
+  } from '@/api/problem';
   import router from '@/router';
   import { ElMessage } from 'element-plus';
 
@@ -61,10 +82,10 @@
   let limit = ref<number>(10);
   let total = ref<number>(0);
   // 存储题目列表
-  let problemList = ref<ProblemForList[]>([]);
+  let problemList = ref([]);
 
   const getProblemList = async () => {
-    let result: ProblemListResponseData = await reqProblemList(pageNo.value, limit.value);
+    let result = await reqProblemList(pageNo.value, limit.value);
     if (result.code == 200) {
       total.value = result.data.total;
       problemList.value = result.data.list;
@@ -93,9 +114,27 @@
     let result = await reqDeleteProblem(id);
     ElMessage({
       showClose: true,
-        message: result.data,
-        type: 'success',
+      message: result.data,
+      type: 'success',
     });
+    getProblemList();
+  };
+
+  const enableProblem = async (id: number, enable: boolean) => {
+    let result = await reqUpdateProblemEnable(id, enable);
+    if (result.code == 200) {
+      ElMessage({
+        showClose: true,
+        message: result.message,
+        type: 'success',
+      });
+    } else {
+      ElMessage({
+        showClose: true,
+        message: result.message,
+        type: 'error',
+      });
+    }
     getProblemList();
   };
 
