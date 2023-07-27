@@ -48,10 +48,16 @@
             <el-icon class="el-icon--upload"><upload-filled /></el-icon>
             <div class="el-upload__text"> Drop file here or <em>click to upload</em> </div>
           </el-upload>
-          <el-text class="mx-1" type="info">{{
+          <el-text type="info">{{
             problem.path == '' ? '题目还没有文件' : '该题目已含有文件'
           }}</el-text>
-          <el-link type="primary" @click="downloadProblemFile">点击下载</el-link>
+          <el-link type="primary" @click="downloadProblemFile" v-if="problem.path != ''"
+            >点击下载</el-link
+          >
+          <el-text type="info"> 或者你希望下载模板文件 </el-text>
+          <el-link type="primary" @click="downloadProblemTemplateFile" v-if="problem.path != ''"
+            >点击下载</el-link
+          >
         </div>
       </div>
       <div class="problem-submit">
@@ -65,7 +71,12 @@
   import { reactive, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import { ElMessage } from 'element-plus';
-  import { getProblem, updateProblem, reqDownloadProblemFile } from '@/api/problem';
+  import {
+    getProblem,
+    updateProblem,
+    reqDownloadProblemFile,
+    reqDownloadProblemTemplateFile,
+  } from '@/api/problem';
   import download from '@/utils/download';
   import { ProblemForGet } from '@/api/problem/type';
   let $router = useRouter();
@@ -149,6 +160,12 @@
     let result = await reqDownloadProblemFile(problem.id);
     console.log(result);
     download(result, problem.id + '.zip');
+  };
+
+  const downloadProblemTemplateFile = async () => {
+    let result = await reqDownloadProblemTemplateFile();
+    console.log(result);
+    download(result, '编程文件模板.zip');
   };
 
   // closePage 关闭修改页面
