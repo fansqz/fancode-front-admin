@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 import { toFormData } from '@/utils/format';
-import { ProblemGetResponseData, ProblemCreateResponseData, ProblemListResponseData } from './type';
+import { ProblemGetResponseData, ProblemCreateResponseData, ProblemListResponseData, ProblemDeleteResponseData } from './type';
 import { ProblemUpdateRequestData, ProblemUpdateResponseData } from './type';
 
 enum API {
@@ -12,6 +12,8 @@ enum API {
   GET_PROBLEM_URL = '/problem/get',
   // 更新题目
   UPDATE_PROBLEM_URL = '/problem/update',
+  // 删除题目
+  DELETE_PROBLEM_URL = '/problem/delete',
   // 下载题目编程文件
   DOWNLOAD_PROBLEM_FILE_URL = '/problem/file/download',
   // 下载题目编程文件的模板文件
@@ -24,17 +26,17 @@ export const reqProblemList = (page: number, limit: number) => {
 };
 
 // 创建题目
-export const createProblem = () => {
+export const reqCreateProblem = () => {
   return request.post<any, ProblemCreateResponseData>(API.CREATE_PROBLEM_URL);
 };
 
 // 根据id获取题目信息
-export const getProblem = (id: string) => {
+export const reqGetProblem = (id: string) => {
   return request.get<any, ProblemGetResponseData>(API.GET_PROBLEM_URL + '/' + id);
 };
 
 // 修改题目
-export const updateProblem = (
+export const reqUpdateProblem = (
   data: ProblemUpdateRequestData,
 ): Promise<ProblemUpdateResponseData> => {
   return request({
@@ -45,6 +47,11 @@ export const updateProblem = (
       'Content-Type': 'multipart/form-data',
     },
   });
+};
+
+// 删除题目
+export const reqDeleteProblem = (id: number) => {
+  return request.delete<any, ProblemDeleteResponseData>(API.DELETE_PROBLEM_URL + '/' + id);
 };
 
 // 下载题目的编程文件

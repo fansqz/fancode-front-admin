@@ -26,7 +26,7 @@
             <el-button type="primary" size="small" icon="Edit" @click="changeProblem(row.id)"
               >修改</el-button
             >
-            <el-button type="danger" size="small" icon="Delete">删除</el-button>
+            <el-button type="danger" size="small" icon="Delete" @click="deleteProblem(row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
-  import { reqProblemList, createProblem } from '@/api/problem';
+  import { reqProblemList, reqCreateProblem,reqDeleteProblem } from '@/api/problem';
   import type { ProblemListResponseData, ProblemForList } from '@/api/problem/type';
   import router from '@/router';
   import { ElMessage } from 'element-plus';
@@ -73,7 +73,7 @@
 
   const addProblem = async () => {
     // 创建题目
-    let result = await createProblem();
+    let result = await reqCreateProblem();
     if (result.code == 200) {
       router.push('/problem/update/' + result.data);
     } else {
@@ -87,6 +87,16 @@
 
   const changeProblem = (id: string) => {
     router.push('/problem/update/' + id);
+  };
+
+  const deleteProblem = async (id: number) => {
+    let result = await reqDeleteProblem(id);
+    ElMessage({
+      showClose: true,
+        message: result.data,
+        type: 'success',
+    });
+    getProblemList();
   };
 
   //组件挂载完毕以后获取数据

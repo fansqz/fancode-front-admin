@@ -50,6 +50,12 @@ export interface ProblemUpdateRequestData {
   file: File;
 }
 
+// 更新题目返回类型
 export interface ProblemUpdateResponseData extends ResponseData {
+  data: string;
+}
+
+// 删除题目返回类型
+export interface ProblemDeleteResponseData extends ResponseData {
   data: string;
 }

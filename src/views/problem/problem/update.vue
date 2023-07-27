@@ -55,7 +55,7 @@
             >点击下载</el-link
           >
           <el-text type="info"> 或者你希望下载模板文件 </el-text>
-          <el-link type="primary" @click="downloadProblemTemplateFile" v-if="problem.path != ''"
+          <el-link type="primary" @click="downloadProblemTemplateFile"
             >点击下载</el-link
           >
         </div>
@@ -72,8 +72,8 @@
   import { useRouter } from 'vue-router';
   import { ElMessage } from 'element-plus';
   import {
-    getProblem,
-    updateProblem,
+    reqGetProblem,
+    reqUpdateProblem,
     reqDownloadProblemFile,
     reqDownloadProblemTemplateFile,
   } from '@/api/problem';
@@ -96,7 +96,7 @@
   // 获取题目
   const readProblem = async (id: string) => {
     try {
-      let result = await getProblem(id);
+      let result = await reqGetProblem(id);
       if (result.code == 200) {
         problem.id = result.data.id;
         problem.code = result.data.code;
@@ -126,7 +126,7 @@
   // 提交题目修改
   const changeProblemSubmit = async () => {
     try {
-      let result = await updateProblem({
+      let result = await reqUpdateProblem({
         id: problem.id,
         name: problem.name,
         code: problem.code,
