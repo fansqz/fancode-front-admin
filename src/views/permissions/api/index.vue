@@ -5,6 +5,7 @@
       <el-table-column label="路径" prop="path"></el-table-column>
       <el-table-column label="请求方式" prop="method" width="150"></el-table-column>
       <el-table-column label="描述" prop="description"></el-table-column>
+      <el-table-column label="更新时间" prop="updatedAt"></el-table-column>
       <el-table-column label="操作" width="250px">
         <template v-slot="{ row }">
           <el-button type="primary" size="small" icon="Plus" @click="addApi(row)"> 添加 </el-button>

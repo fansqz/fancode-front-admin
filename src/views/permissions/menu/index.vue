@@ -4,6 +4,7 @@
       <el-table-column label="名称" prop="name"></el-table-column>
       <el-table-column label="权限值" prop="code"></el-table-column>
       <el-table-column label="描述" prop="description"></el-table-column>
+      <el-table-column label="更新时间" prop="updatedAt"></el-table-column>
       <el-table-column label="操作" width="250px">
         <!--row:为已有的菜单对象-->
         <template v-slot="{ row }">
