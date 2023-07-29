@@ -14,7 +14,7 @@ const useUserStore = defineStore('User', {
       phone: '',
       sex: '',
       username: '',
-      code: '',
+      loginName: '',
     };
   },
   actions: {
@@ -36,7 +36,7 @@ const useUserStore = defineStore('User', {
         this.email = result.data.email;
         this.sex = result.data.email;
         this.phone = result.data.phone;
-        this.code = result.data.code;
+        this.loginName = result.data.loginName;
       }
     },
     userLogout() {
@@ -45,7 +45,7 @@ const useUserStore = defineStore('User', {
       this.email = '';
       this.sex = '';
       this.phone = '';
-      this.code = '';
+      this.loginName = '';
       localStorage.removeItem('TOKEN');
     },
   },

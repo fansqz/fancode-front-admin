@@ -18,7 +18,7 @@ interface user {
   phone: string;
   sex: number;
   role: string;
-  code: string;
+  loginName: string;
 }
 
 export interface userResponseData {
