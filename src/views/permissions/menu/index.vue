@@ -1,25 +1,27 @@
 <template>
   <el-card class="box-card">
-    <el-table :data="apiTree" style="width: 100%; margin-bottom: 20px" row-key="id" border>
+    <el-table :data="menuTree" style="width: 100%; margin-bottom: 20px" row-key="id" border>
       <el-table-column label="名称" prop="name"></el-table-column>
-      <el-table-column label="路径" prop="path"></el-table-column>
-      <el-table-column label="请求方式" prop="method" width="150"></el-table-column>
+      <el-table-column label="权限值" prop="code"></el-table-column>
       <el-table-column label="描述" prop="description"></el-table-column>
       <el-table-column label="操作" width="250px">
+        <!--row:为已有的菜单对象-->
         <template v-slot="{ row }">
-          <el-button type="primary" size="small" icon="Plus" @click="addApi(row)"> 添加 </el-button>
+          <el-button type="primary" size="small" icon="Plus" @click="addMenu(row)">
+            添加
+          </el-button>
           <el-button
             type="primary"
             size="small"
             icon="Edit"
-            :disabled="row.parentApiID == 0"
-            @click="updateApi(row)"
+            :disabled="row.parentMenuID == 0"
+            @click="updateMenu(row)"
           >
             编辑
           </el-button>
-          <el-popconfirm :title="`顶真要删除吗`" @confirm="deleteApi(row)">
+          <el-popconfirm :title="`顶真要删除吗`" @confirm="deleteMenu(row)">
             <template #reference>
-              <el-button type="danger" size="small" icon="Delete" :disabled="row.parentApiID == 0">
+              <el-button type="danger" size="small" icon="Delete" :disabled="row.parentMenuID == 0">
                 删除
               </el-button>
             </template>
@@ -31,22 +33,19 @@
     <!--修改或添加-->
     <el-dialog v-model="dialogVisible" :title="getDialogTitle()">
       <el-form>
-        <el-form-item label="接口名称">
-          <el-input placeholder="请输入接口名称" v-model="menuData.name"></el-input>
+        <el-form-item label="菜单名称">
+          <el-input placeholder="请输入菜单名称" v-model="menuData.name"></el-input>
         </el-form-item>
-        <el-form-item label="请求路径">
-          <el-input placeholder="请输入请求路径" v-model="menuData.path"></el-input>
-        </el-form-item>
-        <el-form-item label="请求方法">
-          <el-input placeholder="请输入请求方法" v-model="menuData.method"></el-input>
+        <el-form-item label="权限值">
+          <el-input placeholder="请输入请求路径" v-model="menuData.code"></el-input>
         </el-form-item>
         <el-form-item label="概述">
-          <el-input placeholder="请输入接口概述" v-model="menuData.description"></el-input>
+          <el-input placeholder="请输入菜单概述" v-model="menuData.description"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="SubmitAddOrUpdateApi">确定</el-button>
+        <el-button type="primary" @click="SubmitAddOrUpdateMenu">确定</el-button>
       </template>
     </el-dialog>
   </el-card>
@@ -54,89 +53,86 @@
 
 <script setup lang="ts">
   import { ref, onMounted, reactive } from 'vue';
-  import { reqGetApiTree, reqInsertApi, reqUpdateApi, reqDeleteApi } from '@/api/api';
+  import { reqGetMenuTree, reqInsertMenu, reqUpdateMenu, reqDeleteMenu } from '@/api/menu';
   import { ElMessage } from 'element-plus';
 
-  let apiTree = ref([]);
-  // 添加api/修改api页面是否显示
+  let menuTree = ref([]);
+  // 添加menu/修改menu页面是否显示
   let dialogVisible = ref<boolean>(false);
-  // api数据
+  // menu数据
   let menuData = reactive({
     id: '',
     name: '',
-    path: '',
-    method: '',
+    code: '',
     description: '',
-    parentApiID: 0,
+    parentMenuID: 0,
   });
-  // 用于标识是添加还是修改api，1标识添加，0表示修改
+  // 用于标识是添加还是修改menu，1标识添加，0表示修改
   let menuType = ref(1);
   //请求
   onMounted(() => {
-    getApiTree();
+    getMenuTree();
   });
 
-  // 获取api树
-  const getApiTree = async () => {
-    let result = await reqGetApiTree();
+  // 获取menu树
+  const getMenuTree = async () => {
+    let result = await reqGetMenuTree();
     if (result.code == 200) {
-      apiTree.value = result.data;
+      menuTree.value = result.data;
     }
   };
 
-  // 添加接口
-  const addApi = (row: any) => {
+  // 添加菜单
+  const addMenu = (row: any) => {
     menuType.value = 1;
     dialogVisible.value = true;
-    menuData.parentApiID = row.id;
-    menuData.path = row.path;
+    menuData.parentMenuID = row.id;
   };
 
-  // 修改接口
-  const updateApi = (row: any) => {
+  // 修改菜单
+  const updateMenu = (row: any) => {
     menuType.value = 0;
     dialogVisible.value = true;
     menuData.id = row.id;
     menuData.name = row.name;
-    menuData.path = row.path;
-    menuData.method = row.method;
+    menuData.code = row.code;
     menuData.description = row.description;
-    menuData.parentApiID = row.parentApiID;
+    menuData.parentMenuID = row.parentMenuID;
   };
 
-  // 提交 添加接口/修改接口 的请求
-  const SubmitAddOrUpdateApi = async () => {
+  // 提交 添加菜单/修改菜单 的请求
+  const SubmitAddOrUpdateMenu = async () => {
     if (menuType.value == 1) {
-      const result = await reqInsertApi(menuData);
+      const result = await reqInsertMenu(menuData);
       if (result.code == 200) {
         dialogVisible.value = false;
-        getApiTree();
+        getMenuTree();
         ElMessage({
           showClose: true,
-          message: '接口添加成功',
+          message: '菜单添加成功',
           type: 'success',
         });
       } else {
         ElMessage({
           showClose: true,
-          message: '接口添加失败',
+          message: '菜单添加失败',
           type: 'error',
         });
       }
     } else {
-      const result = await reqUpdateApi(menuData);
+      const result = await reqUpdateMenu(menuData);
       if (result.code == 200) {
         dialogVisible.value = false;
-        getApiTree();
+        getMenuTree();
         ElMessage({
           showClose: true,
-          message: '接口更新成功',
+          message: '菜单更新成功',
           type: 'success',
         });
       } else {
         ElMessage({
           showClose: true,
-          message: '接口更新失败',
+          message: '菜单更新失败',
           type: 'error',
         });
       }
@@ -144,14 +140,14 @@
   };
 
   const getDialogTitle = () => {
-    return menuType.value == 1 ? '添加接口' : '修改接口';
+    return menuType.value == 1 ? '添加菜单' : '修改菜单';
   };
 
-  // 删除api
-  const deleteApi = async (row: any) => {
-    let result = await reqDeleteApi(row.id);
+  // 删除menu
+  const deleteMenu = async (row: any) => {
+    let result = await reqDeleteMenu(row.id);
     if (result.code == 200) {
-      getApiTree();
+      getMenuTree();
       ElMessage({
         showClose: true,
         message: '删除成功',

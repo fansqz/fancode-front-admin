@@ -30,8 +30,14 @@ export const constantMenu = [
       {
         index: 'api',
         title: '接口管理',
-        icon: 'Notebook',
+        icon: 'Connection',
         path: '/permissions/api/view',
+      },
+      {
+        index: 'menu',
+        title: '菜单管理',
+        icon: 'PriceTag',
+        path: '/permissions/menu/view',
       },
       {
         index: 'role',

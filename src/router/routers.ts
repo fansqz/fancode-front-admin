@@ -49,6 +49,10 @@ export const constantRoute = [
         path: '/permissions/api/view',
         component: () => import('@/views/permissions/api/index.vue'),
       },
+      {
+        path: '/permissions/menu/view',
+        component: () => import('@/views/permissions/menu/index.vue'),
+      },
     ],
   },
   {
