@@ -5,23 +5,27 @@ export const constantRoute = [
     component: () => import('@/views/login/index.vue'),
     name: 'login',
   },
-  // 首页
   {
     path: '/',
     component: () => import('@/layout/index.vue'),
     name: 'layout',
-    meta: {
-      hidden: false,
-    },
     redirect: '/home',
     children: [
+      // 首页
       {
         path: '/home',
         component: () => import('@/views/home/index.vue'),
       },
+    ],
+  },
+  // 题目管理
+  {
+    path: '/problem',
+    component: () => import('@/layout/index.vue'),
+    name: 'problem',
+    children: [
       {
-        path: '/problem',
-        name: 'problem',
+        path: '/problem/view',
         component: () => import('@/views/problem/problem/index.vue'),
       },
       {
@@ -29,9 +33,21 @@ export const constantRoute = [
         component: () => import('@/views/problem/problem/update.vue'),
       },
       {
-        path: '/bank',
+        path: '/problem/bank',
         name: 'bank',
         component: () => import('@/views/problem/bank/index.vue'),
+      },
+    ],
+  },
+  // 权限管理
+  {
+    path: '/permissions',
+    component: () => import('@/layout/index.vue'),
+    name: 'permissions',
+    children: [
+      {
+        path: '/permissions/api/view',
+        component: () => import('@/views/permissions/api/index.vue'),
       },
     ],
   },

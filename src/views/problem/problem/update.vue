@@ -157,7 +157,7 @@
           message: '提交成功',
           type: 'success',
         });
-        $router.push('/problem');
+        $router.push('/problem/view');
       } else {
         ElMessage({
           showClose: true,
