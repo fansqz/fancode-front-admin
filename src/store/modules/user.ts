@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { reqLogin, reqUserInfo } from '@/api/user';
-import type { loginForm } from '@/api/user/type';
+import { reqLogin, reqUserInfo } from '@/api/auth';
+import type { loginForm } from '@/api/auth/type';
 import type { UserState } from './types/type';
 // 引入路由
 import { constantRoute } from '@/router/routers';
