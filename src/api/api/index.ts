@@ -8,16 +8,13 @@ enum API {
 }
 
 // 获取api
-export const reqGetApi = (id: number) => {
+export const reqGetApi = (id: number): Promise<any> => {
   return request.get<any, any>(API.API_URL + `/+${id}`);
 };
 
 // 添加api
 export const reqInsertApi = (api: any): Promise<any> => {
-  return request({
-    method: 'post',
-    url: API.API_URL,
-    data: toFormData(api),
+  return request.post(API.API_URL, toFormData(api), {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -26,10 +23,7 @@ export const reqInsertApi = (api: any): Promise<any> => {
 
 // 修改api
 export const reqUpdateApi = (api: any): Promise<any> => {
-  return request({
-    method: 'put',
-    url: API.API_URL,
-    data: toFormData(api),
+  return request.put(API.API_URL, toFormData(api), {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -37,11 +31,11 @@ export const reqUpdateApi = (api: any): Promise<any> => {
 };
 
 // 删除api
-export const reqDeleteApi = (id: number) => {
+export const reqDeleteApi = (id: number): Promise<any> => {
   return request.delete<any, any>(API.API_URL + '/' + id);
 };
 
 // 获取api树
-export const reqGetApiTree = (): any => {
+export const reqGetApiTree = (): Promise<any> => {
   return request.get<any, any>(API.GET_API_TREE);
 };

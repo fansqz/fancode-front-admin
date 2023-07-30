@@ -8,16 +8,13 @@ enum API {
 }
 
 // 获取menu
-export const reqGetMenu = (id: number) => {
-  return request.get<any, any>(API.MENU_URL + `/+${id}`);
+export const reqGetMenu = (id: number): Promise<any> => {
+  return request.get(API.MENU_URL + `/+${id}`);
 };
 
 // 添加menu
 export const reqInsertMenu = (menu: any): Promise<any> => {
-  return request({
-    method: 'post',
-    url: API.MENU_URL,
-    data: toFormData(menu),
+  return request.post(API.MENU_URL, toFormData(menu), {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -26,10 +23,7 @@ export const reqInsertMenu = (menu: any): Promise<any> => {
 
 // 修改menu
 export const reqUpdateMenu = (menu: any): Promise<any> => {
-  return request({
-    method: 'put',
-    url: API.MENU_URL,
-    data: toFormData(menu),
+  return request.put(API.MENU_URL, toFormData(menu), {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -37,11 +31,11 @@ export const reqUpdateMenu = (menu: any): Promise<any> => {
 };
 
 // 删除menu
-export const reqDeleteMenu = (id: number) => {
-  return request.delete<any, any>(API.MENU_URL + '/' + id);
+export const reqDeleteMenu = (id: number): Promise<any> => {
+  return request.delete(API.MENU_URL + '/' + id);
 };
 
 // 获取menu树
-export const reqGetMenuTree = (): any => {
-  return request.get<any, any>(API.GET_MENU_TREE);
+export const reqGetMenuTree = (): Promise<any> => {
+  return request.get(API.GET_MENU_TREE);
 };
