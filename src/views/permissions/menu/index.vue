@@ -88,6 +88,10 @@
     menuType.value = 1;
     dialogVisible.value = true;
     menuData.parentMenuID = row.id;
+    menuData.id = '';
+    menuData.name = '';
+    menuData.code = '';
+    menuData.description = '';
   };
 
   // 修改菜单
@@ -164,7 +168,7 @@
   };
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
+<style scoped lang="scss">
   .box-card {
     height: 100%;
   }

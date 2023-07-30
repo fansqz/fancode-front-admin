@@ -53,6 +53,10 @@ export const constantRoute = [
         path: '/permissions/menu/view',
         component: () => import('@/views/permissions/menu/index.vue'),
       },
+      {
+        path: '/permissions/role/view',
+        component: () => import('@/views/permissions/role/index.vue'),
+      },
     ],
   },
   {

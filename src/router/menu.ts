@@ -43,7 +43,7 @@ export const constantMenu = [
         index: 'role',
         title: '角色管理',
         icon: 'User',
-        path: '/permissions/role',
+        path: '/permissions/role/view',
       },
       {
         index: 'user',

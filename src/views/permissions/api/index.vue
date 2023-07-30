@@ -89,8 +89,11 @@
   const addApi = (row: any) => {
     menuType.value = 1;
     dialogVisible.value = true;
+    menuData.id = '';
     menuData.parentApiID = row.id;
     menuData.path = row.path;
+    menuData.method = '';
+    menuData.description = '';
   };
 
   // 修改接口
@@ -168,7 +171,7 @@
   };
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
+<style scoped lang="scss">
   .box-card {
     height: 100%;
   }
