@@ -173,6 +173,6 @@
 
 <style scoped lang="scss">
   .box-card {
-    height: 100%;
+    min-height: 100%;
   }
 </style>
