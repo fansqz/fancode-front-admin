@@ -18,7 +18,9 @@
       <el-table-column label="操作" width="300px" align="center">
         <!--row:为已有的菜单对象-->
         <template v-slot="{ row }">
-          <el-button type="primary" size="small" icon="Plus"> 权限管理 </el-button>
+          <el-button type="primary" size="small" icon="Plus" @click="setPermisstion(row)">
+            权限管理
+          </el-button>
           <el-button type="primary" size="small" icon="Edit" @click="updateRole(row)">
             角色编辑
           </el-button>
@@ -55,15 +57,70 @@
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="SubmitAddOrUpdateRole">确定</el-button>
+        <el-button type="primary" @click="submitAddOrUpdateRole">确定</el-button>
       </template>
     </el-dialog>
+
+    <!--分配接口与菜单-->
+    <el-drawer v-model="drawer">
+      <template #header>
+        <h4>分配权限</h4>
+      </template>
+      <template #default>
+        <div>
+          <div inlink="true">
+            <el-radio size="large" v-model="apiTreeShow" label="1"> 接口管理 </el-radio>
+            <el-radio size="large" v-model="apiTreeShow" label="2"> 菜单管理 </el-radio>
+          </div>
+
+          <el-tree
+            v-show="apiTreeShow == '1'"
+            :data="apiTree"
+            ref="tree1"
+            show-checkbox
+            default-expand-all
+            check-strictly
+            node-key="id"
+            :default-checked-keys="roleApis"
+            :props="defaultProps"
+          />
+          <el-tree
+            v-show="apiTreeShow == '2'"
+            :data="menuTree"
+            ref="tree2"
+            show-checkbox
+            default-expand-all
+            check-strictly
+            node-key="id"
+            :default-checked-keys="roleMenus"
+            :props="defaultProps"
+          />
+        </div>
+      </template>
+      <template #footer>
+        <div style="flex: auto">
+          <el-button @click="drawer = false">取消</el-button>
+          <el-button type="primary" @click="submitRolePermisstion">提交</el-button>
+        </div>
+      </template>
+    </el-drawer>
   </el-card>
 </template>
 
 <script setup lang="ts">
   import { ref, reactive, onMounted } from 'vue';
-  import { reqRoleList, reqInsertRole, reqUpdateRole, reqDeleteRole } from '@/api/role';
+  import {
+    reqRoleList,
+    reqInsertRole,
+    reqUpdateRole,
+    reqDeleteRole,
+    reqRoleApi,
+    reqUpdateRoleApi,
+    reqUpdateRoleMenu,
+    reqRoleMenu,
+  } from '@/api/role';
+  import { reqGetApiTree } from '@/api/api';
+  import { reqGetMenuTree } from '@/api/menu';
   import { ElMessage } from 'element-plus';
 
   // 搜索的角色名称
@@ -78,12 +135,27 @@
   // 修改或更新角色
   let menuData = reactive({
     id: '',
-    name: 'ccc',
-    description: 'aaa',
+    name: '',
+    description: '',
   });
   // 表示menu的类型，是添加还是修改
   let menuType = ref<number>(1);
   let dialogVisible = ref<boolean>(false);
+  // 控制抽屉显示与隐藏
+  let drawer = ref<boolean>(false);
+  // 展示menu树/ 展示api树
+  let menuTree = ref([]);
+  let apiTree = ref([]);
+  let roleApis = ref([]);
+  let roleMenus = ref([]);
+  let apiTreeShow = ref('1');
+  let tree1 = ref();
+  let tree2 = ref();
+  let roleID = '';
+  const defaultProps = {
+    chidren: 'children',
+    label: 'name',
+  };
 
   //组件挂载完毕以后获取数据
   onMounted(() => {
@@ -120,7 +192,7 @@
     menuData.description = row.description;
   };
 
-  const SubmitAddOrUpdateRole = async () => {
+  const submitAddOrUpdateRole = async () => {
     if (menuType.value == 1) {
       const result = await reqInsertRole(menuData);
       if (result.code == 200) {
@@ -155,6 +227,51 @@
           type: 'error',
         });
       }
+    }
+  };
+
+  const setPermisstion = async (row: any) => {
+    roleID = row.id;
+    drawer.value = true;
+    let result = await reqGetApiTree();
+    if (result.code == 200) {
+      apiTree.value = result.data;
+    }
+    result = await reqGetMenuTree();
+    if (result.code == 200) {
+      menuTree.value = result.data;
+    }
+    result = await reqRoleApi(row.id);
+    if (result.code == 200) {
+      roleApis.value = result.data;
+    }
+    result = await reqRoleMenu(row.id);
+    if (result.code == 200) {
+      roleMenus.value = result.data;
+    }
+  };
+
+  // 提交添加权限请求
+  const submitRolePermisstion = async () => {
+    let apiIDs = tree1.value.getCheckedKeys();
+    let menuIDs = tree2.value.getCheckedKeys();
+    let result1 = await reqUpdateRoleApi({ roleID: roleID, apiIDs: apiIDs });
+    let result2 = await reqUpdateRoleMenu({ roleID: roleID, menuIDs: menuIDs });
+    if (result1.code == 200 && result2.code == 200) {
+      ElMessage({
+        showClose: true,
+        message: '提交成功',
+        type: 'success',
+      });
+      //关闭抽屉
+      drawer.value = false;
+      getRoleList();
+    } else {
+      ElMessage({
+        showClose: true,
+        message: '操作失败',
+        type: 'error',
+      });
     }
   };
 
