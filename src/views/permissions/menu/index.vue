@@ -69,7 +69,7 @@
     parentMenuID: 0,
   });
   // 用于标识是添加还是修改menu，1标识添加，0表示修改
-  let menuType = ref(1);
+  let formType = ref(1);
   //请求
   onMounted(() => {
     getMenuTree();
@@ -85,7 +85,7 @@
 
   // 添加菜单
   const addMenu = (row: any) => {
-    menuType.value = 1;
+    formType.value = 1;
     dialogVisible.value = true;
     menuData.parentMenuID = row.id;
     menuData.id = '';
@@ -96,7 +96,7 @@
 
   // 修改菜单
   const updateMenu = (row: any) => {
-    menuType.value = 0;
+    formType.value = 0;
     dialogVisible.value = true;
     menuData.id = row.id;
     menuData.name = row.name;
@@ -107,7 +107,7 @@
 
   // 提交 添加菜单/修改菜单 的请求
   const SubmitAddOrUpdateMenu = async () => {
-    if (menuType.value == 1) {
+    if (formType.value == 1) {
       const result = await reqInsertMenu(menuData);
       if (result.code == 200) {
         dialogVisible.value = false;
@@ -145,7 +145,7 @@
   };
 
   const getDialogTitle = () => {
-    return menuType.value == 1 ? '添加菜单' : '修改菜单';
+    return formType.value == 1 ? '添加菜单' : '修改菜单';
   };
 
   // 删除menu

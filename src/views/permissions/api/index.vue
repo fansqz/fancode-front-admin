@@ -33,16 +33,16 @@
     <el-dialog v-model="dialogVisible" :title="getDialogTitle()">
       <el-form>
         <el-form-item label="接口名称">
-          <el-input placeholder="请输入接口名称" v-model="menuData.name"></el-input>
+          <el-input placeholder="请输入接口名称" v-model="apiData.name"></el-input>
         </el-form-item>
         <el-form-item label="请求路径">
-          <el-input placeholder="请输入请求路径" v-model="menuData.path"></el-input>
+          <el-input placeholder="请输入请求路径" v-model="apiData.path"></el-input>
         </el-form-item>
         <el-form-item label="请求方法">
-          <el-input placeholder="请输入请求方法" v-model="menuData.method"></el-input>
+          <el-input placeholder="请输入请求方法" v-model="apiData.method"></el-input>
         </el-form-item>
         <el-form-item label="概述">
-          <el-input placeholder="请输入接口概述" v-model="menuData.description"></el-input>
+          <el-input placeholder="请输入接口概述" v-model="apiData.description"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -62,7 +62,7 @@
   // 添加api/修改api页面是否显示
   let dialogVisible = ref<boolean>(false);
   // api数据
-  let menuData = reactive({
+  let apiData = reactive({
     id: '',
     name: '',
     path: '',
@@ -71,7 +71,7 @@
     parentApiID: 0,
   });
   // 用于标识是添加还是修改api，1标识添加，0表示修改
-  let menuType = ref(1);
+  let formType = ref(1);
   //请求
   onMounted(() => {
     getApiTree();
@@ -87,31 +87,31 @@
 
   // 添加接口
   const addApi = (row: any) => {
-    menuType.value = 1;
+    formType.value = 1;
     dialogVisible.value = true;
-    menuData.id = '';
-    menuData.parentApiID = row.id;
-    menuData.path = row.path;
-    menuData.method = '';
-    menuData.description = '';
+    apiData.id = '';
+    apiData.parentApiID = row.id;
+    apiData.path = row.path;
+    apiData.method = '';
+    apiData.description = '';
   };
 
   // 修改接口
   const updateApi = (row: any) => {
-    menuType.value = 0;
+    formType.value = 0;
     dialogVisible.value = true;
-    menuData.id = row.id;
-    menuData.name = row.name;
-    menuData.path = row.path;
-    menuData.method = row.method;
-    menuData.description = row.description;
-    menuData.parentApiID = row.parentApiID;
+    apiData.id = row.id;
+    apiData.name = row.name;
+    apiData.path = row.path;
+    apiData.method = row.method;
+    apiData.description = row.description;
+    apiData.parentApiID = row.parentApiID;
   };
 
   // 提交 添加接口/修改接口 的请求
   const SubmitAddOrUpdateApi = async () => {
-    if (menuType.value == 1) {
-      const result = await reqInsertApi(menuData);
+    if (formType.value == 1) {
+      const result = await reqInsertApi(apiData);
       if (result.code == 200) {
         dialogVisible.value = false;
         getApiTree();
@@ -128,7 +128,7 @@
         });
       }
     } else {
-      const result = await reqUpdateApi(menuData);
+      const result = await reqUpdateApi(apiData);
       if (result.code == 200) {
         dialogVisible.value = false;
         getApiTree();
@@ -148,7 +148,7 @@
   };
 
   const getDialogTitle = () => {
-    return menuType.value == 1 ? '添加接口' : '修改接口';
+    return formType.value == 1 ? '添加接口' : '修改接口';
   };
 
   // 删除api

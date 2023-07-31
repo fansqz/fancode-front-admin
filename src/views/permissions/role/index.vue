@@ -16,7 +16,7 @@
       <el-table-column label="介绍" prop="description" align="center"></el-table-column>
       <el-table-column label="更新时间" prop="updatedAt" align="center"></el-table-column>
       <el-table-column label="操作" width="300px" align="center">
-        <!--row:为已有的菜单对象-->
+        <!--row:为已有的角色对象-->
         <template v-slot="{ row }">
           <el-button type="primary" size="small" icon="Plus" @click="setPermisstion(row)">
             权限管理
@@ -49,10 +49,10 @@
     <el-dialog v-model="dialogVisible" :title="getDialogTitle()">
       <el-form>
         <el-form-item label="角色名称">
-          <el-input placeholder="请输入角色名称" v-model="menuData.name"></el-input>
+          <el-input placeholder="请输入角色名称" v-model="roleData.name"></el-input>
         </el-form-item>
         <el-form-item label="介绍">
-          <el-input placeholder="请输入角色简介" v-model="menuData.description"></el-input>
+          <el-input placeholder="请输入角色简介" v-model="roleData.description"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -133,13 +133,13 @@
   // 存储角色列表
   let roleList = ref([]);
   // 修改或更新角色
-  let menuData = reactive({
+  let roleData = reactive({
     id: '',
     name: '',
     description: '',
   });
-  // 表示menu的类型，是添加还是修改
-  let menuType = ref<number>(1);
+  // 表单是添加还是修改
+  let formType = ref<number>(1);
   let dialogVisible = ref<boolean>(false);
   // 控制抽屉显示与隐藏
   let drawer = ref<boolean>(false);
@@ -174,27 +174,27 @@
     }
   };
 
-  // 添加菜单
+  // 添加角色
   const insertRole = () => {
-    menuType.value = 1;
+    formType.value = 1;
     dialogVisible.value = true;
-    menuData.id = '';
-    menuData.name = '';
-    menuData.description = '';
+    roleData.id = '';
+    roleData.name = '';
+    roleData.description = '';
   };
 
-  // 修改菜单
+  // 修改角色
   const updateRole = (row: any) => {
-    menuType.value = 0;
+    formType.value = 0;
     dialogVisible.value = true;
-    menuData.id = row.id;
-    menuData.name = row.name;
-    menuData.description = row.description;
+    roleData.id = row.id;
+    roleData.name = row.name;
+    roleData.description = row.description;
   };
 
   const submitAddOrUpdateRole = async () => {
-    if (menuType.value == 1) {
-      const result = await reqInsertRole(menuData);
+    if (formType.value == 1) {
+      const result = await reqInsertRole(roleData);
       if (result.code == 200) {
         dialogVisible.value = false;
         getRoleList();
@@ -211,7 +211,7 @@
         });
       }
     } else {
-      const result = await reqUpdateRole(menuData);
+      const result = await reqUpdateRole(roleData);
       if (result.code == 200) {
         dialogVisible.value = false;
         getRoleList();
@@ -308,7 +308,7 @@
   };
 
   const getDialogTitle = () => {
-    if (menuType.value == 1) {
+    if (formType.value == 1) {
       return '添加角色';
     } else {
       return '修改角色';

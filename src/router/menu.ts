@@ -49,7 +49,7 @@ export const constantMenu = [
         index: 'user',
         title: '用户管理',
         icon: 'Avatar',
-        path: '/permissions/user',
+        path: '/permissions/user/view',
       },
     ],
   },
