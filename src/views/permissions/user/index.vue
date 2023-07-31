@@ -63,8 +63,8 @@
         <el-form-item label="电话">
           <el-input placeholder="请输入电话" v-model="userData.phone"></el-input>
         </el-form-item>
-        <el-form-item label="初始密码" v-show="formType==1">
-            <el-input placeholder="请输入密码" v-model="userData.password" ></el-input>
+        <el-form-item label="初始密码" v-show="formType == 1">
+          <el-input placeholder="请输入密码" v-model="userData.password"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -82,7 +82,11 @@
         <el-form>
           <el-form-item label="用户名称："> {{ username2 }} </el-form-item>
           <el-form-item lable="角色列表">
-            <el-checkbox v-model="checkAll" :indeterminate="indeterminate" @change="handleSelectAll">
+            <el-checkbox
+              v-model="checkAll"
+              :indeterminate="indeterminate"
+              @change="handleSelectAll"
+            >
               全选
             </el-checkbox>
             <el-checkbox-group v-model="selectedRoleIDs" @change="handleRoleSelectChange">
@@ -112,7 +116,7 @@
     reqDeleteUser,
     reqUserRole,
     reqUpdateUserRole,
-    reqSimpleRoleList
+    reqSimpleRoleList,
   } from '@/api/user';
   import { ElMessage } from 'element-plus';
 
@@ -143,8 +147,8 @@
     }
   };
 
-    // 修改或更新用户
-    let userData = reactive<any>({
+  // 修改或更新用户
+  let userData = reactive<any>({
     id: '',
     loginName: '',
     username: '',
@@ -175,7 +179,7 @@
   };
 
   const submitAddOrUpdateUser = async () => {
-    let result :any;
+    let result: any;
     if (formType.value == 1) {
       result = await reqInsertUser(userData);
       if (result.code == 200) {
@@ -189,11 +193,11 @@
         getUserList();
       }
     }
-          ElMessage({
-          showClose: true,
-          message: result.message,
-          type: result.code == 200 ? 'success' : 'error',
-        });
+    ElMessage({
+      showClose: true,
+      message: result.message,
+      type: result.code == 200 ? 'success' : 'error',
+    });
   };
 
   // 控制抽屉显示与隐藏
@@ -201,7 +205,7 @@
   // 更新用户关联角色页面的数据
   let userID = 0;
   let username2 = ref<string>('');
-  let  checkAll = ref<boolean>(false);
+  let checkAll = ref<boolean>(false);
   let indeterminate = ref<boolean>(true);
   let roles = ref<any[]>([]);
   let selectedRoleIDs = ref<number[]>([]);
@@ -222,13 +226,13 @@
     drawer.value = true;
   };
 
-  const handleSelectAll = (val:boolean) => {
-    selectedRoleIDs.value = val ? roles.value.map((role:any) => role.id) : [];
+  const handleSelectAll = (val: boolean) => {
+    selectedRoleIDs.value = val ? roles.value.map((role: any) => role.id) : [];
     indeterminate.value = false;
   };
 
   const handleRoleSelectChange = () => {
-    if (selectedRoleIDs.value == roles.value.map((role:any) => role.id)) {
+    if (selectedRoleIDs.value == roles.value.map((role: any) => role.id)) {
       indeterminate.value = false;
     } else {
       indeterminate.value = true;
@@ -241,12 +245,12 @@
     if (result.code == 200) {
       drawer.value = false;
       getUserList();
-    } 
+    }
     ElMessage({
-        showClose: true,
-        message: result.message,
-        type: result.code == 200 ? 'success' : 'error',
-      });
+      showClose: true,
+      message: result.message,
+      type: result.code == 200 ? 'success' : 'error',
+    });
   };
 
   const deleteUser = async (row: any) => {

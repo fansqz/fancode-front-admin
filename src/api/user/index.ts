@@ -9,7 +9,7 @@ enum API {
   // 用户-角色控制
   USER_ROLE_URL = '/manage/user/role',
   // 获取简单的角色列表
-  USER_ROLE_LIST_URL = '/manage/user/simpleRole/list'
+  USER_ROLE_LIST_URL = '/manage/user/simpleRole/list',
 }
 
 // 获取用户列表
@@ -49,7 +49,7 @@ export const reqUserRole = (userID: number): Promise<any> => {
 
 // 更新角色可访问api
 export const reqUpdateUserRole = (userID: number, roleIDs: number[]): Promise<any> => {
-  return request.put(API.USER_ROLE_URL, {userID: userID, roleIDs: roleIDs});
+  return request.put(API.USER_ROLE_URL, { userID: userID, roleIDs: roleIDs });
 };
 
 // 获取简单的角色列表
