@@ -8,17 +8,19 @@
       <el-table-column label="更新时间" prop="updatedAt"></el-table-column>
       <el-table-column label="操作" width="250px">
         <template v-slot="{ row }">
-          <el-button type="primary" size="small" icon="Plus" @click="addApi(row)"> 添加 </el-button>
+          <el-button type="primary" size="small" icon="Plus" @click="handleInsertApi(row)">
+            添加
+          </el-button>
           <el-button
             type="primary"
             size="small"
             icon="Edit"
             :disabled="row.parentApiID == 0"
-            @click="updateApi(row)"
+            @click="handleUpdateApi(row)"
           >
             编辑
           </el-button>
-          <el-popconfirm :title="`顶真要删除吗`" @confirm="deleteApi(row)">
+          <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteApi(row)">
             <template #reference>
               <el-button type="danger" size="small" icon="Delete" :disabled="row.parentApiID == 0">
                 删除
@@ -47,7 +49,7 @@
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="SubmitAddOrUpdateApi">确定</el-button>
+        <el-button type="primary" @click="submitAddOrUpdateApi">确定</el-button>
       </template>
     </el-dialog>
   </el-card>
@@ -72,6 +74,7 @@
   });
   // 用于标识是添加还是修改api，1标识添加，0表示修改
   let formType = ref(1);
+
   //请求
   onMounted(() => {
     getApiTree();
@@ -86,7 +89,7 @@
   };
 
   // 添加接口
-  const addApi = (row: any) => {
+  const handleInsertApi = (row: any) => {
     formType.value = 1;
     dialogVisible.value = true;
     apiData.id = '';
@@ -97,7 +100,7 @@
   };
 
   // 修改接口
-  const updateApi = (row: any) => {
+  const handleUpdateApi = (row: any) => {
     formType.value = 0;
     dialogVisible.value = true;
     apiData.id = row.id;
@@ -108,8 +111,27 @@
     apiData.parentApiID = row.parentApiID;
   };
 
+  // 删除api
+  const handleDeleteApi = async (row: any) => {
+    let result = await reqDeleteApi(row.id);
+    if (result.code == 200) {
+      getApiTree();
+      ElMessage({
+        showClose: true,
+        message: '删除成功',
+        type: 'success',
+      });
+    } else {
+      ElMessage({
+        showClose: true,
+        message: '删除失败',
+        type: 'error',
+      });
+    }
+  };
+
   // 提交 添加接口/修改接口 的请求
-  const SubmitAddOrUpdateApi = async () => {
+  const submitAddOrUpdateApi = async () => {
     if (formType.value == 1) {
       const result = await reqInsertApi(apiData);
       if (result.code == 200) {
@@ -149,25 +171,6 @@
 
   const getDialogTitle = () => {
     return formType.value == 1 ? '添加接口' : '修改接口';
-  };
-
-  // 删除api
-  const deleteApi = async (row: any) => {
-    let result = await reqDeleteApi(row.id);
-    if (result.code == 200) {
-      getApiTree();
-      ElMessage({
-        showClose: true,
-        message: '删除成功',
-        type: 'success',
-      });
-    } else {
-      ElMessage({
-        showClose: true,
-        message: '删除失败',
-        type: 'error',
-      });
-    }
   };
 </script>
 

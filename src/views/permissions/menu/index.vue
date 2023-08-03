@@ -8,7 +8,7 @@
       <el-table-column label="操作" width="250px">
         <!--row:为已有的菜单对象-->
         <template v-slot="{ row }">
-          <el-button type="primary" size="small" icon="Plus" @click="addMenu(row)">
+          <el-button type="primary" size="small" icon="Plus" @click="handleInsertMenu(row)">
             添加
           </el-button>
           <el-button
@@ -16,11 +16,11 @@
             size="small"
             icon="Edit"
             :disabled="row.parentMenuID == 0"
-            @click="updateMenu(row)"
+            @click="handleUpdateMenu(row)"
           >
             编辑
           </el-button>
-          <el-popconfirm :title="`顶真要删除吗`" @confirm="deleteMenu(row)">
+          <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteMenu(row)">
             <template #reference>
               <el-button type="danger" size="small" icon="Delete" :disabled="row.parentMenuID == 0">
                 删除
@@ -46,7 +46,7 @@
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="SubmitAddOrUpdateMenu">确定</el-button>
+        <el-button type="primary" @click="submitAddOrUpdateMenu">确定</el-button>
       </template>
     </el-dialog>
   </el-card>
@@ -84,7 +84,7 @@
   };
 
   // 添加菜单
-  const addMenu = (row: any) => {
+  const handleInsertMenu = (row: any) => {
     formType.value = 1;
     dialogVisible.value = true;
     menuData.parentMenuID = row.id;
@@ -95,7 +95,7 @@
   };
 
   // 修改菜单
-  const updateMenu = (row: any) => {
+  const handleUpdateMenu = (row: any) => {
     formType.value = 0;
     dialogVisible.value = true;
     menuData.id = row.id;
@@ -106,7 +106,7 @@
   };
 
   // 提交 添加菜单/修改菜单 的请求
-  const SubmitAddOrUpdateMenu = async () => {
+  const submitAddOrUpdateMenu = async () => {
     if (formType.value == 1) {
       const result = await reqInsertMenu(menuData);
       if (result.code == 200) {
@@ -149,7 +149,7 @@
   };
 
   // 删除menu
-  const deleteMenu = async (row: any) => {
+  const handleDeleteMenu = async (row: any) => {
     let result = await reqDeleteMenu(row.id);
     if (result.code == 200) {
       getMenuTree();

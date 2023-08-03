@@ -9,7 +9,7 @@
         <el-button type="primary" @click="resetSearch">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button type="primary" @click="insertRole">添加角色</el-button>
+    <el-button type="primary" @click="handleInsertRole">添加角色</el-button>
     <el-table border :data="roleList" style="margin: 10px 0px">
       <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
       <el-table-column label="角色名称" prop="name" align="center"></el-table-column>
@@ -18,13 +18,13 @@
       <el-table-column label="操作" width="300px" align="center">
         <!--row:为已有的角色对象-->
         <template v-slot="{ row }">
-          <el-button type="primary" size="small" icon="Plus" @click="setPermisstion(row)">
+          <el-button type="primary" size="small" icon="Plus" @click="handleSetPermisstion(row)">
             权限管理
           </el-button>
-          <el-button type="primary" size="small" icon="Edit" @click="updateRole(row)">
+          <el-button type="primary" size="small" icon="Edit" @click="handleUpdateRole(row)">
             角色编辑
           </el-button>
-          <el-popconfirm :title="`顶真要删除吗`" @confirm="deleteRole(row)">
+          <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteRole(row)">
             <template #reference>
               <el-button type="danger" size="small" icon="Delete"> 删除 </el-button>
             </template>
@@ -141,21 +141,6 @@
   // 表单是添加还是修改
   let formType = ref<number>(1);
   let dialogVisible = ref<boolean>(false);
-  // 控制抽屉显示与隐藏
-  let drawer = ref<boolean>(false);
-  // 展示menu树/ 展示api树
-  let menuTree = ref([]);
-  let apiTree = ref([]);
-  let roleApis = ref([]);
-  let roleMenus = ref([]);
-  let apiTreeShow = ref('1');
-  let tree1 = ref();
-  let tree2 = ref();
-  let roleID = '';
-  const defaultProps = {
-    chidren: 'children',
-    label: 'name',
-  };
 
   //组件挂载完毕以后获取数据
   onMounted(() => {
@@ -175,7 +160,7 @@
   };
 
   // 添加角色
-  const insertRole = () => {
+  const handleInsertRole = () => {
     formType.value = 1;
     dialogVisible.value = true;
     roleData.id = '';
@@ -184,7 +169,7 @@
   };
 
   // 修改角色
-  const updateRole = (row: any) => {
+  const handleUpdateRole = (row: any) => {
     formType.value = 0;
     dialogVisible.value = true;
     roleData.id = row.id;
@@ -230,7 +215,23 @@
     }
   };
 
-  const setPermisstion = async (row: any) => {
+  // 控制抽屉显示与隐藏
+  let drawer = ref<boolean>(false);
+  // 展示menu树/ 展示api树
+  let menuTree = ref([]);
+  let apiTree = ref([]);
+  let roleApis = ref([]);
+  let roleMenus = ref([]);
+  let apiTreeShow = ref('1');
+  let tree1 = ref();
+  let tree2 = ref();
+  let roleID = '';
+  const defaultProps = {
+    chidren: 'children',
+    label: 'name',
+  };
+
+  const handleSetPermisstion = async (row: any) => {
     roleID = row.id;
     drawer.value = true;
     let result = await reqGetApiTree();
@@ -275,7 +276,7 @@
     }
   };
 
-  const deleteRole = async (row: any) => {
+  const handleDeleteRole = async (row: any) => {
     let result = await reqDeleteRole(row.id);
     ElMessage({
       showClose: true,
