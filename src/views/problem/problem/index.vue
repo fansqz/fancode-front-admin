@@ -2,7 +2,7 @@
   <div>
     <el-card class="box-card">
       <!--顶部添加题目-->
-      <el-button type="primary" size="default" @click="addProblem"> 添加题目 </el-button>
+      <el-button type="primary" size="default" @click="handleInsertProblem"> 添加题目 </el-button>
       <!--展示题目列表-->
       <el-table style="margin: 10px 0px" border :data="problemList">
         <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
@@ -27,7 +27,7 @@
               v-model="row.enable"
               class="ml-2"
               style="--el-switch-on-color: #13ce66; --el-switch-off-color: #646765"
-              @click="enableProblem(row.id, row.enable)"
+              @click="handleEnableProblem(row.id, row.enable)"
             />
           </template>
         </el-table-column>
@@ -38,10 +38,10 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template v-slot="{ row }">
-            <el-button type="primary" size="small" icon="Edit" @click="changeProblem(row.id)"
+            <el-button type="primary" size="small" icon="Edit" @click="handleUpdateProblem(row.id)"
               >修改</el-button
             >
-            <el-button type="danger" size="small" icon="Delete" @click="deleteProblem(row.id)"
+            <el-button type="danger" size="small" icon="Delete" @click="handleDeleteProblem(row.id)"
               >删除</el-button
             >
           </template>
@@ -92,7 +92,7 @@
     }
   };
 
-  const addProblem = async () => {
+  const handleInsertProblem = async () => {
     // 创建题目
     let result = await reqCreateProblem();
     if (result.code == 200) {
@@ -106,11 +106,11 @@
     }
   };
 
-  const changeProblem = (id: string) => {
+  const handleUpdateProblem = (id: string) => {
     router.push('/problem/update/' + id);
   };
 
-  const deleteProblem = async (id: number) => {
+  const handleDeleteProblem = async (id: number) => {
     let result = await reqDeleteProblem(id);
     ElMessage({
       showClose: true,
@@ -120,7 +120,7 @@
     getProblemList();
   };
 
-  const enableProblem = async (id: number, enable: boolean) => {
+  const handleEnableProblem = async (id: number, enable: boolean) => {
     let result = await reqUpdateProblemEnable(id, enable);
     if (result.code == 200) {
       ElMessage({
@@ -153,6 +153,10 @@
     pageNo.value = 1;
     getProblemList();
   };
+
+
+
+
 </script>
 
 <style scoped></style>
