@@ -153,10 +153,6 @@
     pageNo.value = 1;
     getProblemList();
   };
-
-
-
-
 </script>
 
 <style scoped></style>
