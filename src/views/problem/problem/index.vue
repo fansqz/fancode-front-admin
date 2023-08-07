@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card class="box-card">
+    <el-card v-if="!isUpdateOrInsert" class="box-card">
       <!--顶部添加题目-->
       <el-button type="primary" size="default" @click="handleInsertProblem"> 添加题目 </el-button>
       <!--展示题目列表-->
@@ -61,20 +61,21 @@
       />
     </el-card>
 
-    <!--添加对话框-->
+    <!--添加题目的组件-->
+    <Update
+      v-if="isUpdateOrInsert"
+      @exit="closeUpdateOrInsert"
+      :problemID="problemID"
+      :type="type"
+    ></Update>
   </div>
 </template>
 
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
-  import {
-    reqProblemList,
-    reqCreateProblem,
-    reqDeleteProblem,
-    reqUpdateProblemEnable,
-  } from '@/api/problem';
-  import router from '@/router';
+  import { reqProblemList, reqDeleteProblem, reqUpdateProblemEnable } from '@/api/problem';
   import { ElMessage } from 'element-plus';
+  import Update from './update.vue';
 
   //当前页码
   let pageNo = ref<number>(1);
@@ -90,24 +91,6 @@
       total.value = result.data.total;
       problemList.value = result.data.list;
     }
-  };
-
-  const handleInsertProblem = async () => {
-    // 创建题目
-    let result = await reqCreateProblem();
-    if (result.code == 200) {
-      router.push('/problem/update/' + result.data);
-    } else {
-      ElMessage({
-        showClose: true,
-        message: '题目创建失败',
-        type: 'error',
-      });
-    }
-  };
-
-  const handleUpdateProblem = (id: string) => {
-    router.push('/problem/update/' + id);
   };
 
   const handleDeleteProblem = async (id: number) => {
@@ -152,6 +135,25 @@
   const changePageSize = () => {
     pageNo.value = 1;
     getProblemList();
+  };
+
+  const isUpdateOrInsert = ref(false);
+  const problemID = ref('');
+  const type = ref('insert');
+  const handleUpdateProblem = (id: string) => {
+    isUpdateOrInsert.value = true;
+    problemID.value = id;
+    type.value = 'update';
+  };
+
+  const handleInsertProblem = async () => {
+    isUpdateOrInsert.value = true;
+    type.value = 'insert';
+  };
+
+  // closePage 关闭修改页面
+  const closeUpdateOrInsert = () => {
+    isUpdateOrInsert.value = false;
   };
 </script>
 

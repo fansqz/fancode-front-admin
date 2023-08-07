@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <template #header>
         <div class="card-header">
-          <span>修改题目</span>
+          <span> {{ type == 'update' ? '修改题目' : '添加题目' }}</span>
           <el-button
             class="button"
             type="danger"
@@ -81,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-  import { reactive, onMounted } from 'vue';
+  import { reactive, watchEffect } from 'vue';
   import { useRouter } from 'vue-router';
   import { ElMessage } from 'element-plus';
   import {
@@ -89,11 +89,12 @@
     reqUpdateProblem,
     reqDownloadProblemFile,
     reqDownloadProblemTemplateFile,
+    reqCreateProblem,
   } from '@/api/problem';
   import download from '@/utils/download';
+
   let $router = useRouter();
   const { id } = $router.currentRoute.value.params;
-  // do not use same name with ref
   let problem = reactive({
     id: Number(id as string),
     name: '',
@@ -105,6 +106,13 @@
     path: '',
   });
   let problemFile: File;
+
+  const props = defineProps<{
+    type: string;
+    problemID: string;
+  }>();
+  const emit = defineEmits(['exit']);
+
   // 获取题目
   const readProblem = async (id: string) => {
     try {
@@ -118,7 +126,6 @@
         problem.name = result.data.name;
         problem.path = result.data.path;
         problem.title = result.data.title;
-        console.log(problem);
       }
     } catch (err) {
       ElMessage({
@@ -128,8 +135,16 @@
       });
     }
   };
-  onMounted(() => {
-    readProblem(id as string);
+
+  // 类型或者题目id发生改变时改变problem数据
+  watchEffect(async () => {
+    if (props.type == 'insert') {
+      // 创建题目
+      let result = await reqCreateProblem();
+      readProblem(result.data);
+    } else {
+      readProblem(props.problemID);
+    }
   });
 
   // 文件改变时修改
@@ -188,7 +203,7 @@
 
   // closePage 关闭修改页面
   const closePage = () => {
-    $router.push('/problem');
+    emit('exit');
   };
 </script>
 
