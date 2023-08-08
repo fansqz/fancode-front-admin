@@ -4,7 +4,9 @@
     <div class="layout_slider">
       <div class=""></div>
       <el-scrollbar class="scrollbar">
-        <Menu :menuList="userStore.menuRoutes"></Menu>
+        <el-menu>
+          <Menu :menuList="menu"></Menu>
+        </el-menu>
       </el-scrollbar>
     </div>
 
@@ -21,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+  import { reactive } from 'vue';
   import Menu from './menu/index.vue';
   // 获取用户仓库
   import useUserStore from '@/store/modules/user';
@@ -28,6 +31,12 @@
   import Tabbar from './tabbar/index.vue';
 
   let userStore = useUserStore();
+  let menu: any[] = reactive([]);
+  userStore.menuRoutes.forEach((element: any) => {
+    if (element.name == 'layout' && element.children) {
+      menu = element.children;
+    }
+  });
 </script>
 
 <style scoped lang="scss">
