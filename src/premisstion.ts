@@ -5,13 +5,13 @@ import setting from './setting';
 import nprogress from 'nprogress';
 import 'nprogress/nprogress.css';
 nprogress.configure({ showSpinner: false });
-
 import useUserStore from './store/modules/user';
 import pinia from './store';
 const userStore = useUserStore(pinia);
 
 // 全局前置守卫
 router.beforeEach(async (to: any, from: any, next: any) => {
+  console.log(to);
   // 顶部标题
   document.title = setting.title + '-' + to.meta.title;
   // 进度条
@@ -40,7 +40,8 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   if (!username) {
     try {
       await userStore.userInfo();
-      next();
+      // 等到用户信息加载完毕，异步路由注册以后再放行
+      next({ ...to, replace: true });
     } catch (error) {
       // 意味着token过期
       userStore.userLogout();

@@ -33,8 +33,8 @@
   let userStore = useUserStore();
   let menu: any[] = reactive([]);
   userStore.menuRoutes.forEach((element: any) => {
-    if (element.name == 'layout' && element.children) {
-      menu = element.children;
+    if ((element.name == 'layout' || element.name == 'manage') && element.children) {
+      menu = [...menu, ...element.children];
     }
   });
 </script>

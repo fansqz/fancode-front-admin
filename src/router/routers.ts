@@ -4,6 +4,17 @@ export const constantRoute = [
     path: '/login',
     component: () => import('@/views/login/index.vue'),
     name: 'login',
+    meta: {
+      hidden: false,
+    },
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/404/index.vue'),
+    name: '404',
+    meta: {
+      hidden: false,
+    },
   },
   {
     path: '/',
@@ -25,9 +36,23 @@ export const constantRoute = [
         },
         component: () => import('@/views/home/index.vue'),
       },
+    ],
+  },
+];
+
+// 异步路由
+export const asyncRoute = [
+  {
+    path: '/manage',
+    component: () => import('@/layout/index.vue'),
+    name: 'manage',
+    meta: {
+      hidden: false,
+    },
+    children: [
       // 题目管理
       {
-        path: '/problem',
+        path: '/manage/problem',
         name: 'problem',
         meta: {
           title: '题目管理',
@@ -37,7 +62,7 @@ export const constantRoute = [
         component: () => import('@/views/problem/problem/index.vue'),
       },
       {
-        path: '/bank',
+        path: '/manage/bank',
         name: 'bank',
         meta: {
           title: '题库管理',
@@ -48,7 +73,7 @@ export const constantRoute = [
       },
       // 权限管理
       {
-        path: '/permissions',
+        path: '/manage/permissions',
         name: 'permissions',
         meta: {
           title: '权限管理',
@@ -57,7 +82,7 @@ export const constantRoute = [
         },
         children: [
           {
-            path: '/permissions/api/view',
+            path: '/manage/permissions/api',
             name: 'api',
             meta: {
               title: '接口管理',
@@ -67,7 +92,7 @@ export const constantRoute = [
             component: () => import('@/views/permissions/api/index.vue'),
           },
           {
-            path: '/permissions/menu/view',
+            path: '/manage/permissions/menu',
             name: 'menu',
             meta: {
               title: '菜单管理',
@@ -77,7 +102,7 @@ export const constantRoute = [
             component: () => import('@/views/permissions/menu/index.vue'),
           },
           {
-            path: '/permissions/role/view',
+            path: '/manage/permissions/role',
             name: 'role',
             meta: {
               title: '角色管理',
@@ -87,7 +112,7 @@ export const constantRoute = [
             component: () => import('@/views/permissions/role/index.vue'),
           },
           {
-            path: '/permissions/user/view',
+            path: '/manage/permissions/user',
             name: 'user',
             meta: {
               title: '用户管理',
@@ -100,14 +125,16 @@ export const constantRoute = [
       },
     ],
   },
-  {
-    path: '/404',
-    component: () => import('@/views/404/index.vue'),
-    name: '404',
-  },
+];
+
+// 任意路由
+export const anyRoute = [
   {
     path: '/:pathMath(.*)*',
     redirect: '/404',
     name: 'Any',
+    meta: {
+      hidden: false,
+    },
   },
 ];

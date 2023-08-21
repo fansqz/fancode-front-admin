@@ -19,6 +19,8 @@ interface user {
   sex: number;
   role: string;
   loginName: string;
+  menus: [];
+  roles: [];
 }
 
 export interface userResponseData {
