@@ -8,7 +8,7 @@
         <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
         <el-table-column label="题目编号" align="center">
           <template v-slot="{ row }">
-            <pre>{{ row.code }}</pre>
+            <pre>{{ row.number }}</pre>
           </template>
         </el-table-column>
         <el-table-column label="题目名称" align="center">
@@ -65,6 +65,7 @@
     <Update
       v-if="isUpdateOrInsert"
       @exit="closeUpdateOrInsert"
+      @submit="closeUpdateOrInsert"
       :problemID="problemID"
       :type="type"
     ></Update>
@@ -154,6 +155,8 @@
   // closePage 关闭修改页面
   const closeUpdateOrInsert = () => {
     isUpdateOrInsert.value = false;
+    // 读取数据
+    getProblemList();
   };
 </script>
 

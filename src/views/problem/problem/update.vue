@@ -24,7 +24,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="编号" label-width="auto " style="margin-left: 10px">
-                <el-input v-model="problem.code" />
+                <el-input v-model="problem.number" />
               </el-form-item>
             </el-col>
           </el-row>
@@ -98,7 +98,7 @@
   let problem = reactive({
     id: Number(id as string),
     name: '',
-    code: '',
+    number: '',
     difficulty: 1,
     enable: false,
     title: '',
@@ -111,7 +111,7 @@
     type: string;
     problemID: string;
   }>();
-  const emit = defineEmits(['exit']);
+  const emit = defineEmits(['exit', 'submit']);
 
   // 获取题目
   const readProblem = async (id: string) => {
@@ -119,7 +119,7 @@
       let result = await reqGetProblem(id);
       if (result.code == 200) {
         problem.id = result.data.id;
-        problem.code = result.data.code;
+        problem.number = result.data.number;
         problem.difficulty = result.data.difficulty;
         problem.enable = result.data.enable;
         problem.description = result.data.description;
@@ -159,7 +159,7 @@
       let result = await reqUpdateProblem({
         id: problem.id,
         name: problem.name,
-        code: problem.code,
+        number: problem.number,
         difficulty: problem.difficulty,
         enable: problem.enable,
         description: problem.description,
@@ -172,7 +172,7 @@
           message: '提交成功',
           type: 'success',
         });
-        $router.push('/problem/view');
+        emit('submit');
       } else {
         ElMessage({
           showClose: true,
