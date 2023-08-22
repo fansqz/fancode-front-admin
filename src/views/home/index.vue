@@ -1,7 +1,14 @@
 <template>
-  <div>
-    <h1>我是一级路由，展示登录成功以后的数据</h1>
-  </div>
+  <el-card class="box-card">
+    <div>欢迎回来哟</div>
+  </el-card>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
+
+<style scoped lang="scss">
+  .box-card {
+    min-height: 100%;
+  }
+</style>
