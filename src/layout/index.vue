@@ -11,8 +11,8 @@
     </div>
 
     <!--顶部tabbar-->
-    <div class="layout_tabbar">
-      <Tabbar></Tabbar>
+    <div class="layout_header">
+      <Header></Header>
     </div>
 
     <!--展示栏-->
@@ -28,7 +28,7 @@
   // 获取用户仓库
   import useUserStore from '@/store/modules/user';
   import Main from './main/index.vue';
-  import Tabbar from './tabbar/index.vue';
+  import Header from './header/index.vue';
 
   let userStore = useUserStore();
   let menu: any[] = reactive([]);
@@ -59,12 +59,12 @@
         bottom: 0%;
       }
     }
-    .layout_tabbar {
+    .layout_header {
       box-sizing: border-box;
       position: fixed;
       width: 100%;
-      height: $base-tabbar-height;
-      background-color: $base-tabbar-background;
+      height: $base-header-height;
+      background-color: $base-header-background;
       top: 0;
       border-bottom: 1px solid $border-color;
     }
