@@ -48,14 +48,14 @@
       box-sizing: border-box;
       position: relative;
       width: $base-menu-width;
-      height: calc(100vh - $base-tabbar-height);
+      height: calc(100vh - $base-header-height);
       background: $base-menu-background;
-      top: $base-tabbar-height;
+      top: $base-header-height;
       border-right: 1px solid $border-color;
       .scrollbar {
         position: fixed;
         width: $base-menu-width - 1px;
-        height: calc(100% - $base-tabbar-height);
+        height: calc(100% - $base-header-height);
         bottom: 0%;
       }
     }
@@ -72,8 +72,8 @@
       box-sizing: border-box;
       position: fixed;
       width: calc(100vw - $base-menu-width);
-      height: calc(100vh - $base-tabbar-height);
-      top: $base-tabbar-height;
+      height: calc(100vh - $base-header-height);
+      top: $base-header-height;
       left: $base-menu-width;
       padding: 20px;
       overflow: auto;

@@ -23,20 +23,20 @@
     height: 100%;
     .logo {
       position: absolute;
-      height: $base-tabbar-height;
+      height: $base-header-height;
       width: 180px;
       left: 0px;
     }
     .tabbar_left {
       position: absolute;
-      height: $base-tabbar-height;
+      height: $base-header-height;
       width: 30%;
       left: $base-menu-width;
       top: 0%;
     }
     .tabbar_right {
       position: absolute;
-      height: $base-tabbar-height;
+      height: $base-header-height;
       width: 30%;
       right: 0%;
       top: 0%;
