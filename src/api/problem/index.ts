@@ -16,7 +16,7 @@ enum API {
 
 // 获取题目列表
 export const reqProblemList = (page: number, limit: number): Promise<any> => {
-  return request.get<any, any>(API.LIST_PROBLEM_URL + `${page}/+${limit}`);
+  return request.get<any, any>(API.LIST_PROBLEM_URL + `${page}/${limit}`);
 };
 
 // 创建题目

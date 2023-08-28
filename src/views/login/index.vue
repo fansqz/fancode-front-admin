@@ -1,6 +1,6 @@
 <template>
-  <div class="login_container">
-    <el-form class="login_form" :rules="rules" :model="loginForm" ref="loginElFrom">
+  <div class="login-container">
+    <el-form class="login-form" :rules="rules" :model="loginForm" ref="loginElFrom">
       <div class="title">
         <h1>FanCode</h1>
       </div>
@@ -18,7 +18,7 @@
       </el-form-item>
       <el-form-item>
         <el-button
-          class="login_button"
+          class="login-button"
           type="primary"
           @click="login"
           :loading="loading"
@@ -87,12 +87,12 @@
 </script>
 
 <style scoped lang="scss">
-  .login_container {
+  .login-container {
     width: 100vw;
     height: 100vh;
     background: url('@/assets/images/background.jpg') no-repeat;
     background-size: cover;
-    .login_form {
+    .login-form {
       position: relative;
       width: 20%;
       height: 30%;
@@ -116,7 +116,7 @@
           white-space: pre-line;
         }
       }
-      .login_button {
+      .login-button {
         width: 100%;
       }
     }

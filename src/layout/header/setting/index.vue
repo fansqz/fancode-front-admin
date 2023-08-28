@@ -1,6 +1,6 @@
 <template>
   <div class="setting">
-    <el-dropdown :hide-on-click="false" class="user_dropdown">
+    <el-dropdown :hide-on-click="false" class="user-dropdown">
       <span class="el-dropdown-link">
         {{ userStore.username }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
       </span>
@@ -12,7 +12,7 @@
         </el-dropdown-menu>
       </template>
     </el-dropdown>
-    <img src="@/assets/vue.svg" style="width: 24px; height: 24px" class="user_image" />
+    <img src="@/assets/vue.svg" style="width: 24px; height: 24px" class="user-image" />
   </div>
 </template>
 
@@ -36,10 +36,10 @@
     width: 100%;
     align-items: center;
     flex-direction: row-reverse;
-    .user_dropdown {
+    .user-dropdown {
       padding-right: 60px;
     }
-    .user_image {
+    .user-image {
       padding: 10px;
     }
   }

@@ -1,7 +1,7 @@
 <template>
-  <div class="layout_container">
+  <div class="layout-container">
     <!--左侧菜单-->
-    <div class="layout_slider">
+    <div class="layout-slider">
       <div class=""></div>
       <el-scrollbar class="scrollbar">
         <el-menu>
@@ -11,12 +11,12 @@
     </div>
 
     <!--顶部tabbar-->
-    <div class="layout_header">
+    <div class="layout-header">
       <Header></Header>
     </div>
 
     <!--展示栏-->
-    <div class="layout_main">
+    <div class="layout-main">
       <Main></Main>
     </div>
   </div>
@@ -40,11 +40,11 @@
 </script>
 
 <style scoped lang="scss">
-  .layout_container {
+  .layout-container {
     width: 100vw;
     height: 100vh;
 
-    .layout_slider {
+    .layout-slider {
       box-sizing: border-box;
       position: relative;
       width: $base-menu-width;
@@ -59,7 +59,7 @@
         bottom: 0%;
       }
     }
-    .layout_header {
+    .layout-header {
       box-sizing: border-box;
       position: fixed;
       width: 100%;
@@ -68,7 +68,7 @@
       top: 0;
       border-bottom: 1px solid $border-color;
     }
-    .layout_main {
+    .layout-main {
       box-sizing: border-box;
       position: fixed;
       width: calc(100vw - $base-menu-width);
