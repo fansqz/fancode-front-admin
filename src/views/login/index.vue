@@ -5,7 +5,7 @@
         <h1>FanCode</h1>
       </div>
       <el-form-item prop="loginName">
-        <el-input :prefix-icon="User" v-model="loginForm.loginName"> </el-input>
+        <el-input :prefix-icon="User" v-model="loginForm.account"> </el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input
@@ -44,12 +44,13 @@
   let $route = useRoute();
   let loading = ref(false);
   let loginForm = reactive({
-    loginName: 'uuid',
+    account: 'uuid',
     password: 'password',
+    type: 'password',
   });
 
   let rules = {
-    loginName: [
+    account: [
       { required: true, message: '用户uuid不能为空', trigger: 'change' },
       { required: true, min: 5, max: 10, message: '用户uuid长度需6-10位' },
     ],

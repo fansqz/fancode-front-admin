@@ -1,7 +1,8 @@
 // 登录接口需要携带的ts类型
 export interface loginForm {
-  loginName: string;
+  account: string;
   password: string;
+  type: string;
 }
 
 // 登录接口返回数据类型
