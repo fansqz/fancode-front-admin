@@ -36,7 +36,7 @@
             <pre>{{ row.createdAt }}</pre>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" width="200px">
           <template v-slot="{ row }">
             <el-button type="primary" size="small" icon="Edit" @click="handleUpdateProblem(row.id)"
               >修改</el-button

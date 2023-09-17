@@ -43,14 +43,21 @@
               <el-radio border :label="5">困难</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="是否启用" label-width="auto">
+          <el-form-item label="支持的编程语言" label-width="auto">
+            <el-checkbox-group v-model="problem.languages">
+              <el-checkbox :label="'c'">C</el-checkbox>
+              <el-checkbox :label="'java'">Java</el-checkbox>
+              <el-checkbox :label="'go'">Go</el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="是否启用" label-width="auto" v-if="type == 'update'">
             <el-switch
               v-model="problem.enable"
               style="--el-switch-on-color: #13ce66; --el-switch-off-color: #646765"
             />
           </el-form-item>
         </el-form>
-        <div class="file">
+        <div class="file" v-if="type == 'update'">
           <el-upload
             class="upload-demo"
             drag
@@ -102,6 +109,7 @@
     difficulty: 1,
     enable: false,
     title: '',
+    languages: [],
     description: '',
     path: '',
   });
@@ -126,6 +134,7 @@
         problem.name = result.data.name;
         problem.path = result.data.path;
         problem.title = result.data.title;
+        problem.languages = result.data.languages.split(',');
       }
     } catch (err) {
       ElMessage({
@@ -165,18 +174,19 @@
         description: problem.description,
         title: problem.title,
         file: problemFile,
+        languages: problem.languages.join(','),
       });
       if (result.code == 200) {
         ElMessage({
           showClose: true,
-          message: '提交成功',
+          message: result.message,
           type: 'success',
         });
         emit('submit');
       } else {
         ElMessage({
           showClose: true,
-          message: '提交失败',
+          message: result.message,
           type: 'error',
         });
       }

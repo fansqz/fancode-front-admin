@@ -3,15 +3,15 @@ import { toFormData } from '@/utils/format';
 
 enum API {
   //题目相关url
-  PROBLEM_URL = 'manage/problem',
+  PROBLEM_URL = '/manage/problem',
   //获取题目列表
-  LIST_PROBLEM_URL = 'manage/problem/list/',
+  LIST_PROBLEM_URL = '/manage/problem/list/',
   // 下载题目编程文件
   DOWNLOAD_PROBLEM_FILE_URL = '/problem/file/download',
   // 下载题目编程文件的模板文件
   DOWNLOAD_PROBLEM_TEMPLATE_FILE = '/problem/file/download/template',
   // 设置题目可用
-  UPDATE_PROBLEM_ENABLE = '/problem/enable',
+  UPDATE_PROBLEM_ENABLE = '/manage/problem/enable',
 }
 
 // 获取题目列表
