@@ -2,7 +2,7 @@
   <div>
     <el-card class="box-card">
       <!--顶部添加题库-->
-      <el-button type="primary" size="default"> 添加题库 </el-button>
+      <el-button type="primary" size="default" @click="handlerInsertBank"> 添加题库 </el-button>
       <!--展示题库列表-->
       <el-table style="margin: 10px 0px" border :data="problemBankList">
         <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
@@ -29,7 +29,7 @@
         <el-table-column label="操作" align="center" width="200px">
           <template v-slot="{ row }">
             <el-button type="primary" size="small" icon="Edit">修改</el-button>
-            <el-button type="danger" size="small" icon="Delete" @click="handleDeleteProblem(row.id)"
+            <el-button type="danger" size="small" icon="Delete" @click="handleDeleteBank(row.id)"
               >删除</el-button
             >
           </template>
@@ -55,6 +55,10 @@
   import { ref, onMounted } from 'vue';
   import { reqProblemBankList, reqDeleteProblemBank } from '@/api/problem-bank';
   import { ElMessage } from 'element-plus';
+  import { useRouter, useRoute } from 'vue-router';
+
+  let $router = useRouter();
+  let $route = useRoute();
 
   //当前页码
   let pageNo = ref<number>(1);
@@ -75,7 +79,7 @@
     }
   };
 
-  const handleDeleteProblem = async (id: number) => {
+  const handleDeleteBank= async (id: number) => {
     let result = await reqDeleteProblemBank(id, false);
     ElMessage({
       showClose: true,
@@ -83,6 +87,10 @@
       type: 'success',
     });
     getProblemBankList();
+  };
+
+  const handlerInsertBank = async () => {
+    changeRoute("bank-update");
   };
 
   //组件挂载完毕以后获取数据
@@ -99,6 +107,13 @@
   const changePageSize = () => {
     pageNo.value = 1;
     getProblemBankList();
+  };
+
+  const changeRoute = (routeName: string, params = {}) => {
+    if ($route.name === routeName) {
+      return;
+    }
+    $router.push({ name: routeName, params: params });
   };
 </script>
 

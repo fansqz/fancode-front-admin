@@ -1,7 +1,7 @@
 <template>
   <template v-for="item in menuList" :key="item.path">
     <!--没有子路由-->
-    <template v-if="haveChildren(item)">
+    <template v-if="!haveChildren(item)">
       <el-menu-item v-if="!item.meta.hidden" :index="item.path" @click="goRoute">
         <template #title>
           <el-icon>
@@ -27,7 +27,7 @@
       </el-menu-item>
     </template>
     <!--有子路由，且个数大于1-->
-    <template v-if="item.children && item.children.length > 1">
+    <template v-if="haveChildren(item) && childrenCount(item) > 1">
       <el-sub-menu v-if="!item.meta.hidden" :index="item.path">
         <template #title>
           <el-icon>
@@ -56,9 +56,9 @@
     if (!router.children) {
       return false;
     } else {
-      let answer = true;
+      let answer = false;
       router.children.forEach((element: any) => {
-        answer = answer && element.meta.hidden;
+        answer = answer || !element.meta.hidden;
       });
       return answer;
     }
@@ -66,8 +66,8 @@
 
   const childrenCount = (router: any): number => {
     let answer = 0;
-    router.children.array.forEach((element: any) => {
-      if (element.meta.hidden) {
+    router.children.forEach((element: any) => {
+      if (!element.meta.hidden) {
         answer++;
       }
     });

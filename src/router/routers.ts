@@ -70,6 +70,15 @@ export const asyncRoute = [
           hidden: false,
         },
         component: () => import('@/views/problem/bank/index.vue'),
+        children: [
+          {
+            path: '/manage/bank/update',
+            name: 'bank-update',
+            meta: {
+              hidden: true,
+            },
+          },
+        ]
       },
       // 权限管理
       {
