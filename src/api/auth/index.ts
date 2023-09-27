@@ -1,5 +1,4 @@
 import request from '@/utils/request';
-import type { loginForm, loginResponseData, userResponseData } from './type';
 import { toFormData } from 'axios';
 
 enum API {
@@ -8,7 +7,7 @@ enum API {
 }
 
 // 暴露请求函数
-export const reqLogin = (data: loginForm): Promise<loginResponseData> => {
+export const reqLogin = (data: any): Promise<any> => {
   return request.post(API.LOGIN_URL, toFormData(data), {
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -17,6 +16,6 @@ export const reqLogin = (data: loginForm): Promise<loginResponseData> => {
 };
 
 // 获取用户信息
-export const reqUserInfo = (): Promise<userResponseData> => {
+export const reqUserInfo = (): Promise<any> => {
   return request.get(API.USERINFO_URL);
 };

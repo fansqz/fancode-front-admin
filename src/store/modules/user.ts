@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { defineStore } from 'pinia';
 import { reqLogin, reqUserInfo } from '@/api/auth';
-import type { loginForm } from '@/api/auth/type';
-import type { UserState } from './types/type';
 // 引入路由
 import { constantRoute, asyncRoute, anyRoute } from '@/router/routers';
 import router from '@/router';
@@ -10,7 +8,7 @@ import router from '@/router';
 import cloneDeep from 'lodash/cloneDeep';
 
 const useUserStore = defineStore('User', {
-  state: (): UserState => {
+  state: (): any => {
     return {
       token: localStorage.getItem('TOKEN'),
       menuRoutes: [],
@@ -22,7 +20,7 @@ const useUserStore = defineStore('User', {
     };
   },
   actions: {
-    async userLogin(data: loginForm) {
+    async userLogin(data: any) {
       const result = await reqLogin(data);
       if (result.code == 200) {
         this.token = result.data;
