@@ -1,7 +1,7 @@
 <template>
   <template v-for="item in menuList" :key="item.path">
     <!--没有子路由-->
-    <template v-if="!item.children">
+    <template v-if="haveChildren(item)">
       <el-menu-item v-if="!item.meta.hidden" :index="item.path" @click="goRoute">
         <template #title>
           <el-icon>
@@ -12,7 +12,7 @@
       </el-menu-item>
     </template>
     <!--有子路由，但是只有一个-->
-    <template v-if="item.children && item.children.length == 1">
+    <template v-if="haveChildren(item) && childrenCount(item) == 1">
       <el-menu-item
         v-if="!item.meta.hidden && !item.children[0].meta.hidden"
         :index="item.children[0].path"
@@ -50,6 +50,28 @@
   //点击菜单回调
   const goRoute = (vc: any) => {
     $router.push(vc.index);
+  };
+
+  const haveChildren = (router: any): boolean => {
+    if (!router.children) {
+      return false;
+    } else {
+      let answer = true;
+      router.children.forEach((element: any) => {
+        answer = answer && element.meta.hidden;
+      });
+      return answer;
+    }
+  };
+
+  const childrenCount = (router: any): number => {
+    let answer = 0;
+    router.children.array.forEach((element: any) => {
+      if (element.meta.hidden) {
+        answer++;
+      }
+    });
+    return answer;
   };
 </script>
 
