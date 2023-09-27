@@ -5,7 +5,7 @@ enum API {
   //题目相关url
   PROBLEM_URL = '/manage/problem',
   //获取题目列表
-  LIST_PROBLEM_URL = '/manage/problem/list/',
+  LIST_PROBLEM_URL = '/manage/problem/list',
   // 下载题目编程文件
   DOWNLOAD_PROBLEM_FILE_URL = '/problem/file/download',
   // 下载题目编程文件的模板文件
@@ -15,8 +15,10 @@ enum API {
 }
 
 // 获取题目列表
-export const reqProblemList = (page: number, limit: number): Promise<any> => {
-  return request.get<any, any>(API.LIST_PROBLEM_URL + `${page}/${limit}`);
+export const reqProblemList = (data: any): Promise<any> => {
+  return request.get<any, any>(API.LIST_PROBLEM_URL, {
+    params: data,
+  });
 };
 
 // 创建题目
