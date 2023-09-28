@@ -13,7 +13,7 @@
         </el-table-column>
         <el-table-column label="题目数量" align="center">
           <template v-slot="{ row }">
-            <pre>{{ row.createdAt }}</pre>
+            <pre>{{ row.problemCount }}</pre>
           </template>
         </el-table-column>
         <el-table-column label="创建时间" align="center">

@@ -45,7 +45,7 @@
   let bankData = reactive<any>({
     icon: '',
     name: '',
-    discription: '',
+    description: '',
   });
   // dialog是否可见
   const visible = computed({
