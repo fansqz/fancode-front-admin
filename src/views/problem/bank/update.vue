@@ -10,7 +10,7 @@
           :http-request="uploadProblemBankIcon"
           :before-upload="beforeUpload"
         >
-          <img v-if="bankData.icon" :src="bankData.icon" class="avatar" />
+          <img v-if="bankData.icon" :src="bankData.icon" class="bank-icon" />
           <el-icon v-else class="icon-upload-icon"><Plus /></el-icon>
         </el-upload>
       </el-form-item>
@@ -107,15 +107,16 @@
   const submitAddOrUpdateBank = async () => {
     let result: any;
     if (props.type == 'insert') {
-      result = reqInsertProblemBank(bankData);
+      result = await reqInsertProblemBank(bankData);
     } else {
-      result = reqUpdateProblemBank({
+      result = await reqUpdateProblemBank({
         id: props.bankID,
         icon: bankData.icon,
         name: bankData.name,
         description: bankData.description,
       });
     }
+    console.log(result);
     if (result.code == 200) {
       ElMessage({
         type: 'success',
@@ -156,9 +157,20 @@
   );
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .dialog {
     .icon-upload {
+      border: 1px dashed var(--el-border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: var(--el-transition-duration-fast);
+      .bank-icon {
+        width: 178px;
+        height: 178px;
+        display: block;
+      }
       .icon-upload-icon {
         font-size: 28px;
         color: #8c939d;

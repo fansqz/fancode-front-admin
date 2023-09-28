@@ -28,7 +28,7 @@ export const reqProblemBankList = (data: any): Promise<any> => {
 
 // 创建题库
 export const reqInsertProblemBank = (data: any): Promise<any> => {
-  return request.post(API.LIST_BANK_URL, toFormData(data), {
+  return request.post(API.BANK_URL, toFormData(data), {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -50,6 +50,6 @@ export const reqGetProblemBank = (id: string): Promise<any> => {
 };
 
 // 删除题库
-export const reqDeleteProblemBank = (id: number, forceDelete: boolean): Promise<any> => {
+export const reqDeleteProblemBank = (id: string, forceDelete: boolean): Promise<any> => {
   return request.delete(API.LIST_BANK_URL + '/' + id + '/' + forceDelete);
 };

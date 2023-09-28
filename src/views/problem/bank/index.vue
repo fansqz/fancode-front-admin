@@ -28,7 +28,9 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="200px">
           <template v-slot="{ row }">
-            <el-button type="primary" size="small" icon="Edit" @click="">修改</el-button>
+            <el-button type="primary" size="small" icon="Edit" @click="handlerUpdateBank"
+              >修改</el-button
+            >
             <el-button type="danger" size="small" icon="Delete" @click="handleDeleteBank(row.id)"
               >删除</el-button
             >
@@ -47,18 +49,21 @@
         :total="total"
         style="margin: 0px 3%"
       />
+
+      <BankUpdate
+        v-model:visible="updateDialogVisible"
+        :type="updateOrInsert"
+        :bankID="problemBankID"
+      />
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted, reactive } from 'vue';
   import { reqProblemBankList, reqDeleteProblemBank } from '@/api/problem-bank';
+  import BankUpdate from './update.vue';
+  import { ref, onMounted } from 'vue';
   import { ElMessage } from 'element-plus';
-  import { useRouter, useRoute } from 'vue-router';
-
-  let $router = useRouter();
-  let $route = useRoute();
 
   //当前页码
   let pageNo = ref<number>(1);
@@ -67,6 +72,10 @@
   let total = ref<number>(0);
   // 存储题目列表
   let problemBankList = ref([]);
+  // 正在更新的题库id
+  let problemBankID = ref('');
+  let updateOrInsert = ref('insert');
+  let updateDialogVisible = ref(false);
 
   const getProblemBankList = async () => {
     let result = await reqProblemBankList({
@@ -79,7 +88,7 @@
     }
   };
 
-  const handleDeleteBank = async (id: number) => {
+  const handleDeleteBank = async (id: string) => {
     let result = await reqDeleteProblemBank(id, false);
     ElMessage({
       showClose: true,
@@ -89,33 +98,16 @@
     getProblemBankList();
   };
 
-  // 是否在更新或者添加
-  let isInUpdateOrInsert = ref(false);
-  // dialog的类型
-  let dialogType = ref('update');
-  let updateOrInsertBankData = reactive<any>({
-    id: '',
-    name: '',
-    discription: '',
-  });
+  const handlerUpdateBank = async (id: string) => {
+    problemBankID.value = id;
+    updateOrInsert.value = 'update';
+    updateDialogVisible.value = true;
+  };
 
-  // 上传题库图标
-  const uploadProblemBankIcon = async (params: any) => {
-    let result = await reqUploadAvatar({
-      avatar: params.file,
-    });
-    if (result.code == 200) {
-      account.avatar = result.data;
-      ElMessage({
-        type: 'success',
-        message: '头像上传成功',
-      });
-    } else {
-      ElMessage({
-        type: 'error',
-        message: result.message,
-      });
-    }
+  const handlerInsertBank = () => {
+    problemBankID.value = '';
+    updateOrInsert.value = 'insert';
+    updateDialogVisible.value = true;
   };
 
   //组件挂载完毕以后获取数据
@@ -132,13 +124,6 @@
   const changePageSize = () => {
     pageNo.value = 1;
     getProblemBankList();
-  };
-
-  const changeRoute = (routeName: string, params = {}) => {
-    if ($route.name === routeName) {
-      return;
-    }
-    $router.push({ name: routeName, params: params });
   };
 </script>
 
