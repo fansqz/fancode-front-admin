@@ -92,6 +92,7 @@
       let result = await reqGetProblemBank(bankID);
       if (result.code == 200) {
         let data = result.data;
+        console.log(data);
         bankData.icon = data.icon;
         bankData.name = data.name;
         bankData.description = data.description;
@@ -139,19 +140,15 @@
   });
 
   watch(
-    () => props.bankID,
-    (newValue: string) => {
-      getProblemBank(newValue);
-    },
-  );
-
-  watch(
-    () => props.type,
-    (newValue: string) => {
-      if (newValue == 'insert') {
+    () => props.visible,
+    () => {
+      if (props.type == 'insert') {
         bankData.icon = '';
         bankData.name = '';
         bankData.description = '';
+      } else {
+        console.log('aaaaaaa');
+        getProblemBank(props.bankID);
       }
     },
   );

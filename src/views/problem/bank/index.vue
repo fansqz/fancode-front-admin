@@ -28,7 +28,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="200px">
           <template v-slot="{ row }">
-            <el-button type="primary" size="small" icon="Edit" @click="handlerUpdateBank"
+            <el-button type="primary" size="small" icon="Edit" @click="handlerUpdateBank(row.id)"
               >修改</el-button
             >
             <el-button type="danger" size="small" icon="Delete" @click="handleDeleteBank(row.id)"
