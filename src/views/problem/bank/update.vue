@@ -40,7 +40,7 @@
 
   // type = update or insert
   const props = defineProps(['type', 'bankID', 'visible']);
-  const emit = defineEmits(['update:visible']);
+  const emit = defineEmits(['update:visible', 'afterSubmit']);
   // 题库数据
   let bankData = reactive<any>({
     icon: '',
@@ -117,13 +117,13 @@
         description: bankData.description,
       });
     }
-    console.log(result);
     if (result.code == 200) {
       ElMessage({
         type: 'success',
         message: result.message,
       });
       visible.value = false;
+      emit('afterSubmit');
     } else {
       ElMessage({
         type: 'error',

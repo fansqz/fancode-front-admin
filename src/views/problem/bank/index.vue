@@ -54,6 +54,7 @@
         v-model:visible="updateDialogVisible"
         :type="updateOrInsert"
         :bankID="problemBankID"
+        @afterSubmit="getProblemBankList"
       />
     </el-card>
   </div>
