@@ -22,7 +22,7 @@ export const reqProblemList = (data: any): Promise<any> => {
 };
 
 // 创建题目
-export const reqCreateProblem = (): Promise<any> => {
+export const reqInsertProblem = (): Promise<any> => {
   return request.post<any, any>(API.PROBLEM_URL);
 };
 

@@ -28,7 +28,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="200px">
           <template v-slot="{ row }">
-            <el-button type="primary" size="small" icon="Edit">修改</el-button>
+            <el-button type="primary" size="small" icon="Edit" @click="">修改</el-button>
             <el-button type="danger" size="small" icon="Delete" @click="handleDeleteBank(row.id)"
               >删除</el-button
             >
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, reactive } from 'vue';
   import { reqProblemBankList, reqDeleteProblemBank } from '@/api/problem-bank';
   import { ElMessage } from 'element-plus';
   import { useRouter, useRoute } from 'vue-router';
@@ -79,7 +79,7 @@
     }
   };
 
-  const handleDeleteBank= async (id: number) => {
+  const handleDeleteBank = async (id: number) => {
     let result = await reqDeleteProblemBank(id, false);
     ElMessage({
       showClose: true,
@@ -89,8 +89,33 @@
     getProblemBankList();
   };
 
-  const handlerInsertBank = async () => {
-    changeRoute("bank-update");
+  // 是否在更新或者添加
+  let isInUpdateOrInsert = ref(false);
+  // dialog的类型
+  let dialogType = ref('update');
+  let updateOrInsertBankData = reactive<any>({
+    id: '',
+    name: '',
+    discription: '',
+  });
+
+  // 上传题库图标
+  const uploadProblemBankIcon = async (params: any) => {
+    let result = await reqUploadAvatar({
+      avatar: params.file,
+    });
+    if (result.code == 200) {
+      account.avatar = result.data;
+      ElMessage({
+        type: 'success',
+        message: '头像上传成功',
+      });
+    } else {
+      ElMessage({
+        type: 'error',
+        message: result.message,
+      });
+    }
   };
 
   //组件挂载完毕以后获取数据

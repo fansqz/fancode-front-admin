@@ -72,13 +72,14 @@ export const asyncRoute = [
         component: () => import('@/views/problem/bank/index.vue'),
         children: [
           {
+            // 更新题库
             path: '/manage/bank/update',
             name: 'bank-update',
             meta: {
               hidden: true,
             },
           },
-        ]
+        ],
       },
       // 权限管理
       {

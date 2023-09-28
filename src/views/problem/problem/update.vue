@@ -96,7 +96,7 @@
     reqUpdateProblem,
     reqDownloadProblemFile,
     reqDownloadProblemTemplateFile,
-    reqCreateProblem,
+    reqInsertProblem,
   } from '@/api/problem';
   import download from '@/utils/download';
 
@@ -149,7 +149,7 @@
   watchEffect(async () => {
     if (props.type == 'insert') {
       // 创建题目
-      let result = await reqCreateProblem();
+      let result = await reqInsertProblem();
       readProblem(result.data);
     } else {
       readProblem(props.problemID);
