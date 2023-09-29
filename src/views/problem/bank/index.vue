@@ -1,6 +1,23 @@
 <template>
   <div>
     <el-card class="box-card">
+      <!--搜索框-->
+      <template #header>
+        <div class="search">
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <el-input v-model="listQuery.name" clearable placeholder="请输入题库名称" />
+            </el-col>
+            <el-col :span="6">
+              <el-input v-model="listQuery.description" clearable placeholder="请输入题库描述" />
+            </el-col>
+            <el-col :span="6">
+              <el-button type="primary" @click="search"> 查询 </el-button>
+              <el-button @click="reset"> 重置 </el-button>
+            </el-col>
+          </el-row>
+        </div>
+      </template>
       <!--顶部添加题库-->
       <el-button type="primary" size="default" @click="handlerInsertBank"> 添加题库 </el-button>
       <!--展示题库列表-->
@@ -43,19 +60,19 @@
       <el-pagination
         @current-change="changePageNo"
         @size-change="changePageSize"
-        v-model:current-page="pageNo"
-        v-model:page-size="limit"
+        v-model:current-page="listQuery.page"
+        v-model:page-size="listQuery.pageSize"
         :page-sizes="[10, 20, 30, 50]"
         :background="true"
         layout="prev, pager, next, jumper, ->,sizes, total"
-        :total="total"
+        :total="listQuery.total"
         style="margin: 0px 3%"
       />
 
       <BankUpdate
-        v-model:visible="updateDialogVisible"
-        :type="updateOrInsert"
-        :bankID="problemBankID"
+        v-model:visible="updateDialogData.visible"
+        :type="updateDialogData.type"
+        :bankID="updateDialogData.bankID"
         @afterSubmit="getProblemBankList"
       />
     </el-card>
@@ -65,31 +82,37 @@
 <script setup lang="ts">
   import { reqProblemBankList, reqDeleteProblemBank } from '@/api/problem-bank';
   import BankUpdate from './update.vue';
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, reactive } from 'vue';
   import { useRouter } from 'vue-router';
   import { ElMessage } from 'element-plus';
 
   let $router = useRouter();
 
-  //当前页码
-  let pageNo = ref<number>(1);
-  // 每页展示多少条数据
-  let limit = ref<number>(10);
-  let total = ref<number>(0);
-  // 存储题目列表
+  let listQuery = reactive({
+    page: 1,
+    pageSize: 10,
+    total: 0,
+    name: '',
+    description: '',
+  });
   let problemBankList = ref([]);
-  // 正在更新的题库id
-  let problemBankID = ref('');
-  let updateOrInsert = ref('insert');
-  let updateDialogVisible = ref(false);
+
+  // 管理更新或者添加题库的dialog
+  let updateDialogData = reactive({
+    bankID: '',
+    type: 'insert',
+    visible: false,
+  });
 
   const getProblemBankList = async () => {
     let result = await reqProblemBankList({
-      page: pageNo.value,
-      pageSize: limit.value,
+      page: listQuery.page,
+      pageSize: listQuery.pageSize,
+      name: listQuery.name,
+      description: listQuery.description,
     });
     if (result.code == 200) {
-      total.value = result.data.total;
+      listQuery.total = result.data.total;
       problemBankList.value = result.data.list;
     }
   };
@@ -104,16 +127,18 @@
     getProblemBankList();
   };
 
+  // 更新题库
   const handlerUpdateBank = async (id: string) => {
-    problemBankID.value = id;
-    updateOrInsert.value = 'update';
-    updateDialogVisible.value = true;
+    updateDialogData.bankID = id;
+    updateDialogData.type = 'update';
+    updateDialogData.visible = true;
   };
 
+  // 添加题库
   const handlerInsertBank = () => {
-    problemBankID.value = '';
-    updateOrInsert.value = 'insert';
-    updateDialogVisible.value = true;
+    updateDialogData.bankID = '';
+    updateDialogData.type = 'insert';
+    updateDialogData.visible = true;
   };
 
   const handlerProblemManage = (bankID: string) => {
@@ -123,6 +148,15 @@
         bankID: bankID,
       },
     });
+  };
+
+  const search = () => {
+    getProblemBankList();
+  };
+
+  const reset = () => {
+    listQuery.name = '';
+    listQuery.description = '';
   };
 
   //组件挂载完毕以后获取数据
@@ -137,7 +171,7 @@
   };
 
   const changePageSize = () => {
-    pageNo.value = 1;
+    listQuery.page = 1;
     getProblemBankList();
   };
 </script>
