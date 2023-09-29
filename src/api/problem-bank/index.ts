@@ -6,6 +6,8 @@ enum API {
   BANK_URL = '/manage/problemBank',
   //获取题库列表
   LIST_BANK_URL = '/manage/problemBank/list',
+  //获取简单题库列表
+  LIST_SIMPLE_BANK_URL = '/manage/problemBank/simple/list',
   // 题库图标
   BANK_ICON_URL = '/manage/problemBank/icon',
 }
@@ -24,6 +26,11 @@ export const reqProblemBankList = (data: any): Promise<any> => {
   return request.get<any, any>(API.LIST_BANK_URL, {
     params: data,
   });
+};
+
+// 获取简单题库列表，只有名称和id
+export const reqSimpleProblemBankList = (): Promise<any> => {
+  return request.get<any, any>(API.LIST_SIMPLE_BANK_URL);
 };
 
 // 创建题库

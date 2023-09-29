@@ -50,14 +50,25 @@
               <el-checkbox :label="'go'">Go</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
-          <el-form-item label="是否启用" label-width="auto" v-if="type == 'update'">
+          <el-form-item label="所属题库" label-width="auto">
+            <el-select v-model="problem.bankID" placeholder="Select" size="large">
+              <el-option :key="-1" :label="'无'" :value="''"/>
+              <el-option
+                v-for="item in bankList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="是否启用" label-width="auto">
             <el-switch
               v-model="problem.enable"
               style="--el-switch-on-color: #13ce66; --el-switch-off-color: #646765"
             />
           </el-form-item>
         </el-form>
-        <div class="file" v-if="type == 'update'">
+        <div class="file">
           <el-upload
             class="upload-demo"
             drag
@@ -88,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-  import { reactive, watchEffect } from 'vue';
+  import { reactive, watchEffect,ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import { ElMessage } from 'element-plus';
   import {
@@ -99,11 +110,16 @@
     reqInsertProblem,
   } from '@/api/problem';
   import download from '@/utils/download';
+import { reqSimpleProblemBankList } from '@/api/problem-bank';
 
   let $router = useRouter();
   const { id } = $router.currentRoute.value.params;
+  const props = defineProps(['type', 'problemID']);
+  const emit = defineEmits(['exit', 'submit']);
+  let bankList = ref<any[]>([]);
   let problem = reactive({
-    id: Number(id as string),
+    id: id as string,
+    bankID: '',
     name: '',
     number: '',
     difficulty: 1,
@@ -114,12 +130,6 @@
     path: '',
   });
   let problemFile: File;
-
-  const props = defineProps<{
-    type: string;
-    problemID: string;
-  }>();
-  const emit = defineEmits(['exit', 'submit']);
 
   // 获取题目
   const readProblem = async (id: string) => {
@@ -211,6 +221,13 @@
     download(result, '编程文件模板.zip');
   };
 
+  onMounted(async()=>{
+    let result = await reqSimpleProblemBankList();
+    if (result.code == 200) {
+      bankList.value = result.data;
+    }
+  });
+
   // closePage 关闭修改页面
   const closePage = () => {
     emit('exit');
@@ -218,6 +235,7 @@
 </script>
 
 <style scoped>
+.box-card {
   .card-header {
     display: flex;
     justify-content: space-between;
@@ -238,4 +256,6 @@
     align-items: center;
     padding: auto;
   }
+}
+
 </style>

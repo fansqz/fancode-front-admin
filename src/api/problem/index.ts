@@ -41,12 +41,12 @@ export const reqUpdateProblem = (data: any): Promise<any> => {
 };
 
 // 删除题目
-export const reqDeleteProblem = (id: number): Promise<any> => {
+export const reqDeleteProblem = (id: string): Promise<any> => {
   return request.delete(API.PROBLEM_URL + '/' + id);
 };
 
 // 下载题目的编程文件
-export const reqDownloadProblemFile = (id: number): Promise<any> => {
+export const reqDownloadProblemFile = (id: string): Promise<any> => {
   return request.get(API.DOWNLOAD_PROBLEM_FILE_URL + '/' + id, { responseType: 'blob' });
 };
 
@@ -56,7 +56,7 @@ export const reqDownloadProblemTemplateFile = (): Promise<any> => {
 };
 
 // 设置题目可用
-export const reqUpdateProblemEnable = (id: number, enable: boolean): Promise<any> => {
+export const reqUpdateProblemEnable = (id: number, enable: string): Promise<any> => {
   return request.post(
     API.UPDATE_PROBLEM_ENABLE,
     toFormData({

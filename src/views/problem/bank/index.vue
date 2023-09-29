@@ -8,7 +8,10 @@
         <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
         <el-table-column label="题库名称" align="center">
           <template v-slot="{ row }">
-            <pre>{{ row.name }}</pre>
+            <TextButton
+              @click="handlerProblemManage(row.id)"
+              :text="row.name"
+            />
           </template>
         </el-table-column>
         <el-table-column label="题目数量" align="center">
@@ -31,9 +34,13 @@
             <el-button type="primary" size="small" icon="Edit" @click="handlerUpdateBank(row.id)"
               >修改</el-button
             >
-            <el-button type="danger" size="small" icon="Delete" @click="handleDeleteBank(row.id)"
-              >删除</el-button
-            >
+            <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteBank(row.id)">
+              <template #reference>
+                <el-button type="danger" size="small" icon="Delete">
+                  删除
+                </el-button>
+              </template>
+          </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -64,7 +71,10 @@
   import { reqProblemBankList, reqDeleteProblemBank } from '@/api/problem-bank';
   import BankUpdate from './update.vue';
   import { ref, onMounted } from 'vue';
+  import { useRouter } from 'vue-router';
   import { ElMessage } from 'element-plus';
+
+  let $router = useRouter(); 
 
   //当前页码
   let pageNo = ref<number>(1);
@@ -109,6 +119,15 @@
     problemBankID.value = '';
     updateOrInsert.value = 'insert';
     updateDialogVisible.value = true;
+  };
+
+  const handlerProblemManage = (bankID: string) => {
+    $router.push({
+    name: "bank-problem",
+    params: { 
+      bankID: bankID,
+     },
+  });
   };
 
   //组件挂载完毕以后获取数据

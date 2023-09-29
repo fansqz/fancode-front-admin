@@ -1,6 +1,11 @@
 <template>
-  <div>
-    <el-card v-if="!isUpdateOrInsert" class="box-card">
+  <div class="container">
+    <BankCard
+      class="bank-card"
+      v-if="bankID && !isUpdateOrInsert"
+      :bankID="bankID"
+    />
+    <el-card v-if="!isUpdateOrInsert" class="problem-card">
       <!--顶部添加题目-->
       <el-button type="primary" size="default" @click="handleInsertProblem"> 添加题目 </el-button>
       <!--展示题目列表-->
@@ -25,6 +30,8 @@
           <template v-slot="{ row }">
             <el-switch
               v-model="row.enable"
+              :active-value="1"
+              :inactive-value="-1"
               class="ml-2"
               style="--el-switch-on-color: #13ce66; --el-switch-off-color: #646765"
               @click="handleEnableProblem(row.id, row.enable)"
@@ -41,9 +48,13 @@
             <el-button type="primary" size="small" icon="Edit" @click="handleUpdateProblem(row.id)"
               >修改</el-button
             >
-            <el-button type="danger" size="small" icon="Delete" @click="handleDeleteProblem(row.id)"
-              >删除</el-button
-            >
+            <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteProblem(row.id)">
+              <template #reference>
+                <el-button type="danger" size="small" icon="Delete">
+                  删除
+                </el-button>
+              </template>
+          </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -64,8 +75,8 @@
     <!--添加题目的组件-->
     <Update
       v-if="isUpdateOrInsert"
-      @exit="closeUpdateOrInsert"
-      @submit="closeUpdateOrInsert"
+      @exit="closeUpdatePage"
+      @submit="closeUpdatePage"
       :problemID="problemID"
       :type="type"
     ></Update>
@@ -74,10 +85,15 @@
 
 <script setup lang="ts">
   import { ref, onMounted } from 'vue';
-  import { reqProblemList, reqDeleteProblem, reqUpdateProblemEnable } from '@/api/problem';
   import { ElMessage } from 'element-plus';
+  import { useRoute } from 'vue-router';
+  import { reqProblemList, reqDeleteProblem, reqUpdateProblemEnable } from '@/api/problem';
   import Update from './update.vue';
-
+  import BankCard from './bank-card.vue';
+  
+  const $route = useRoute();
+  // 所属题库id
+  let bankID = ref($route.params.bankID);
   //当前页码
   let pageNo = ref<number>(1);
   // 每页展示多少条数据
@@ -88,6 +104,7 @@
 
   const getProblemList = async () => {
     let result = await reqProblemList({
+      bankID: bankID.value,
       page: pageNo.value,
       pageSize: limit.value,
     });
@@ -97,7 +114,7 @@
     }
   };
 
-  const handleDeleteProblem = async (id: number) => {
+  const handleDeleteProblem = async (id: string) => {
     let result = await reqDeleteProblem(id);
     ElMessage({
       showClose: true,
@@ -107,7 +124,7 @@
     getProblemList();
   };
 
-  const handleEnableProblem = async (id: number, enable: boolean) => {
+  const handleEnableProblem = async (id: number, enable: string) => {
     let result = await reqUpdateProblemEnable(id, enable);
     if (result.code == 200) {
       ElMessage({
@@ -156,11 +173,25 @@
   };
 
   // closePage 关闭修改页面
-  const closeUpdateOrInsert = () => {
+  const closeUpdatePage = () => {
     isUpdateOrInsert.value = false;
     // 读取数据
     getProblemList();
   };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+  .container {
+    display:flex;
+    flex-direction: column;
+    align-items:center;/*所有子元素都垂直居中了*/
+    .bank-card {
+      width: 90%;
+      margin: 10px;
+    }
+    .problem-card {
+      width: 90%;
+    }
+  }
+
+</style>
