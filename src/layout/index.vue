@@ -4,7 +4,7 @@
     <div class="layout-slider">
       <div class=""></div>
       <el-scrollbar class="scrollbar">
-        <el-menu>
+        <el-menu :default-active="$route.path">
           <Menu :menuList="menu"></Menu>
         </el-menu>
       </el-scrollbar>
@@ -24,6 +24,7 @@
 
 <script setup lang="ts">
   import { reactive } from 'vue';
+  import { useRoute } from 'vue-router';
   import Menu from './menu/index.vue';
   // 获取用户仓库
   import useUserStore from '@/store/modules/user';
@@ -31,6 +32,7 @@
   import Header from './header/index.vue';
 
   let userStore = useUserStore();
+  let $route = useRoute();
   let menu: any[] = reactive([]);
   userStore.menuRoutes.forEach((element: any) => {
     if ((element.name == 'layout' || element.name == 'manage') && element.children) {

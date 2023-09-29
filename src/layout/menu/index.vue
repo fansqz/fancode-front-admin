@@ -49,6 +49,7 @@
   let $router = useRouter();
   //点击菜单回调
   const goRoute = (vc: any) => {
+    console.log(vc.index);
     $router.push(vc.index);
   };
 
