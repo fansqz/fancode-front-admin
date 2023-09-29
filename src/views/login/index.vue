@@ -102,7 +102,7 @@
       background-color: $background-color;
       border-radius: 15px;
       opacity: 0.9;
-      border: 1px solid $border-color;
+      border: 1px solid $base-border-color;
       padding: 20px 35px;
       .title {
         height: 25%;

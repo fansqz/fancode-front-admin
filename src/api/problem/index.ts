@@ -24,7 +24,9 @@ export const reqProblemList = (data: any): Promise<any> => {
 // 创建题目
 export const reqInsertProblem = (data: any): Promise<any> => {
   return request.post<any, any>(API.PROBLEM_URL, toFormData(data), {
-    'Context-Type': 'multipart/form-data',
+    headers: {
+      'Context-Type': 'multipart/form-data',
+    },
   });
 };
 

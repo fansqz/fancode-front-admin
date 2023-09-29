@@ -1,7 +1,37 @@
 <template>
   <div class="container">
-    <BankCard class="bank-card" v-if="bankID && !isUpdateOrInsert" :bankID="bankID" />
+    <BankCard
+      class="bank-card"
+      v-if="listQuery.bankID && !isUpdateOrInsert"
+      :bankID="listQuery.bankID"
+    />
     <el-card v-if="!isUpdateOrInsert" class="problem-card">
+      <!--搜索框-->
+      <template #header>
+        <div class="search">
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <el-input v-model="listQuery.number" clearable placeholder="请输入题目编号" />
+            </el-col>
+            <el-col :span="6">
+              <el-input v-model="listQuery.name" clearable placeholder="请输入题目名称" />
+            </el-col>
+            <el-col :span="6">
+              <el-select v-model="listQuery.difficulty" placeholder="Select">
+                <el-option :key="1" :label="'简单'" :value="1" />
+                <el-option :key="2" :label="'偏易'" :value="2" />
+                <el-option :key="3" :label="'中等'" :value="3" />
+                <el-option :key="4" :label="'偏难'" :value="4" />
+                <el-option :key="5" :label="'困难'" :value="5" />
+              </el-select>
+            </el-col>
+            <el-col :span="6">
+              <el-button type="primary" @click="search"> 查询 </el-button>
+              <el-button @click="reset"> 重置 </el-button>
+            </el-col>
+          </el-row>
+        </div>
+      </template>
       <!--顶部添加题目-->
       <el-button type="primary" size="default" @click="handleInsertProblem"> 添加题目 </el-button>
       <!--展示题目列表-->
@@ -55,12 +85,12 @@
       <el-pagination
         @current-change="changePageNo"
         @size-change="changePageSize"
-        v-model:current-page="pageNo"
-        v-model:page-size="limit"
+        v-model:current-page="listQuery.page"
+        v-model:page-size="listQuery.pageSize"
         :page-sizes="[10, 20, 30, 50]"
         :background="true"
         layout="prev, pager, next, jumper, ->,sizes, total"
-        :total="total"
+        :total="listQuery.total"
         style="margin: 0px 3%"
       />
     </el-card>
@@ -77,7 +107,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, reactive } from 'vue';
   import { ElMessage } from 'element-plus';
   import { useRoute } from 'vue-router';
   import { reqProblemList, reqDeleteProblem, reqUpdateProblemEnable } from '@/api/problem';
@@ -85,24 +115,30 @@
   import BankCard from './bank-card.vue';
 
   const $route = useRoute();
-  // 所属题库id
-  let bankID = ref($route.params.bankID);
-  //当前页码
-  let pageNo = ref<number>(1);
-  // 每页展示多少条数据
-  let limit = ref<number>(10);
-  let total = ref<number>(0);
+  // 搜索的参数
+  let listQuery = reactive({
+    page: 1,
+    pageSize: 10,
+    total: 0,
+    bankID: $route.params.bankID,
+    number: '',
+    name: '',
+    difficulty: 1,
+  });
   // 存储题目列表
   let problemList = ref([]);
 
   const getProblemList = async () => {
     let result = await reqProblemList({
-      bankID: bankID.value,
-      page: pageNo.value,
-      pageSize: limit.value,
+      bankID: listQuery.bankID,
+      number: listQuery.number,
+      name: listQuery.name,
+      difficulty: listQuery.difficulty,
+      page: listQuery.page,
+      pageSize: listQuery.pageSize,
     });
     if (result.code == 200) {
-      total.value = result.data.total;
+      listQuery.total = result.data.total;
       problemList.value = result.data.list;
     }
   };
@@ -135,6 +171,18 @@
     getProblemList();
   };
 
+  // 搜索
+  const search = () => {
+    getProblemList();
+  };
+
+  // 重置
+  const reset = () => {
+    listQuery.number = '';
+    listQuery.name = '';
+    listQuery.difficulty = 1;
+  };
+
   //组件挂载完毕以后获取数据
   onMounted(() => {
     getProblemList();
@@ -146,8 +194,9 @@
     getProblemList();
   };
 
+  // 页面大小改变时触发
   const changePageSize = () => {
-    pageNo.value = 1;
+    listQuery.page = 1;
     getProblemList();
   };
 

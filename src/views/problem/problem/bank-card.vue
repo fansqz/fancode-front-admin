@@ -63,7 +63,7 @@
     .bank-message {
       width: calc(100% - 200px);
       height: auto;
-      background-color: rgb(77, 164, 251);
+      background-color: $base-blue-color;
       padding: 30px 60px;
       .bank-name {
         font-size: 30px;

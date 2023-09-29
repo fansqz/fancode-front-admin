@@ -237,7 +237,7 @@
   };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .box-card {
     .card-header {
       display: flex;
