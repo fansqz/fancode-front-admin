@@ -1,5 +1,5 @@
 <template>
-    <pre
+  <pre
     class="button"
     @mouseover="style = 'color:blue'"
     @mouseleave="style = 'color:#4089ef'"
@@ -9,13 +9,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+  import { ref } from 'vue';
   defineProps(['text']);
   let style = ref();
 </script>
 
 <style scoped lang="scss">
   .button {
-    cursor: pointer
+    cursor: pointer;
   }
 </style>

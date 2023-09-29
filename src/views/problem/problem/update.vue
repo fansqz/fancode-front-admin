@@ -52,7 +52,7 @@
           </el-form-item>
           <el-form-item label="所属题库" label-width="auto">
             <el-select v-model="problem.bankID" placeholder="Select" size="large">
-              <el-option :key="-1" :label="'无'" :value="''"/>
+              <el-option :key="-1" :label="'无'" :value="''" />
               <el-option
                 v-for="item in bankList"
                 :key="item.id"
@@ -99,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-  import { reactive, watchEffect,ref, onMounted } from 'vue';
+  import { reactive, watchEffect, ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import { ElMessage } from 'element-plus';
   import {
@@ -110,7 +110,7 @@
     reqInsertProblem,
   } from '@/api/problem';
   import download from '@/utils/download';
-import { reqSimpleProblemBankList } from '@/api/problem-bank';
+  import { reqSimpleProblemBankList } from '@/api/problem-bank';
 
   let $router = useRouter();
   const { id } = $router.currentRoute.value.params;
@@ -221,7 +221,7 @@ import { reqSimpleProblemBankList } from '@/api/problem-bank';
     download(result, '编程文件模板.zip');
   };
 
-  onMounted(async()=>{
+  onMounted(async () => {
     let result = await reqSimpleProblemBankList();
     if (result.code == 200) {
       bankList.value = result.data;
@@ -235,27 +235,26 @@ import { reqSimpleProblemBankList } from '@/api/problem-bank';
 </script>
 
 <style scoped>
-.box-card {
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .button {
-      margin: 0px 10px;
+  .box-card {
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .button {
+        margin: 0px 10px;
+      }
+    }
+    .card-body {
+      padding: 0px 30px;
+      .file {
+        padding: 50px;
+      }
+    }
+    .problem-submit {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: auto;
     }
   }
-  .card-body {
-    padding: 0px 30px;
-    .file {
-      padding: 50px;
-    }
-  }
-  .problem-submit {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: auto;
-  }
-}
-
 </style>

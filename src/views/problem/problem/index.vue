@@ -1,10 +1,6 @@
 <template>
   <div class="container">
-    <BankCard
-      class="bank-card"
-      v-if="bankID && !isUpdateOrInsert"
-      :bankID="bankID"
-    />
+    <BankCard class="bank-card" v-if="bankID && !isUpdateOrInsert" :bankID="bankID" />
     <el-card v-if="!isUpdateOrInsert" class="problem-card">
       <!--顶部添加题目-->
       <el-button type="primary" size="default" @click="handleInsertProblem"> 添加题目 </el-button>
@@ -50,11 +46,9 @@
             >
             <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteProblem(row.id)">
               <template #reference>
-                <el-button type="danger" size="small" icon="Delete">
-                  删除
-                </el-button>
+                <el-button type="danger" size="small" icon="Delete"> 删除 </el-button>
               </template>
-          </el-popconfirm>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -90,7 +84,7 @@
   import { reqProblemList, reqDeleteProblem, reqUpdateProblemEnable } from '@/api/problem';
   import Update from './update.vue';
   import BankCard from './bank-card.vue';
-  
+
   const $route = useRoute();
   // 所属题库id
   let bankID = ref($route.params.bankID);
@@ -182,9 +176,9 @@
 
 <style scoped lang="scss">
   .container {
-    display:flex;
+    display: flex;
     flex-direction: column;
-    align-items:center;/*所有子元素都垂直居中了*/
+    align-items: center; /*所有子元素都垂直居中了*/
     .bank-card {
       width: 90%;
       margin: 10px;
@@ -193,5 +187,4 @@
       width: 90%;
     }
   }
-
 </style>

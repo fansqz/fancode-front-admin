@@ -8,10 +8,7 @@
         <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
         <el-table-column label="题库名称" align="center">
           <template v-slot="{ row }">
-            <TextButton
-              @click="handlerProblemManage(row.id)"
-              :text="row.name"
-            />
+            <TextButton @click="handlerProblemManage(row.id)" :text="row.name" />
           </template>
         </el-table-column>
         <el-table-column label="题目数量" align="center">
@@ -36,11 +33,9 @@
             >
             <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteBank(row.id)">
               <template #reference>
-                <el-button type="danger" size="small" icon="Delete">
-                  删除
-                </el-button>
+                <el-button type="danger" size="small" icon="Delete"> 删除 </el-button>
               </template>
-          </el-popconfirm>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -74,7 +69,7 @@
   import { useRouter } from 'vue-router';
   import { ElMessage } from 'element-plus';
 
-  let $router = useRouter(); 
+  let $router = useRouter();
 
   //当前页码
   let pageNo = ref<number>(1);
@@ -123,11 +118,11 @@
 
   const handlerProblemManage = (bankID: string) => {
     $router.push({
-    name: "bank-problem",
-    params: { 
-      bankID: bankID,
-     },
-  });
+      name: 'bank-problem',
+      params: {
+        bankID: bankID,
+      },
+    });
   };
 
   //组件挂载完毕以后获取数据

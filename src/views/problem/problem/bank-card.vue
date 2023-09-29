@@ -1,7 +1,7 @@
 <template>
   <div class="box-card">
     <div class="bank-icon">
-      <img :src="problemBank.icon"/>
+      <img :src="problemBank.icon" />
     </div>
     <div class="bank-message">
       <div class="bank-name">题库名称: {{ problemBank.name }}</div>
@@ -11,34 +11,36 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, watch } from 'vue';
-import { reqGetProblemBank } from '@/api/problem-bank';
+  import { onMounted, reactive, watch } from 'vue';
+  import { reqGetProblemBank } from '@/api/problem-bank';
 
-const props = defineProps(['bankID']);
-let problemBank = reactive({
-  name: '',
-  icon: '',
-  description: '',
-});
+  const props = defineProps(['bankID']);
+  let problemBank = reactive({
+    name: '',
+    icon: '',
+    description: '',
+  });
 
-const getProblemBank = async (bankID: string) => {
-  let result = await reqGetProblemBank(bankID);
-  if (result.code == 200) {
-    let data = result.data;
-    problemBank.name = data.name;
-    problemBank.icon = data.icon;
-    problemBank.description = data.description;
-  }
-};
+  const getProblemBank = async (bankID: string) => {
+    let result = await reqGetProblemBank(bankID);
+    if (result.code == 200) {
+      let data = result.data;
+      problemBank.name = data.name;
+      problemBank.icon = data.icon;
+      problemBank.description = data.description;
+    }
+  };
 
-onMounted(() => {
-  getProblemBank(props.bankID);
-});
+  onMounted(() => {
+    getProblemBank(props.bankID);
+  });
 
-watch(() => props.bankID, () => {
-  getProblemBank(props.bankID);
-});
-
+  watch(
+    () => props.bankID,
+    () => {
+      getProblemBank(props.bankID);
+    },
+  );
 </script>
 
 <style scoped lang="scss">
