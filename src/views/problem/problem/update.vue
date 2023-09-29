@@ -64,6 +64,8 @@
           <el-form-item label="是否启用" label-width="auto">
             <el-switch
               v-model="problem.enable"
+              :active-value="1"
+              :inactive-value="-1"
               style="--el-switch-on-color: #13ce66; --el-switch-off-color: #646765"
             />
           </el-form-item>
@@ -100,7 +102,6 @@
 
 <script setup lang="ts">
   import { reactive, watchEffect, ref, onMounted } from 'vue';
-  import { useRouter } from 'vue-router';
   import { ElMessage } from 'element-plus';
   import {
     reqGetProblem,
@@ -112,13 +113,11 @@
   import download from '@/utils/download';
   import { reqSimpleProblemBankList } from '@/api/problem-bank';
 
-  let $router = useRouter();
-  const { id } = $router.currentRoute.value.params;
-  const props = defineProps(['type', 'problemID']);
+  const props = defineProps(['type', 'problemID', 'defaultBankID']);
   const emit = defineEmits(['exit', 'submit']);
   let bankList = ref<any[]>([]);
   let problem = reactive({
-    id: id as string,
+    id: '',
     bankID: '',
     name: '',
     number: '',
@@ -137,6 +136,7 @@
       let result = await reqGetProblem(id);
       if (result.code == 200) {
         problem.id = result.data.id;
+        problem.bankID = result.data.bankID;
         problem.number = result.data.number;
         problem.difficulty = result.data.difficulty;
         problem.enable = result.data.enable;
@@ -159,7 +159,9 @@
   watchEffect(async () => {
     if (props.type == 'insert') {
       // 创建题目
-      let result = await reqInsertProblem();
+      let result = await reqInsertProblem({
+        bankID: props.defaultBankID,
+      });
       readProblem(result.data);
     } else {
       readProblem(props.problemID);
@@ -177,6 +179,7 @@
     try {
       let result = await reqUpdateProblem({
         id: problem.id,
+        bankID: problem.bankID,
         name: problem.name,
         number: problem.number,
         difficulty: problem.difficulty,

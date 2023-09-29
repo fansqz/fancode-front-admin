@@ -28,7 +28,6 @@
               v-model="row.enable"
               :active-value="1"
               :inactive-value="-1"
-              class="ml-2"
               style="--el-switch-on-color: #13ce66; --el-switch-off-color: #646765"
               @click="handleEnableProblem(row.id, row.enable)"
             />
