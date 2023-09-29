@@ -128,7 +128,7 @@
   };
 
   // 更新题库
-  const handlerUpdateBank = async (id: string) => {
+  const handlerUpdateBank = (id: string) => {
     updateDialogData.bankID = id;
     updateDialogData.type = 'update';
     updateDialogData.visible = true;

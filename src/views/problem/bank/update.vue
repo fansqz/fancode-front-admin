@@ -92,7 +92,6 @@
       let result = await reqGetProblemBank(bankID);
       if (result.code == 200) {
         let data = result.data;
-        console.log(data);
         bankData.icon = data.icon;
         bankData.name = data.name;
         bankData.description = data.description;
@@ -147,7 +146,6 @@
         bankData.name = '';
         bankData.description = '';
       } else {
-        console.log('aaaaaaa');
         getProblemBank(props.bankID);
       }
     },

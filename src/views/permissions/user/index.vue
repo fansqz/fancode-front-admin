@@ -9,7 +9,7 @@
         <el-button type="primary" @click="resetSearch">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-button type="primary" @click="clickInsertUser">添加用户</el-button>
+    <el-button type="primary" @click="handleInsertUser">添加用户</el-button>
     <el-table border :data="userList" style="margin: 10px 0px">
       <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
       <el-table-column label="登录id" prop="loginName" align="center"></el-table-column>
@@ -24,7 +24,7 @@
           <el-button type="primary" size="small" icon="Plus" @click="handleSetUserRole(row)">
             关联角色
           </el-button>
-          <el-button type="primary" size="small" icon="Edit" @click="handleUpdateUser(row)">
+          <el-button type="primary" size="small" icon="Edit" @click="handleUpdateUser(row.id)">
             用户编辑
           </el-button>
           <el-popconfirm :title="`顶真要删除吗`" @confirm="deleteUser(row)">
@@ -47,31 +47,6 @@
       :total="total"
       style="margin: 0px 3%"
     />
-
-    <!--修改或添加用户-->
-    <el-dialog v-model="dialogVisible" :title="getDialogTitle()">
-      <el-form>
-        <el-form-item label="用户id">
-          <el-input placeholder="请输入用户id" v-model="userData.loginName"></el-input>
-        </el-form-item>
-        <el-form-item label="用户名称">
-          <el-input placeholder="请输入用户名称" v-model="userData.username"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱">
-          <el-input placeholder="请输入邮箱" v-model="userData.email"></el-input>
-        </el-form-item>
-        <el-form-item label="电话">
-          <el-input placeholder="请输入电话" v-model="userData.phone"></el-input>
-        </el-form-item>
-        <el-form-item label="初始密码" v-show="formType == 1">
-          <el-input placeholder="请输入密码" v-model="userData.password"></el-input>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="submitAddOrUpdateUser">确定</el-button>
-      </template>
-    </el-dialog>
 
     <!--分配角色-->
     <el-drawer v-model="drawer">
@@ -105,20 +80,26 @@
       </template>
     </el-drawer>
   </el-card>
+
+  <UpdateDialog
+    :userID="updateDialogData.userID"
+    v-model:visible="updateDialogData.visible"
+    :type="updateDialogData.type"
+    @afterSubmit="getUserList"
+  />
 </template>
 
 <script setup lang="ts">
-  import { ref, reactive, onMounted } from 'vue';
+  import { ref, onMounted, reactive } from 'vue';
   import {
     reqUserList,
-    reqInsertUser,
-    reqUpdateUser,
     reqDeleteUser,
     reqUserRole,
     reqUpdateUserRole,
     reqSimpleRoleList,
   } from '@/api/user';
   import { ElMessage } from 'element-plus';
+  import UpdateDialog from './update.vue';
 
   // 搜索的用户名称
   let username = ref<string>();
@@ -129,6 +110,12 @@
   let total = ref<number>(0);
   // 存储用户列表
   let userList = ref<any[]>([]);
+
+  let updateDialogData = reactive({
+    userID: '',
+    type: 'insert',
+    visible: false,
+  });
 
   //组件挂载完毕以后获取数据
   onMounted(() => {
@@ -147,57 +134,17 @@
     }
   };
 
-  // 修改或更新用户
-  let userData = reactive<any>({
-    id: '',
-    loginName: '',
-    username: '',
-    email: '',
-    phone: '',
-    password: '',
-  });
-  // 表单是添加还是修改
-  let formType = ref<number>(1);
-  let dialogVisible = ref<boolean>(false);
-
   // 添加用户
-  const clickInsertUser = () => {
-    formType.value = 1;
-    dialogVisible.value = true;
-    userData.loginName = '';
-    userData.username = '';
-    userData.email = '';
-    userData.phone = '';
-    userData.password = '';
+  const handleInsertUser = () => {
+    updateDialogData.type = 'insert';
+    updateDialogData.visible = true;
   };
 
   // 修改用户
-  const handleUpdateUser = (row: any) => {
-    formType.value = 0;
-    dialogVisible.value = true;
-    Object.assign(userData, row);
-  };
-
-  const submitAddOrUpdateUser = async () => {
-    let result: any;
-    if (formType.value == 1) {
-      result = await reqInsertUser(userData);
-      if (result.code == 200) {
-        dialogVisible.value = false;
-        getUserList();
-      }
-    } else {
-      result = await reqUpdateUser(userData);
-      if (result.code == 200) {
-        dialogVisible.value = false;
-        getUserList();
-      }
-    }
-    ElMessage({
-      showClose: true,
-      message: result.message,
-      type: result.code == 200 ? 'success' : 'error',
-    });
+  const handleUpdateUser = (id: string) => {
+    updateDialogData.userID = id;
+    updateDialogData.type = 'update';
+    updateDialogData.visible = true;
   };
 
   // 控制抽屉显示与隐藏
@@ -283,14 +230,6 @@
   const changePageSize = () => {
     pageNo.value = 1;
     getUserList();
-  };
-
-  const getDialogTitle = () => {
-    if (formType.value == 1) {
-      return '添加用户';
-    } else {
-      return '修改用户';
-    }
   };
 </script>
 

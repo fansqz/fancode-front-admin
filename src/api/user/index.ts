@@ -12,6 +12,11 @@ enum API {
   USER_ROLE_LIST_URL = '/manage/user/simpleRole/list',
 }
 
+// 根据用户id获取用户信息
+export const reqGetUser = (userID: string): Promise<any> => {
+  return request.get(API.USER_URL + `/${userID}`);
+};
+
 // 获取用户列表
 export const reqUserList = (data: any): Promise<any> => {
   return request.get(API.LIST_USER_URL, {
@@ -39,7 +44,7 @@ export const reqUpdateUser = (data: any): Promise<any> => {
 
 // 删除角色
 export const reqDeleteUser = (id: number): Promise<any> => {
-  return request.delete(API.USER_URL + '/' + id);
+  return request.delete(API.USER_URL + `/${id}`);
 };
 
 // 获取用户的角色id
