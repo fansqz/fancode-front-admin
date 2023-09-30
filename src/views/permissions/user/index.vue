@@ -1,14 +1,27 @@
 <template>
   <el-card class="box-card">
-    <el-form :inline="true">
-      <el-form-item label="用户名称搜索">
-        <el-input placeholder="请输入用户名称关键字" v-model="username"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="search">搜索</el-button>
-        <el-button type="primary" @click="reset">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <template #header>
+      <div class="search">
+        <el-row :gutter="20">
+          <el-col :span="4">
+            <el-input v-model="listQuery.username" clearable placeholder="请输入用户名称" />
+          </el-col>
+          <el-col :span="4">
+            <el-input v-model="listQuery.loginName" clearable placeholder="请输入登录id" />
+          </el-col>
+          <el-col :span="4">
+            <el-input v-model="listQuery.email" clearable placeholder="请输入邮箱" />
+          </el-col>
+          <el-col :span="4">
+            <el-input v-model="listQuery.phone" clearable placeholder="请输入电话" />
+          </el-col>
+          <el-col :span="4">
+            <el-button type="primary" @click="search"> 查询 </el-button>
+            <el-button @click="reset"> 重置 </el-button>
+          </el-col>
+        </el-row>
+      </div>
+    </template>
     <el-button type="primary" @click="handleInsertUser">添加用户</el-button>
     <el-table border :data="userList" style="margin: 10px 0px">
       <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
@@ -39,8 +52,8 @@
     <el-pagination
       @current-change="changePageNo"
       @size-change="changePageSize"
-      v-model:current-page="pageNo"
-      v-model:page-size="limit"
+      v-model:current-page="listQuery.page"
+      v-model:page-size="listQuery.pageSize"
       :page-sizes="[10, 20, 30, 50]"
       :background="true"
       layout="prev, pager, next, jumper, ->,sizes, total"
@@ -70,14 +83,16 @@
   import UpdateDialog from './update.vue';
   import RoleAssignDrawer from './role-assign.vue';
 
-  // 搜索的用户名称
-  let username = ref<string>();
-  //当前页码
-  let pageNo = ref<number>(1);
-  // 每页展示多少条数据
-  let limit = ref<number>(10);
-  let total = ref<number>(0);
+  let listQuery = reactive({
+    username: '',
+    loginName: '',
+    email: '',
+    phone: '',
+    page: 0,
+    pageSize: 10,
+  });
   // 存储用户列表
+  let total = ref(0);
   let userList = ref([]);
 
   // 更新用户的dialog的数据
@@ -99,11 +114,7 @@
   });
 
   const getUserList = async () => {
-    let result = await reqUserList({
-      username: username.value,
-      page: pageNo.value,
-      pageSize: limit.value,
-    });
+    let result = await reqUserList(listQuery);
     if (result.code == 200) {
       total.value = result.data.total;
       userList.value = result.data.list;
@@ -141,13 +152,16 @@
   };
 
   const search = () => {
-    pageNo.value = 1;
+    listQuery.page = 1;
     getUserList();
   };
 
   const reset = () => {
-    username.value = '';
-    pageNo.value = 1;
+    listQuery.username = '';
+    listQuery.loginName = '';
+    listQuery.email = '';
+    listQuery.phone = '';
+    listQuery.page = 1;
     getUserList();
   };
 
@@ -158,7 +172,7 @@
   };
 
   const changePageSize = () => {
-    pageNo.value = 1;
+    listQuery.page = 1;
     getUserList();
   };
 </script>

@@ -90,7 +90,7 @@
         :page-sizes="[10, 20, 30, 50]"
         :background="true"
         layout="prev, pager, next, jumper, ->,sizes, total"
-        :total="listQuery.total"
+        :total="total"
         style="margin: 0px 3%"
       />
     </el-card>
@@ -119,26 +119,19 @@
   let listQuery = reactive({
     page: 1,
     pageSize: 10,
-    total: 0,
     bankID: $route.params.bankID,
     number: '',
     name: '',
     difficulty: 1,
   });
+  let total = ref(0);
   // 存储题目列表
   let problemList = ref([]);
 
   const getProblemList = async () => {
-    let result = await reqProblemList({
-      bankID: listQuery.bankID,
-      number: listQuery.number,
-      name: listQuery.name,
-      difficulty: listQuery.difficulty,
-      page: listQuery.page,
-      pageSize: listQuery.pageSize,
-    });
+    let result = await reqProblemList(listQuery);
     if (result.code == 200) {
-      listQuery.total = result.data.total;
+      total.value = result.data.total;
       problemList.value = result.data.list;
     }
   };

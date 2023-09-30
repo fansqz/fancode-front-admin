@@ -65,7 +65,7 @@
         :page-sizes="[10, 20, 30, 50]"
         :background="true"
         layout="prev, pager, next, jumper, ->,sizes, total"
-        :total="listQuery.total"
+        :total="total"
         style="margin: 0px 3%"
       />
 
@@ -91,10 +91,10 @@
   let listQuery = reactive({
     page: 1,
     pageSize: 10,
-    total: 0,
     name: '',
     description: '',
   });
+  let total = ref(0);
   let problemBankList = ref([]);
 
   // 管理更新或者添加题库的dialog
@@ -105,14 +105,9 @@
   });
 
   const getProblemBankList = async () => {
-    let result = await reqProblemBankList({
-      page: listQuery.page,
-      pageSize: listQuery.pageSize,
-      name: listQuery.name,
-      description: listQuery.description,
-    });
+    let result = await reqProblemBankList(listQuery);
     if (result.code == 200) {
-      listQuery.total = result.data.total;
+      total.value = result.data.total;
       problemBankList.value = result.data.list;
     }
   };
