@@ -60,68 +60,21 @@
         <el-button type="primary" @click="submitAddOrUpdateRole">确定</el-button>
       </template>
     </el-dialog>
-
-    <!--分配接口与菜单-->
-    <el-drawer v-model="drawer">
-      <template #header>
-        <h4>分配权限</h4>
-      </template>
-      <template #default>
-        <div>
-          <div inlink="true">
-            <el-radio size="large" v-model="apiTreeShow" label="1"> 接口管理 </el-radio>
-            <el-radio size="large" v-model="apiTreeShow" label="2"> 菜单管理 </el-radio>
-          </div>
-
-          <el-tree
-            v-show="apiTreeShow == '1'"
-            :data="apiTree"
-            ref="tree1"
-            show-checkbox
-            default-expand-all
-            check-strictly
-            node-key="id"
-            :default-checked-keys="roleApis"
-            :props="defaultProps"
-          />
-          <el-tree
-            v-show="apiTreeShow == '2'"
-            :data="menuTree"
-            ref="tree2"
-            show-checkbox
-            default-expand-all
-            check-strictly
-            node-key="id"
-            :default-checked-keys="roleMenus"
-            :props="defaultProps"
-          />
-        </div>
-      </template>
-      <template #footer>
-        <div style="flex: auto">
-          <el-button @click="drawer = false">取消</el-button>
-          <el-button type="primary" @click="submitRolePermisstion">提交</el-button>
-        </div>
-      </template>
-    </el-drawer>
   </el-card>
+
+  <!--分配接口与菜单-->
+  <PermissionAssign
+    v-model:visible="permissionsAssignDrawerData.visible"
+    :roleID="permissionsAssignDrawerData.roleID"
+    @afterSubmimt="getRoleList"
+  />
 </template>
 
 <script setup lang="ts">
   import { ref, reactive, onMounted } from 'vue';
-  import {
-    reqRoleList,
-    reqInsertRole,
-    reqUpdateRole,
-    reqDeleteRole,
-    reqRoleApi,
-    reqUpdateRoleApi,
-    reqUpdateRoleMenu,
-    reqRoleMenu,
-  } from '@/api/role';
-  import { reqGetApiTree } from '@/api/api';
-  import { reqGetMenuTree } from '@/api/menu';
   import { ElMessage } from 'element-plus';
+  import { reqRoleList, reqInsertRole, reqUpdateRole, reqDeleteRole } from '@/api/role';
+  import PermissionAssign from './permission-assign.vue';
 
   // 搜索的角色名称
   let roleName = ref<string>();
@@ -141,6 +94,11 @@
   // 表单是添加还是修改
   let formType = ref<number>(1);
   let dialogVisible = ref<boolean>(false);
+  // api和菜单分配的drawer需要的数据
+  let permissionsAssignDrawerData = reactive({
+    visible: false,
+    roleID: '',
+  });
 
   //组件挂载完毕以后获取数据
   onMounted(() => {
@@ -175,6 +133,12 @@
     roleData.id = row.id;
     roleData.name = row.name;
     roleData.description = row.description;
+  };
+
+  // 处理修改角色的权限
+  const handleSetPermisstion = (roleID: string) => {
+    permissionsAssignDrawerData.roleID = roleID;
+    permissionsAssignDrawerData.visible = true;
   };
 
   const submitAddOrUpdateRole = async () => {
@@ -212,67 +176,6 @@
           type: 'error',
         });
       }
-    }
-  };
-
-  // 控制抽屉显示与隐藏
-  let drawer = ref<boolean>(false);
-  // 展示menu树/ 展示api树
-  let menuTree = ref([]);
-  let apiTree = ref([]);
-  let roleApis = ref([]);
-  let roleMenus = ref([]);
-  let apiTreeShow = ref('1');
-  let tree1 = ref();
-  let tree2 = ref();
-  let roleID = '';
-  const defaultProps = {
-    chidren: 'children',
-    label: 'name',
-  };
-
-  const handleSetPermisstion = async (row: any) => {
-    roleID = row.id;
-    drawer.value = true;
-    let result = await reqGetApiTree();
-    if (result.code == 200) {
-      apiTree.value = result.data;
-    }
-    result = await reqGetMenuTree();
-    if (result.code == 200) {
-      menuTree.value = result.data;
-    }
-    result = await reqRoleApi(row.id);
-    if (result.code == 200) {
-      roleApis.value = result.data;
-    }
-    result = await reqRoleMenu(row.id);
-    if (result.code == 200) {
-      roleMenus.value = result.data;
-    }
-  };
-
-  // 提交添加权限请求
-  const submitRolePermisstion = async () => {
-    let apiIDs = tree1.value.getCheckedKeys();
-    let menuIDs = tree2.value.getCheckedKeys();
-    let result1 = await reqUpdateRoleApi({ roleID: roleID, apiIDs: apiIDs });
-    let result2 = await reqUpdateRoleMenu({ roleID: roleID, menuIDs: menuIDs });
-    if (result1.code == 200 && result2.code == 200) {
-      ElMessage({
-        showClose: true,
-        message: '提交成功',
-        type: 'success',
-      });
-      //关闭抽屉
-      drawer.value = false;
-      getRoleList();
-    } else {
-      ElMessage({
-        showClose: true,
-        message: '操作失败',
-        type: 'error',
-      });
     }
   };
 

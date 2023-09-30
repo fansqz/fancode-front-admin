@@ -33,7 +33,7 @@
   const props = defineProps(['type', 'visible', 'userID']);
   const emit = defineEmits(['after-submit', 'update:visible']);
   // dialog是否可见
-  const visible = computed({
+  let visible = computed({
     get() {
       return props.visible;
     },

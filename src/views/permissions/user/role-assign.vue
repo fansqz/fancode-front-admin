@@ -35,7 +35,7 @@
   const props = defineProps(['userID', 'visible']);
   const emit = defineEmits(['update:visible', 'afterSubmit']);
   // drawer是否可见
-  const visible = computed({
+  let visible = computed({
     get() {
       return props.visible;
     },
