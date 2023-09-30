@@ -1,14 +1,21 @@
 <template>
   <el-card class="box-card">
-    <el-form :inline="true">
-      <el-form-item label="职位搜索">
-        <el-input placeholder="请输入职位关键字" v-model="roleName"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="search">搜索</el-button>
-        <el-button type="primary" @click="resetSearch">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <template #header>
+      <div class="search">
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-input v-model="listQuery.name" clearable placeholder="请输入角色名称" />
+          </el-col>
+          <el-col :span="6">
+            <el-input v-model="listQuery.description" clearable placeholder="请输入角色描述" />
+          </el-col>
+          <el-col :span="6">
+            <el-button type="primary" @click="search"> 查询 </el-button>
+            <el-button @click="reset"> 重置 </el-button>
+          </el-col>
+        </el-row>
+      </div>
+    </template>
     <el-button type="primary" @click="handleInsertRole">添加角色</el-button>
     <el-table border :data="roleList" style="margin: 10px 0px">
       <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
@@ -18,13 +25,13 @@
       <el-table-column label="操作" width="300px" align="center">
         <!--row:为已有的角色对象-->
         <template v-slot="{ row }">
-          <el-button type="primary" size="small" icon="Plus" @click="handleSetPermisstion(row)">
+          <el-button type="primary" size="small" icon="Plus" @click="handleSetPermisstion(row.id)">
             权限管理
           </el-button>
-          <el-button type="primary" size="small" icon="Edit" @click="handleUpdateRole(row)">
+          <el-button type="primary" size="small" icon="Edit" @click="handleUpdateRole(row.id)">
             角色编辑
           </el-button>
-          <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteRole(row)">
+          <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteRole(row.id)">
             <template #reference>
               <el-button type="danger" size="small" icon="Delete"> 删除 </el-button>
             </template>
@@ -36,8 +43,8 @@
     <el-pagination
       @current-change="changePageNo"
       @size-change="changePageSize"
-      v-model:current-page="pageNo"
-      v-model:page-size="limit"
+      v-model:current-page="listQuery.page"
+      v-model:page-size="listQuery.pageSize"
       :page-sizes="[10, 20, 30, 50]"
       :background="true"
       layout="prev, pager, next, jumper, ->,sizes, total"
@@ -70,12 +77,13 @@
   import UpdateDialog from './update.vue';
 
   // 搜索的角色名称
-  let roleName = ref<string>();
-  //当前页码
-  let pageNo = ref<number>(1);
-  // 每页展示多少条数据
-  let limit = ref<number>(10);
-  let total = ref<number>(0);
+  let listQuery = reactive({
+    name: '',
+    description: '',
+    page: 1,
+    pageSize: 10,
+  });
+  let total = ref(0);
   // 存储角色列表
   let roleList = ref([]);
   // 角色更新的dialog的数据
@@ -96,11 +104,7 @@
   });
 
   const getRoleList = async () => {
-    let result = await reqRoleList({
-      roleName: roleName.value,
-      page: pageNo.value,
-      pageSize: limit.value,
-    });
+    let result = await reqRoleList(listQuery);
     if (result.code == 200) {
       total.value = result.data.total;
       roleList.value = result.data.list;
@@ -109,14 +113,14 @@
 
   // 添加角色
   const handleInsertRole = () => {
-    updateDialogData.type = 'update';
+    updateDialogData.type = 'insert';
     updateDialogData.visible = true;
   };
 
   // 修改角色
   const handleUpdateRole = (roleID: string) => {
     updateDialogData.roleID = roleID;
-    updateDialogData.type = 'insert';
+    updateDialogData.type = 'update';
     updateDialogData.visible = true;
   };
 
@@ -127,8 +131,8 @@
   };
 
   // 删除角色
-  const handleDeleteRole = async (row: any) => {
-    let result = await reqDeleteRole(row.id);
+  const handleDeleteRole = async (roleID: string) => {
+    let result = await reqDeleteRole(roleID);
     ElMessage({
       showClose: true,
       message: result.data,
@@ -138,13 +142,14 @@
   };
 
   const search = () => {
-    pageNo.value = 1;
+    listQuery.page = 1;
     getRoleList();
   };
 
-  const resetSearch = () => {
-    roleName.value = '';
-    pageNo.value = 1;
+  const reset = () => {
+    listQuery.name = '';
+    listQuery.description = '';
+    listQuery.page = 1;
     getRoleList();
   };
 
@@ -155,7 +160,7 @@
   };
 
   const changePageSize = () => {
-    pageNo.value = 1;
+    listQuery.page = 1;
     getRoleList();
   };
 </script>

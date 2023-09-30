@@ -39,12 +39,12 @@
   const submitAddOrUpdateRole = async () => {
     let result;
     if (props.type == 'insert') {
-      result = await reqInsertRole({
+      result = await reqInsertRole(roleData);
+    } else {
+      result = await reqUpdateRole({
         ...roleData,
         id: props.roleID,
       });
-    } else {
-      result = await reqUpdateRole(roleData);
     }
     if (result.code == 200) {
       ElMessage({
@@ -70,7 +70,8 @@
   const getRole = async (roleID: string) => {
     let result = await reqGetRole(roleID);
     if (result.code == 200) {
-      roleData = result.data;
+      roleData.name = result.data.name;
+      roleData.description = result.data.description;
     }
   };
 

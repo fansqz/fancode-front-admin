@@ -108,7 +108,7 @@
     }
     result = await reqGetMenuTree();
     if (result.code == 200) {
-      menuTree.value = result.data;
+      menuData.value = result.data;
     }
     result = await reqRoleApi(props.roleID);
     if (result.code == 200) {
@@ -119,13 +119,6 @@
       menuSelecteds.value = result.data;
     }
   };
-
-  watch(
-    () => props.roleID,
-    () => {
-      loadData();
-    },
-  );
 
   watch(
     () => props.visible,

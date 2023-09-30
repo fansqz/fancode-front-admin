@@ -43,17 +43,17 @@ export const reqUpdateRole = (data: any): Promise<any> => {
 };
 
 // 删除角色
-export const reqDeleteRole = (id: number): Promise<any> => {
+export const reqDeleteRole = (id: string): Promise<any> => {
   return request.delete(API.ROLE_URL + '/' + id);
 };
 
 // 获取角色可访问api
-export const reqRoleApi = (roleID: number): Promise<any> => {
+export const reqRoleApi = (roleID: string): Promise<any> => {
   return request.get(API.ROLE_API + `/${roleID}`);
 };
 
 // 获取角色可访问的menu
-export const reqRoleMenu = (roleID: number): Promise<any> => {
+export const reqRoleMenu = (roleID: string): Promise<any> => {
   return request.get(API.ROLE_MENU + `/${roleID}`);
 };
 
