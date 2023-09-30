@@ -19,6 +19,11 @@ export const reqRoleList = (data: any): Promise<any> => {
   });
 };
 
+// 获取角色
+export const reqGetRole = (roleID: string): Promise<any> => {
+  return request.get(API.ROLE_URL + `/${roleID}`);
+};
+
 // 创建角色
 export const reqInsertRole = (data: any): Promise<any> => {
   return request.post(API.ROLE_URL, toFormData(data), {

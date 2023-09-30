@@ -44,23 +44,15 @@
       :total="total"
       style="margin: 0px 3%"
     />
-
-    <!--修改或添加角色-->
-    <el-dialog v-model="dialogVisible" :title="getDialogTitle()">
-      <el-form>
-        <el-form-item label="角色名称">
-          <el-input placeholder="请输入角色名称" v-model="roleData.name"></el-input>
-        </el-form-item>
-        <el-form-item label="介绍">
-          <el-input placeholder="请输入角色简介" v-model="roleData.description"></el-input>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="submitAddOrUpdateRole">确定</el-button>
-      </template>
-    </el-dialog>
   </el-card>
+
+  <!--更新或添加角色-->
+  <UpdateDialog
+    v-model:visible="updateDialogData.visible"
+    :roleID="updateDialogData.roleID"
+    :type="updateDialogData.type"
+    @afterSubmit="getRoleList"
+  />
 
   <!--分配接口与菜单-->
   <PermissionAssign
@@ -73,8 +65,9 @@
 <script setup lang="ts">
   import { ref, reactive, onMounted } from 'vue';
   import { ElMessage } from 'element-plus';
-  import { reqRoleList, reqInsertRole, reqUpdateRole, reqDeleteRole } from '@/api/role';
+  import { reqRoleList, reqDeleteRole } from '@/api/role';
   import PermissionAssign from './permission-assign.vue';
+  import UpdateDialog from './update.vue';
 
   // 搜索的角色名称
   let roleName = ref<string>();
@@ -85,15 +78,12 @@
   let total = ref<number>(0);
   // 存储角色列表
   let roleList = ref([]);
-  // 修改或更新角色
-  let roleData = reactive({
-    id: '',
-    name: '',
-    description: '',
+  // 角色更新的dialog的数据
+  let updateDialogData = reactive({
+    type: 'insert',
+    roleID: '',
+    visible: false,
   });
-  // 表单是添加还是修改
-  let formType = ref<number>(1);
-  let dialogVisible = ref<boolean>(false);
   // api和菜单分配的drawer需要的数据
   let permissionsAssignDrawerData = reactive({
     visible: false,
@@ -119,20 +109,15 @@
 
   // 添加角色
   const handleInsertRole = () => {
-    formType.value = 1;
-    dialogVisible.value = true;
-    roleData.id = '';
-    roleData.name = '';
-    roleData.description = '';
+    updateDialogData.type = 'update';
+    updateDialogData.visible = true;
   };
 
   // 修改角色
-  const handleUpdateRole = (row: any) => {
-    formType.value = 0;
-    dialogVisible.value = true;
-    roleData.id = row.id;
-    roleData.name = row.name;
-    roleData.description = row.description;
+  const handleUpdateRole = (roleID: string) => {
+    updateDialogData.roleID = roleID;
+    updateDialogData.type = 'insert';
+    updateDialogData.visible = true;
   };
 
   // 处理修改角色的权限
@@ -141,44 +126,7 @@
     permissionsAssignDrawerData.visible = true;
   };
 
-  const submitAddOrUpdateRole = async () => {
-    if (formType.value == 1) {
-      const result = await reqInsertRole(roleData);
-      if (result.code == 200) {
-        dialogVisible.value = false;
-        getRoleList();
-        ElMessage({
-          showClose: true,
-          message: '角色添加成功',
-          type: 'success',
-        });
-      } else {
-        ElMessage({
-          showClose: true,
-          message: '角色添加失败',
-          type: 'error',
-        });
-      }
-    } else {
-      const result = await reqUpdateRole(roleData);
-      if (result.code == 200) {
-        dialogVisible.value = false;
-        getRoleList();
-        ElMessage({
-          showClose: true,
-          message: '角色更新成功',
-          type: 'success',
-        });
-      } else {
-        ElMessage({
-          showClose: true,
-          message: '角色更新失败',
-          type: 'error',
-        });
-      }
-    }
-  };
-
+  // 删除角色
   const handleDeleteRole = async (row: any) => {
     let result = await reqDeleteRole(row.id);
     ElMessage({
@@ -209,14 +157,6 @@
   const changePageSize = () => {
     pageNo.value = 1;
     getRoleList();
-  };
-
-  const getDialogTitle = () => {
-    if (formType.value == 1) {
-      return '添加角色';
-    } else {
-      return '修改角色';
-    }
   };
 </script>
 
