@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="search">搜索</el-button>
-        <el-button type="primary" @click="resetSearch">重置</el-button>
+        <el-button type="primary" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
     <el-button type="primary" @click="handleInsertUser">添加用户</el-button>
@@ -21,13 +21,13 @@
       <el-table-column label="操作" width="300px" align="center">
         <!--row:为已有角色对象-->
         <template v-slot="{ row }">
-          <el-button type="primary" size="small" icon="Plus" @click="handleSetUserRole(row)">
+          <el-button type="primary" size="small" icon="Plus" @click="handleSetUserRole(row.id)">
             关联角色
           </el-button>
           <el-button type="primary" size="small" icon="Edit" @click="handleUpdateUser(row.id)">
             用户编辑
           </el-button>
-          <el-popconfirm :title="`顶真要删除吗`" @confirm="deleteUser(row)">
+          <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteUser(row.id)">
             <template #reference>
               <el-button type="danger" size="small" icon="Delete"> 删除 </el-button>
             </template>
@@ -47,39 +47,13 @@
       :total="total"
       style="margin: 0px 3%"
     />
-
-    <!--分配角色-->
-    <el-drawer v-model="drawer">
-      <template #header>
-        <h4>分配角色</h4>
-      </template>
-      <template #default>
-        <el-form>
-          <el-form-item label="用户名称："> {{ username2 }} </el-form-item>
-          <el-form-item lable="角色列表">
-            <el-checkbox
-              v-model="checkAll"
-              :indeterminate="indeterminate"
-              @change="handleSelectAll"
-            >
-              全选
-            </el-checkbox>
-            <el-checkbox-group v-model="selectedRoleIDs" @change="handleRoleSelectChange">
-              <el-checkbox v-for="(role, index) in roles" :key="index" :label="role.id">
-                {{ role.name }}
-              </el-checkbox>
-            </el-checkbox-group>
-          </el-form-item>
-        </el-form>
-      </template>
-      <template #footer>
-        <div style="flex: auto">
-          <el-button @click="drawer = false">取消</el-button>
-          <el-button type="primary" @click="submitUpdateUserRole">提交</el-button>
-        </div>
-      </template>
-    </el-drawer>
   </el-card>
+
+  <RoleAssignDrawer
+    v-model:visible="roleAssignDrawerData.visible"
+    :userID="roleAssignDrawerData.userID"
+    @afterSubmit="getUserList"
+  />
 
   <UpdateDialog
     :userID="updateDialogData.userID"
@@ -91,15 +65,10 @@
 
 <script setup lang="ts">
   import { ref, onMounted, reactive } from 'vue';
-  import {
-    reqUserList,
-    reqDeleteUser,
-    reqUserRole,
-    reqUpdateUserRole,
-    reqSimpleRoleList,
-  } from '@/api/user';
+  import { reqUserList, reqDeleteUser } from '@/api/user';
   import { ElMessage } from 'element-plus';
   import UpdateDialog from './update.vue';
+  import RoleAssignDrawer from './role-assign.vue';
 
   // 搜索的用户名称
   let username = ref<string>();
@@ -109,11 +78,18 @@
   let limit = ref<number>(10);
   let total = ref<number>(0);
   // 存储用户列表
-  let userList = ref<any[]>([]);
+  let userList = ref([]);
 
+  // 更新用户的dialog的数据
   let updateDialogData = reactive({
     userID: '',
     type: 'insert',
+    visible: false,
+  });
+
+  // 给用户分配角色的drawer的数据
+  let roleAssignDrawerData = reactive({
+    userID: '',
     visible: false,
   });
 
@@ -147,61 +123,15 @@
     updateDialogData.visible = true;
   };
 
-  // 控制抽屉显示与隐藏
-  let drawer = ref<boolean>(false);
-  // 更新用户关联角色页面的数据
-  let userID = 0;
-  let username2 = ref<string>('');
-  let checkAll = ref<boolean>(false);
-  let indeterminate = ref<boolean>(true);
-  let roles = ref<any[]>([]);
-  let selectedRoleIDs = ref<number[]>([]);
-
   // 点击设置用户的角色
-  const handleSetUserRole = async (row: any) => {
-    userID = row.id;
-    let result = await reqSimpleRoleList();
-    if (result.code == 200) {
-      roles.value = result.data;
-    }
-    result = await reqUserRole(row.id);
-    if (result.code == 200) {
-      selectedRoleIDs.value = result.data;
-    }
-    userID = row.id;
-    username2.value = row.username;
-    drawer.value = true;
+  const handleSetUserRole = (id: string) => {
+    roleAssignDrawerData.userID = id;
+    roleAssignDrawerData.visible = true;
   };
 
-  const handleSelectAll = (val: boolean) => {
-    selectedRoleIDs.value = val ? roles.value.map((role: any) => role.id) : [];
-    indeterminate.value = false;
-  };
-
-  const handleRoleSelectChange = () => {
-    if (selectedRoleIDs.value == roles.value.map((role: any) => role.id)) {
-      indeterminate.value = false;
-    } else {
-      indeterminate.value = true;
-    }
-  };
-
-  // 提交添加权限请求
-  const submitUpdateUserRole = async () => {
-    let result = await reqUpdateUserRole(userID, selectedRoleIDs.value);
-    if (result.code == 200) {
-      drawer.value = false;
-      getUserList();
-    }
-    ElMessage({
-      showClose: true,
-      message: result.message,
-      type: result.code == 200 ? 'success' : 'error',
-    });
-  };
-
-  const deleteUser = async (row: any) => {
-    let result = await reqDeleteUser(row.id);
+  // 删除角色
+  const handleDeleteUser = async (id: string) => {
+    let result = await reqDeleteUser(id);
     ElMessage({
       showClose: true,
       message: result.message,
@@ -215,7 +145,7 @@
     getUserList();
   };
 
-  const resetSearch = () => {
+  const reset = () => {
     username.value = '';
     pageNo.value = 1;
     getUserList();

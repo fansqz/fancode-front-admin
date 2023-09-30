@@ -31,7 +31,7 @@
   import { reqInsertUser, reqUpdateUser, reqGetUser } from '@/api/user';
 
   const props = defineProps(['type', 'visible', 'userID']);
-  const emit = defineEmits(['afterSubmit', 'update:visible']);
+  const emit = defineEmits(['after-submit', 'update:visible']);
   // dialog是否可见
   const visible = computed({
     get() {
@@ -85,7 +85,7 @@
       result = await reqInsertUser(userData);
       if (result.code == 200) {
         visible.value = false;
-        emit('afterSubmit');
+        emit('after-submit');
       }
     } else {
       result = await reqUpdateUser({
@@ -97,7 +97,7 @@
       });
       if (result.code == 200) {
         visible.value = false;
-        emit('afterSubmit');
+        emit('after-submit');
       }
     }
     ElMessage({

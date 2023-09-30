@@ -43,17 +43,17 @@ export const reqUpdateUser = (data: any): Promise<any> => {
 };
 
 // 删除角色
-export const reqDeleteUser = (id: number): Promise<any> => {
+export const reqDeleteUser = (id: string): Promise<any> => {
   return request.delete(API.USER_URL + `/${id}`);
 };
 
 // 获取用户的角色id
-export const reqUserRole = (userID: number): Promise<any> => {
+export const reqUserRole = (userID: string): Promise<any> => {
   return request.get(API.USER_ROLE_URL + `/${userID}`);
 };
 
 // 更新角色可访问api
-export const reqUpdateUserRole = (userID: number, roleIDs: number[]): Promise<any> => {
+export const reqUpdateUserRole = (userID: string, roleIDs: string[]): Promise<any> => {
   return request.put(API.USER_ROLE_URL, { userID: userID, roleIDs: roleIDs });
 };
 
