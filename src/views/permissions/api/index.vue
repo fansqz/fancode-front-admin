@@ -60,8 +60,6 @@
   import { ElMessage } from 'element-plus';
 
   let apiTree = ref([]);
-  // 添加api/修改api页面是否显示
-  let dialogVisible = ref<boolean>(false);
   // api数据
   let apiData = reactive({
     id: '',
@@ -71,8 +69,10 @@
     description: '',
     parentApiID: 0,
   });
-  // 用于标识是添加还是修改api，1标识添加，0表示修改
-  let formType = ref(1);
+  // 添加api/修改api页面是否显示
+  let dialogVisible = ref(false);
+  // 用于标识是添加还是修改api
+  let dialogType = ref('insert');
 
   //请求
   onMounted(() => {
@@ -89,7 +89,7 @@
 
   // 添加接口
   const handleInsertApi = (row: any) => {
-    formType.value = 1;
+    dialogType.value = 'insert';
     dialogVisible.value = true;
     apiData.id = '';
     apiData.name = '';
@@ -101,7 +101,7 @@
 
   // 修改接口
   const handleUpdateApi = (row: any) => {
-    formType.value = 0;
+    dialogType.value = 'update';
     dialogVisible.value = true;
     apiData.id = row.id;
     apiData.name = row.name;
@@ -132,7 +132,7 @@
 
   // 提交 添加接口/修改接口 的请求
   const submitAddOrUpdateApi = async () => {
-    if (formType.value == 1) {
+    if (dialogType.value == 'insert') {
       const result = await reqInsertApi(apiData);
       if (result.code == 200) {
         dialogVisible.value = false;
@@ -170,7 +170,7 @@
   };
 
   const getDialogTitle = () => {
-    return formType.value == 1 ? '添加接口' : '修改接口';
+    return dialogType.value == 'insert' ? '添加接口' : '修改接口';
   };
 </script>
 

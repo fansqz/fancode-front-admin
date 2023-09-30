@@ -58,8 +58,6 @@
   import { ElMessage } from 'element-plus';
 
   let menuTree = ref([]);
-  // 添加menu/修改menu页面是否显示
-  let dialogVisible = ref<boolean>(false);
   // menu数据
   let menuData = reactive({
     id: '',
@@ -68,8 +66,10 @@
     description: '',
     parentMenuID: 0,
   });
+  // 添加menu/修改menu页面是否显示
+  let dialogVisible = ref(false);
   // 用于标识是添加还是修改menu，1标识添加，0表示修改
-  let formType = ref(1);
+  let dialogType = ref('insert');
   //请求
   onMounted(() => {
     getMenuTree();
@@ -85,7 +85,7 @@
 
   // 添加菜单
   const handleInsertMenu = (row: any) => {
-    formType.value = 1;
+    dialogType.value = 'insert';
     dialogVisible.value = true;
     menuData.parentMenuID = row.id;
     menuData.id = '';
@@ -96,7 +96,7 @@
 
   // 修改菜单
   const handleUpdateMenu = (row: any) => {
-    formType.value = 0;
+    dialogType.value = 'update';
     dialogVisible.value = true;
     menuData.id = row.id;
     menuData.name = row.name;
@@ -107,7 +107,7 @@
 
   // 提交 添加菜单/修改菜单 的请求
   const submitAddOrUpdateMenu = async () => {
-    if (formType.value == 1) {
+    if (dialogType.value == 'insert') {
       const result = await reqInsertMenu(menuData);
       if (result.code == 200) {
         dialogVisible.value = false;
@@ -145,7 +145,7 @@
   };
 
   const getDialogTitle = () => {
-    return formType.value == 1 ? '添加菜单' : '修改菜单';
+    return dialogType.value == 'insert' ? '添加菜单' : '修改菜单';
   };
 
   // 删除menu
