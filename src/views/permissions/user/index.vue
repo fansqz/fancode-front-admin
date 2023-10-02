@@ -31,18 +31,16 @@
       <el-table-column label="电话" prop="phone" align="center"></el-table-column>
       <el-table-column label="角色列表" prop="roles" align="center"></el-table-column>
       <el-table-column label="更新时间" prop="updatedAt" align="center"></el-table-column>
-      <el-table-column label="操作" width="300px" align="center">
+      <el-table-column label="操作" width="220px" align="center">
         <!--row:为已有角色对象-->
         <template v-slot="{ row }">
           <el-button type="primary" size="small" icon="Plus" @click="handleSetUserRole(row.id)">
             关联角色
           </el-button>
-          <el-button type="primary" size="small" icon="Edit" @click="handleUpdateUser(row.id)">
-            用户编辑
-          </el-button>
+          <el-button type="primary" size="small" icon="Edit" @click="handleUpdateUser(row.id)" />
           <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteUser(row.id)">
             <template #reference>
-              <el-button type="danger" size="small" icon="Delete"> 删除 </el-button>
+              <el-button type="danger" size="small" icon="Delete" />
             </template>
           </el-popconfirm>
         </template>

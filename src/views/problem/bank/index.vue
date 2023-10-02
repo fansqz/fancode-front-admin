@@ -33,7 +33,7 @@
             <pre>{{ row.problemCount }}</pre>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" align="center">
+        <el-table-column label="创建时间" width="160px" align="center">
           <template v-slot="{ row }">
             <pre>{{ row.createdAt }}</pre>
           </template>
@@ -43,14 +43,12 @@
             <pre>{{ row.creatorName }}</pre>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="200px">
+        <el-table-column label="操作" align="center" width="120px">
           <template v-slot="{ row }">
-            <el-button type="primary" size="small" icon="Edit" @click="handlerUpdateBank(row.id)"
-              >修改</el-button
-            >
+            <el-button type="primary" size="small" icon="Edit" @click="handlerUpdateBank(row.id)" />
             <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteBank(row.id)">
               <template #reference>
-                <el-button type="danger" size="small" icon="Delete"> 删除 </el-button>
+                <el-button type="danger" size="small" icon="Delete" />
               </template>
             </el-popconfirm>
           </template>

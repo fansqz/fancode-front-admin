@@ -21,19 +21,25 @@
       <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
       <el-table-column label="角色名称" prop="name" align="center"></el-table-column>
       <el-table-column label="介绍" prop="description" align="center"></el-table-column>
-      <el-table-column label="更新时间" prop="updatedAt" align="center"></el-table-column>
-      <el-table-column label="操作" width="300px" align="center">
+      <el-table-column
+        label="更新时间"
+        prop="updatedAt"
+        width="160px"
+        align="center"
+      ></el-table-column>
+      <el-table-column label="操作" width="160px" align="center">
         <!--row:为已有的角色对象-->
         <template v-slot="{ row }">
-          <el-button type="primary" size="small" icon="Plus" @click="handleSetPermisstion(row.id)">
-            权限管理
-          </el-button>
-          <el-button type="primary" size="small" icon="Edit" @click="handleUpdateRole(row.id)">
-            角色编辑
-          </el-button>
+          <el-button
+            type="primary"
+            size="small"
+            icon="Plus"
+            @click="handleSetPermisstion(row.id)"
+          />
+          <el-button type="primary" size="small" icon="Edit" @click="handleUpdateRole(row.id)" />
           <el-popconfirm :title="`顶真要删除吗`" @confirm="handleDeleteRole(row.id)">
             <template #reference>
-              <el-button type="danger" size="small" icon="Delete"> 删除 </el-button>
+              <el-button type="danger" size="small" icon="Delete" />
             </template>
           </el-popconfirm>
         </template>
