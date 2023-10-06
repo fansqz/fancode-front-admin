@@ -7,9 +7,9 @@ enum API {
   //获取题目列表
   LIST_PROBLEM_URL = '/manage/problem/list',
   // 下载题目编程文件
-  DOWNLOAD_PROBLEM_FILE_URL = '/problem/file/download',
+  DOWNLOAD_PROBLEM_FILE_URL = '/manage/problem/file/download',
   // 下载题目编程文件的模板文件
-  DOWNLOAD_PROBLEM_TEMPLATE_FILE = '/problem/file/download/template',
+  DOWNLOAD_PROBLEM_TEMPLATE_FILE = '/manage/problem/file/download/template',
   // 设置题目可用
   UPDATE_PROBLEM_ENABLE = '/manage/problem/enable',
 }
