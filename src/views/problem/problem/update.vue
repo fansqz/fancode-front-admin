@@ -144,7 +144,7 @@
         problem.name = result.data.name;
         problem.path = result.data.path;
         problem.title = result.data.title;
-        if (result.data.languages != "") {
+        if (result.data.languages != '') {
           problem.languages = result.data.languages.split(',');
         }
       }
