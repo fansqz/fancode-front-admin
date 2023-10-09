@@ -16,23 +16,23 @@ enum API {
 
 // 获取题目列表
 export const reqProblemList = (data: any): Promise<any> => {
-  return request.get<any, any>(API.LIST_PROBLEM_URL, {
+  return request.get(API.LIST_PROBLEM_URL, {
     params: data,
   });
 };
 
 // 创建题目
 export const reqInsertProblem = (data: any): Promise<any> => {
-  return request.post<any, any>(API.PROBLEM_URL, toFormData(data), {
+  return request.post(API.PROBLEM_URL, toFormData(data), {
     headers: {
-      'Context-Type': 'multipart/form-data',
+      'Content-Type': 'multipart/form-data',
     },
   });
 };
 
 // 根据id获取题目信息
 export const reqGetProblem = (id: string): Promise<any> => {
-  return request.get<any, any>(API.PROBLEM_URL + '/' + id);
+  return request.get(API.PROBLEM_URL + '/' + id);
 };
 
 // 修改题目

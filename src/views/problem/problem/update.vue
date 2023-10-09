@@ -144,7 +144,9 @@
         problem.name = result.data.name;
         problem.path = result.data.path;
         problem.title = result.data.title;
-        problem.languages = result.data.languages.split(',');
+        if (result.data.languages != "") {
+          problem.languages = result.data.languages.split(',');
+        }
       }
     } catch (err) {
       ElMessage({
@@ -177,6 +179,7 @@
   // 提交题目修改
   const changeProblemSubmit = async () => {
     try {
+      console.log(problem.languages);
       let result = await reqUpdateProblem({
         id: problem.id,
         bankID: problem.bankID,
