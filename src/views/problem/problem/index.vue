@@ -18,6 +18,7 @@
             </el-col>
             <el-col :span="6">
               <el-select v-model="listQuery.difficulty" placeholder="Select">
+                <el-option :key="0" :label="'任意'" :value="0" />
                 <el-option :key="1" :label="'简单'" :value="1" />
                 <el-option :key="2" :label="'偏易'" :value="2" />
                 <el-option :key="3" :label="'中等'" :value="3" />
@@ -125,7 +126,7 @@
     bankID: $route.params.bankID,
     number: '',
     name: '',
-    difficulty: 1,
+    difficulty: 0,
   });
   let total = ref(0);
   // 存储题目列表
@@ -176,7 +177,8 @@
   const reset = () => {
     listQuery.number = '';
     listQuery.name = '';
-    listQuery.difficulty = 1;
+    listQuery.difficulty = 0;
+    getProblemList();
   };
 
   //组件挂载完毕以后获取数据

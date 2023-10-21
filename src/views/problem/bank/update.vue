@@ -18,7 +18,7 @@
         <el-input placeholder="请输入题库名称" v-model="bankData.name"></el-input>
       </el-form-item>
       <el-form-item label="题库描述">
-        <el-input placeholder="请输入题库描述" v-model="bankData.discription"></el-input>
+        <el-input placeholder="请输入题库描述" v-model="bankData.description"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>

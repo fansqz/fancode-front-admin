@@ -150,6 +150,7 @@
   const reset = () => {
     listQuery.name = '';
     listQuery.description = '';
+    getProblemBankList();
   };
 
   //组件挂载完毕以后获取数据
