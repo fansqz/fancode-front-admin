@@ -4,10 +4,10 @@
       <div class="search">
         <el-row :gutter="20">
           <el-col :span="4">
-            <el-input v-model="listQuery.username" clearable placeholder="请输入用户名称" />
+            <el-input v-model="listQuery.loginName" clearable placeholder="请输入登录id" />
           </el-col>
           <el-col :span="4">
-            <el-input v-model="listQuery.loginName" clearable placeholder="请输入登录id" />
+            <el-input v-model="listQuery.username" clearable placeholder="请输入用户名称" />
           </el-col>
           <el-col :span="4">
             <el-input v-model="listQuery.email" clearable placeholder="请输入邮箱" />
