@@ -79,7 +79,7 @@
 
 <script setup lang="ts">
   import { reqProblemBankList, reqDeleteProblemBank } from '@/api/problem-bank';
-  import BankUpdate from './update.vue';
+  import BankUpdate from './bank-editer.vue';
   import { ref, onMounted, reactive } from 'vue';
   import { useRouter } from 'vue-router';
   import { ElMessage } from 'element-plus';

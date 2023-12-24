@@ -1,11 +1,7 @@
 <template>
   <div class="container">
-    <BankCard
-      class="bank-card"
-      v-if="listQuery.bankID && !isUpdateOrInsert"
-      :bankID="listQuery.bankID"
-    />
-    <el-card v-if="!isUpdateOrInsert" class="problem-card">
+    <BankCard class="bank-card" v-if="listQuery.bankID && type == 0" :bankID="listQuery.bankID" />
+    <el-card v-if="type == 0" class="problem-card">
       <!--搜索框-->
       <template #header>
         <div class="search">
@@ -100,13 +96,18 @@
     </el-card>
 
     <!--添加题目的组件-->
+    <Insert
+      v-if="type == 1"
+      @exit="closeUpdateOrInsertPage"
+      @submit="closeUpdateOrInsertPage"
+    ></Insert>
     <Update
-      v-if="isUpdateOrInsert"
-      @exit="closeUpdatePage"
-      @submit="closeUpdatePage"
+      v-if="type == 2"
+      @exit="closeUpdateOrInsertPage"
+      @submit="closeUpdateOrInsertPage"
       :problemID="problemID"
-      :type="type"
-    ></Update>
+    >
+    </Update>
   </div>
 </template>
 
@@ -115,7 +116,8 @@
   import { ElMessage } from 'element-plus';
   import { useRoute } from 'vue-router';
   import { reqProblemList, reqDeleteProblem, reqUpdateProblemEnable } from '@/api/problem';
-  import Update from './update.vue';
+  import Insert from './problem-insert.vue';
+  import Update from './problem-editer/index.vue';
   import BankCard from './bank-card.vue';
 
   const $route = useRoute();
@@ -198,23 +200,21 @@
     getProblemList();
   };
 
-  const isUpdateOrInsert = ref(false);
+  const type = ref(0);
   const problemID = ref('');
-  const type = ref('insert');
+
   const handleUpdateProblem = (id: string) => {
-    isUpdateOrInsert.value = true;
+    type.value = 2;
     problemID.value = id;
-    type.value = 'update';
   };
 
-  const handleInsertProblem = async () => {
-    isUpdateOrInsert.value = true;
-    type.value = 'insert';
+  const handleInsertProblem = () => {
+    type.value = 1;
   };
 
   // closePage 关闭修改页面
-  const closeUpdatePage = () => {
-    isUpdateOrInsert.value = false;
+  const closeUpdateOrInsertPage = () => {
+    type.value = 0;
     // 读取数据
     getProblemList();
   };
