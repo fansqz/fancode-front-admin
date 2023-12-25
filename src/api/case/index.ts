@@ -43,9 +43,14 @@ export const reqProblemCaseList = (data: any): Promise<any> => {
 };
 
 // 检测题目用例名称是否重复
-export const reqCheckProblemCaseName = (name: string, problemID: string): Promise<any> => {
+export const reqCheckProblemCaseName = (
+  id: string,
+  name: string,
+  problemID: string,
+): Promise<any> => {
   return request.get(API.PROBLEM_CASE_NAME_URL + '/check', {
     params: {
+      id: id,
       name: name,
       problemID: problemID,
     },
