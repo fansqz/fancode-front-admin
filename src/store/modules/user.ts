@@ -45,6 +45,8 @@ const useUserStore = defineStore('User', {
         userAsyncRoute.forEach((route: any) => {
           router.addRoute(route);
         });
+      } else {
+        return Promise.reject(new Error(result.message));
       }
     },
     userLogout() {

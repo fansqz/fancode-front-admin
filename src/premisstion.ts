@@ -21,7 +21,7 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   // 如果是login
   if (to.path == '/login') {
     if (token) {
-      next({ path: '/' });
+      next({ path: '/home' });
     } else {
       next();
     }
