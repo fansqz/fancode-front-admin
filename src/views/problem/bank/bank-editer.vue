@@ -10,7 +10,7 @@
           :http-request="uploadProblemBankIcon"
           :before-upload="beforeUpload"
         >
-          <img v-if="bankData.icon" :src="bankData.icon" class="bank-icon" />
+          <img v-if="bankData.iconURL" :src="bankData.iconURL" class="bank-icon" />
           <el-icon v-else class="icon-upload-icon"><Plus /></el-icon>
         </el-upload>
       </el-form-item>
@@ -36,6 +36,7 @@
     reqInsertProblemBank,
     reqUpdateProblemBank,
   } from '@/api/problem-bank';
+  import { reqGetURL } from '@/api/common';
   import { ElMessage } from 'element-plus';
 
   // type = update or insert
@@ -44,6 +45,7 @@
   // 题库数据
   let bankData = reactive<any>({
     icon: '',
+    iconURL: '',
     name: '',
     description: '',
   });
@@ -75,6 +77,11 @@
     });
     if (result.code == 200) {
       bankData.icon = result.data;
+      // 读取url
+      let result2 = await reqGetURL(bankData.icon);
+      if (result2.code == 200) {
+        bankData.iconURL = result2.data;
+      }
       ElMessage({
         type: 'success',
         message: '题库图标上传成功',
@@ -95,6 +102,11 @@
         bankData.icon = data.icon;
         bankData.name = data.name;
         bankData.description = data.description;
+        // 读取url
+        let result2 = await reqGetURL(bankData.icon);
+        if (result2.code == 200) {
+          bankData.iconURL = result2.data;
+        }
       } else {
         ElMessage({
           type: 'error',
