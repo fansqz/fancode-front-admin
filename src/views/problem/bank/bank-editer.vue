@@ -10,7 +10,7 @@
           :http-request="uploadProblemBankIcon"
           :before-upload="beforeUpload"
         >
-          <img v-if="bankData.iconURL" :src="bankData.iconURL" class="bank-icon" />
+          <el-image v-if="bankData.iconURL" :src="bankData.iconURL" class="bank-icon" />
           <el-icon v-else class="icon-upload-icon"><Plus /></el-icon>
         </el-upload>
       </el-form-item>

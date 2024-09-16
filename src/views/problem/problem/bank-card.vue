@@ -1,7 +1,7 @@
 <template>
   <div class="box-card">
     <div class="bank-icon">
-      <img :src="problemBank.icon" />
+      <el-image :src="problemBank.icon" />
     </div>
     <div class="bank-message">
       <div class="bank-name">题库名称: {{ problemBank.name }}</div>
