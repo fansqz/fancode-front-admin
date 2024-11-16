@@ -23,12 +23,20 @@
       </el-table-column>
       <el-table-column label="输入" width="200px" align="center">
         <template v-slot="{ row }">
-          <pre style="word-break: break-all; overflow: hidden">{{ row.input }}</pre>
+          <el-tooltip :content="row.input" placement="bottom" effect="light">
+            <el-text style="word-break: break-all; overflow: hidden" truncated>{{
+              row.input
+            }}</el-text>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="输出" width="200px" align="center">
         <template v-slot="{ row }">
-          <pre style="word-break: break-all; overflow: hidden">{{ row.output }}</pre>
+          <el-tooltip :content="row.output" placement="bottom" effect="light">
+            <el-text style="word-break: break-all; overflow: hidden" truncated>{{
+              row.output
+            }}</el-text>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="120px" align="center">
