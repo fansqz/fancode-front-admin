@@ -1,102 +1,116 @@
+import { descriptions } from '@/enum/description.ts';
 
-type VisualDocumentDirectoryResponse = BaseResponse & {
-  data: VisualDocumentDirectory;
+export type VisualDocumentDirectoryResponse = BaseResponse & {
+  data: VisualDocumentDirectory[];
 };
 
-type VisualDocumentDirectory = {
+export type VisualDocumentDirectory = {
   // 可视化节点
   id: number;
-  parent: number;
+  parentID: number;
   title: string;
   enable: boolean;
   chidren: VisualDocumentDirectory[];
 };
 
-type VisualDocumentResponse = BaseResponse & {
+export type VisualDocumentResponse = BaseResponse & {
   data: VisualDocument;
 };
 
-type VisualDocument = {
+export type VisualDocument = {
   id: number;
-  parent: number;
-  titile: string;
+  parentID: number;
+  title: string;
   content: string;
   creatorID: number;
   enable: boolean;
+  codeList: VisualDocumentCode[];
 };
 
-type InsertVisualDocumentRequest = {
-  parent: number;
-  titile: string;
+export type InsertVisualDocumentRequest = {
+  parentID: number;
+  title: string;
   content: string;
   enable: boolean;
 };
 
-type InsertVisualDocumentResponse = BaseResponse & {
+export type InsertVisualDocumentResponse = BaseResponse & {
   data: number;
 };
 
-type UpdateVisualDocumentRequest = {
+export type UpdateVisualDocumentRequest = {
   id: number;
-  parent: number;
-  titile: string;
+  parentID: number;
+  title: string;
   content: string;
   enable: boolean;
+  codeList: VisualDocumentCode[];
 };
 
-type UpdateVisualDocumentResponse = BaseResponse & {
-  data: string;
-};
-
-type UpdateVisualDocumentParentResponse = BaseResponse & {
-  data: string;
-};
-
-type DeleteVisualDocumentResponse = BaseResponse & {
-  data: string;
-};
-
-type VisualDocumentCodeLanguageResponse = BaseResponse & {
-  data: string[];
-};
-
-type VisaulDocumentCodeResponse = BaseResponse & {
-  data: VisualDocumentCode;
-};
-
-type VisualDocumentCode = {
-  id: number;
-  documentID: number;
+export type VisualDocumentCode = {
   code: string;
   language: string;
   breakpoints: number[];
   visualSetting: string;
 };
 
-type InsertVisualDocumentCodeRequest = {
-  documentID: number;
-  code: string;
-  language: string;
-  breakpoints: number[];
-  visualSetting: string;
-};
-
-type InsertVisualDocumentCodeResponse = BaseResponse & {
-  data: number;
-};
-
-
-type UpdateVisualDocumentCodeRequest = {
-  id: number;
-  code: string;
-  breakpoints: number[];
-  visualSetting: string;
-};
-
-type UpdateVisualDocumentCodeResponse = BaseResponse & {
+export type UpdateVisualDocumentResponse = BaseResponse & {
   data: string;
 };
 
-type DeleteVisualDocumentCodeResponse = BaseResponse & {
+export type UpdateVisualDocumentParentResponse = BaseResponse & {
   data: string;
+};
+
+export type DeleteVisualDocumentResponse = BaseResponse & {
+  data: string;
+};
+
+export type VisualSetting = {
+  type: descriptions;
+  description: VisualDescription;
+};
+
+// 可视化描述类型
+export type VisualDescription =
+  | ArrayDescription
+  | BinaryTreeDescription
+  | LinkListDescription
+  | GraphDescription
+  | any;
+
+// 数组可视化描述
+export type ArrayDescription = {
+  arrayName: string;
+  pointNames: string[];
+};
+
+// 二叉树可视化描述
+export type BinaryTreeDescription = {
+  // 二叉树节点结构体名称
+  treeNode: string;
+  // 数据域
+  data: string;
+  // 左子树和右边子树属性名称
+  left: string;
+  right: string;
+};
+
+// 图的可视化描述
+export type GraphDescription = {
+  // 二叉树节点结构体名称
+  graphNode: string;
+  // 数据域
+  data: string;
+  nexts: string[];
+};
+
+// 链表的可视化描述
+export type LinkListDescription = {
+  // 链表节点
+  linkNode: string;
+  // 数据域
+  data: string;
+  next: string;
+  prev?: string;
 };

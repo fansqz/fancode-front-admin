@@ -170,4 +170,8 @@
   };
 </script>
 
-<style scoped></style>
+<style scoped>
+  .box-card {
+    margin: 40px;
+  }
+</style>

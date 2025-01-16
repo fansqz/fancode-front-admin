@@ -50,6 +50,16 @@ export const asyncRoute = [
       hidden: false,
     },
     children: [
+      {
+        path: '/manage/visual-document',
+        name: 'visual-document',
+        meta: {
+          title: '可视化教程',
+          icon: 'Reading',
+          hidden: false,
+        },
+        component: () => import('@/views/visual-document/index.vue'),
+      },
       // 题目管理
       {
         path: '/manage/problem',
