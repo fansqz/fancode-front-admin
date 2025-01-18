@@ -60,3 +60,12 @@ export const reqUpdateProblemEnable = (id: number, enable: string): Promise<any>
     },
   );
 };
+
+// 上传题库图标
+export const reqUploadProblemFile = (data: any): Promise<any> => {
+  return request.post(`${API.PROBLEM_URL}/file/upload`, toFormData(data), {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};

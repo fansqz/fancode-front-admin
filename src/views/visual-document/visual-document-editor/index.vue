@@ -30,6 +30,21 @@
       <el-switch class="button" v-model="enable" />
     </div>
 
+    <div class="save-button">
+      <el-button v-if="!hasChange" type="info" size="small" disabled>保存</el-button>
+      <el-button v-if="hasChange" type="primary" size="small" @click="saveVisualDocument"
+        >保存</el-button
+      >
+    </div>
+
+    <div class="delete-button">
+      <el-popconfirm :title="`顶真要删除吗`" @confirm="deleteVisualDocument()">
+        <template #reference>
+          <el-button type="danger" size="small">删除</el-button>
+        </template>
+      </el-popconfirm>
+    </div>
+
     <div class="editor-main">
       <DocumentEditor v-if="activeIndex == 'document'" />
       <CodeEditor v-if="activeIndex == 'code'" />
@@ -39,16 +54,21 @@
 
 <script setup lang="ts">
   import { onMounted, watch, ref } from 'vue';
-  import { reqVisualDocument } from '@/api/visual-document';
-  import DocumentEditor from './document-editor.vue';
+  import {
+    reqVisualDocument,
+    reqUpdateVisualDocument,
+    reqDeleteVisualDocument,
+  } from '@/api/visual-document';
+  import DocumentEditor from './document-editor/index.vue';
   import CodeEditor from './code-editor/index.vue';
   import useVisualDocumentStore from '@/store/modules/visual-document';
   import { storeToRefs } from 'pinia';
+  import { ElMessage } from 'element-plus';
 
   const visualDocumentStore = useVisualDocumentStore();
 
-  const props = defineProps(['id']);
-  const emit = defineEmits(['updatedTitle']);
+  const hasChange = ref(false);
+  const emit = defineEmits(['updatedTitle', 'handleDocumentNotFound', 'handleDocumentDelete']);
 
   const activeIndex = ref('document');
   const { id, parentID, title, content, enable, codeList } = storeToRefs(visualDocumentStore);
@@ -56,9 +76,12 @@
 
   // 获取document
   const getVisualDocument = async () => {
-    let result = await reqVisualDocument(props.id);
+    let result = await reqVisualDocument(id.value);
+    if (result.code == 10000) {
+      // 记录为找到
+      emit('handleDocumentNotFound');
+    }
     if (result.code == 200) {
-      id.value = result.data.id;
       parentID.value = result.data.parentID;
       title.value = result.data.title;
       content.value = result.data.content;
@@ -68,8 +91,10 @@
         const codeItem = result.data.codeList[i];
         // 反序列化 setting 属性
         list.push({
-          visualSettingObj: JSON.parse(codeItem.visualSetting),
-          ...codeItem,
+          visualSetting: JSON.parse(codeItem.visualSetting),
+          code: codeItem.code,
+          language: codeItem.language,
+          breakpoints: codeItem.breakpoints,
         });
       }
       codeList.value = list;
@@ -85,17 +110,64 @@
     inEditTitle.value = false;
   };
 
+  // 删除可视化文档
+  const deleteVisualDocument = async () => {
+    let result = await reqDeleteVisualDocument(id.value);
+    if (result.code == 200) {
+      ElMessage({
+        showClose: true,
+        message: '删除成功',
+        type: 'success',
+      });
+      emit('handleDocumentDelete');
+    }
+  };
+
+  // 保存可视化文档
+  const saveVisualDocument = async () => {
+    let codeListReq = [];
+    for (let data of codeList.value) {
+      codeListReq.push({
+        code: data.code,
+        language: data.language,
+        breakpoints: data.breakpoints,
+        visualSetting: JSON.stringify(data.visualSetting),
+      });
+    }
+    let result = await reqUpdateVisualDocument({
+      id: id.value,
+      parentID: parentID.value,
+      title: title.value,
+      content: content.value,
+      enable: enable.value,
+      codeList: codeListReq,
+    });
+    if (result.code == 200) {
+      ElMessage({
+        showClose: true,
+        message: '保存成功',
+        type: 'success',
+      });
+      // 更新目录标题
+      emit('updatedTitle');
+      hasChange.value = false;
+    }
+  };
+
   const handleClickEditTitle = () => {
     inEditTitle.value = true;
   };
 
-  onMounted(() => {
-    getVisualDocument();
+  onMounted(async () => {
+    await getVisualDocument();
 
     watch(
-      () => props.id,
+      () => visualDocumentStore,
       () => {
-        getVisualDocument();
+        hasChange.value = true;
+      },
+      {
+        deep: true,
       },
     );
   });
@@ -137,8 +209,26 @@
     .enable-button {
       position: absolute;
       top: 0px;
-      right: 20px;
+      right: 140px;
       width: 40px;
+      height: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .save-button {
+      position: absolute;
+      top: 0px;
+      right: 80px;
+      height: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .delete-button {
+      position: absolute;
+      top: 0px;
+      right: 20px;
       height: 40px;
       display: flex;
       flex-direction: column;

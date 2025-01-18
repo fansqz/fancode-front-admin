@@ -42,13 +42,15 @@ export const reqUpdateVisualDocument = (
 };
 
 // 更新可视化文档的父节点
-export const reqUpdateVisualDocumentParent = (
-  id: number,
-  parentID: number,
+export const reqUpdateVisualDocumentDirectory = (
+  draggingNodeID: number,
+  dragNodeID: number,
+  type: string,
 ): Promise<UpdateVisualDocumentParentResponse> => {
-  return request.post(API.VISUAL_DOCUMENT_URL + '/parent', {
-    id: id,
-    parentID: parentID,
+  return request.post(API.VISUAL_DOCUMENT_URL + '/directory', {
+    draggingDocumentID: draggingNodeID,
+    dragDocumentID: dragNodeID,
+    eventType: type,
   });
 };
 

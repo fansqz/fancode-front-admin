@@ -70,6 +70,10 @@
   }
 
   const handleAddVisualCode = () => {
+    if (addVisualCode.optionalLanguage.length == 0) {
+      // 可选语言为空，则不执行添加代码任务
+      return;
+    }
     let defaultCode = defaultCodeMap.get(addVisualCode.selectedLanguage);
     if (defaultCode == undefined) {
       defaultCode = '';
@@ -78,8 +82,7 @@
       code: defaultCode,
       language: addVisualCode.selectedLanguage,
       breakpoints: [],
-      visualSetting: '',
-      visualSettingObj: {
+      visualSetting: {
         type: descriptions.Array,
         description: {
           arrayName: 'arr',
@@ -107,6 +110,9 @@
         }
       }
       addVisualCode.optionalLanguage = optionalLanguage;
+      if (optionalLanguage.length > 0) {
+        addVisualCode.selectedLanguage = optionalLanguage[0];
+      }
       addVisualCode.visible = true;
     } else if (action === 'remove') {
       // 删除语言

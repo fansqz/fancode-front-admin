@@ -10,6 +10,7 @@ export type VisualDocumentDirectory = {
   parentID: number;
   title: string;
   enable: boolean;
+  order: number;
   chidren: VisualDocumentDirectory[];
 };
 

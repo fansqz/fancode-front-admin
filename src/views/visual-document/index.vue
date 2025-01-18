@@ -8,26 +8,40 @@
     <el-tree
       :data="data"
       :props="props"
+      highlight-current="true"
+      :expand-on-click-node="false"
+      :current-node-key="id"
       draggable
       default-expand-all
       node-key="id"
       class="directory-tree"
       indent="8"
       @node-click="clickEditorVisualDocument"
+      @node-drag-end="handleUpdateDocumentParent"
     >
       <template #default="scope">
         <div class="tree_item">
           <el-text>{{ scope.node.label }}</el-text>
-          <el-button link size="samll" class="button">+</el-button>
+          <el-button
+            link
+            size="samll"
+            class="button"
+            @click="clickAddVisualDocument(scope.node.data)"
+            >+</el-button
+          >
         </div>
       </template>
     </el-tree>
-    <div class="editor">
+    <div v-if="!notVisualDocumentData" class="editor">
       <VisualDocumentEditor
-        :key="visualDocumentID"
-        :id="visualDocumentID"
+        :key="id"
         @updatedTitle="getDirectory()"
+        @handleDocumentDelete="selectFirstDocument()"
+        @handleDocumentNotFound="selectFirstDocument()"
       />
+    </div>
+    <div v-if="notVisualDocumentData" class="not-record">
+      <el-text>无数据</el-text>
     </div>
 
     <el-dialog v-model="visualDocumentForAdd.visible" title="新建可视化文档">
@@ -50,17 +64,30 @@
 </template>
 
 <script setup lang="ts">
-  import { reqVisualDocumentDirectory, reqInsertVisualDocument } from '@/api/visual-document';
+  import {
+    reqVisualDocumentDirectory,
+    reqInsertVisualDocument,
+    reqUpdateVisualDocumentDirectory,
+  } from '@/api/visual-document';
   import { onMounted, reactive, ref } from 'vue';
   import VisualDocumentEditor from './visual-document-editor/index.vue';
+  import { defaultDocument } from './visual-document-editor/document-editor/default-document';
+  import useVisualDocumentStore from '@/store/modules/visual-document';
+  import { storeToRefs } from 'pinia';
 
+  const visualDocumentStore = useVisualDocumentStore();
+
+  const { id } = storeToRefs(visualDocumentStore);
   const data = ref<any[]>([]);
   const props = {
     children: 'children',
     label: 'title',
   };
-  const visualDocumentID = ref(0);
 
+  // 标记是否没有可视化文档数据
+  const notVisualDocumentData = ref(false);
+
+  // 添加可视化文档的数据
   const visualDocumentForAdd = reactive({
     visible: false,
     parentID: 0,
@@ -70,15 +97,36 @@
   });
 
   const clickEditorVisualDocument = (node: any) => {
-    visualDocumentID.value = node.id;
+    id.value = node.id;
   };
 
-  const clickAddVisualDocument = (parentID: number) => {
-    visualDocumentForAdd.parentID = parentID;
-    visualDocumentForAdd.title = '';
-    visualDocumentForAdd.content = '';
+  const clickAddVisualDocument = (node: any) => {
+    visualDocumentForAdd.parentID = node.id;
+    visualDocumentForAdd.title = '未命名';
+    visualDocumentForAdd.content = defaultDocument;
     visualDocumentForAdd.enable = false;
     visualDocumentForAdd.visible = true;
+  };
+
+  // 更新文档父节点
+  const handleUpdateDocumentParent = async (draggingNode: any, dropNode: any, dropType: any) => {
+    if (draggingNode.data.id == dropNode.data.id) {
+      return;
+    }
+    await reqUpdateVisualDocumentDirectory(draggingNode.data.id, dropNode.data.id, dropType);
+    // 更新目录
+    getDirectory();
+  };
+
+  // 更新目录并选择第一篇文档
+  const selectFirstDocument = async () => {
+    await getDirectory();
+    if (data.value.length != 0) {
+      id.value = data.value[0].id;
+    } else {
+      // 目录无数据
+      notVisualDocumentData.value = true;
+    }
   };
 
   // 添加可视化文档
@@ -90,8 +138,13 @@
       enable: visualDocumentForAdd.enable,
     });
     if ((result.code = 200)) {
+      // 如果一开始是无数据状态，设置为有数据
+      if (notVisualDocumentData.value == true) {
+        notVisualDocumentData.value = false;
+      }
       // 获取新的目录
       await getDirectory();
+      id.value = result.data;
     }
     visualDocumentForAdd.visible = false;
   };
@@ -105,6 +158,15 @@
 
   onMounted(async () => {
     await getDirectory();
+    // 如果id为0，那么选择第一篇文档
+    if (id.value == 0) {
+      if (data.value.length != 0) {
+        id.value = data.value[0].id;
+      } else {
+        // 目录无数据
+        notVisualDocumentData.value = true;
+      }
+    }
   });
 </script>
 
@@ -155,6 +217,17 @@
       top: 0px;
       left: 200px;
       margin: 0px;
+    }
+    .not-record {
+      position: absolute;
+      width: calc(100% - 200px);
+      height: 100%;
+      top: 0px;
+      left: 200px;
+      margin: 0px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
   }
 </style>

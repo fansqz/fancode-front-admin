@@ -7,7 +7,7 @@
     <pane>
       <VisualDesciptionSetting
         class="visual-setting"
-        v-model="model.visualSettingObj"
+        v-model="model.visualSetting"
       ></VisualDesciptionSetting>
     </pane>
 
@@ -35,7 +35,7 @@
     code: string;
     language: string;
     breakpoints: number[];
-    visualSettingObj: VisualSetting;
+    visualSetting: VisualSetting;
   }>({
     default: {
       code: '',

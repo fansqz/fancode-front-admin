@@ -41,8 +41,8 @@ app.use(ElementPlus, {
   //element-plus国际化
   locale: zhCn,
 });
-app.use(gloalComponent);
+app.use(gloalComponent as any);
 app.use(router);
-app.use(pinia);
+app.use(pinia as any);
 app.mount('#app');
 initMarkdowmEditor(app);

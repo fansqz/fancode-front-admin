@@ -19,14 +19,14 @@ const useVisualDocumentStore = defineStore('visual-document', {
     enable: false,
     codeList: [],
   }),
+  persist: true,
 });
 
 export type VisualDocumentCode = {
   code: string;
   language: string;
   breakpoints: number[];
-  visualSetting: string;
-  visualSettingObj: VisualSetting;
+  visualSetting: VisualSetting;
 };
 
 export default useVisualDocumentStore;
