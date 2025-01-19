@@ -3,18 +3,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, watch, toRefs, onMounted } from 'vue';
+  import { ref, watch, onMounted, defineModel } from 'vue';
   import { editor } from 'monaco-editor';
   import { setBreakPoint, initBreakPoint } from './breakpoint';
+  import { getConfigs } from './conf';
+  import debounce from 'lodash.debounce';
 
   let editorInstance: editor.IStandaloneCodeEditor;
-  let props = defineProps<{
-    code: string;
-    language: string;
-    breakpoints: number[];
-  }>();
-
-  const { code, language, breakpoints } = toRefs(props);
+  let code = defineModel<string>('code', { default: '' });
+  let language = defineModel<string>('language', { default: 'c' });
+  let breakpoints = defineModel<number[]>('breakpoints', { default: [] });
 
   const editorEl = ref<HTMLElement>();
 
@@ -23,15 +21,17 @@
       return;
     }
     // 创建editor实例
-    editorInstance = editor.create(editorEl.value, {
-      language: language.value,
-      value: code.value,
-      readOnly: false,
-      minimap: {
-        enabled: false,
-      },
-      automaticLayout: true,
-    });
+    editorInstance = editor.create(
+      editorEl.value,
+      getConfigs({
+        language: language.value,
+        value: code.value,
+        readOnly: false,
+        minimap: {
+          enabled: false,
+        },
+      }),
+    );
 
     // 初始化断点
     initBreakPoint(editorInstance, breakpoints.value);
@@ -52,6 +52,14 @@
       (val) => {
         editorInstance?.setValue(val);
       },
+    );
+
+    // 监控内容修改
+    editorInstance.onDidChangeModelContent(
+      debounce(async () => {
+        // 使用防抖，在不输入内容的时候进行保存
+        code.value = editorInstance.getValue();
+      }, 600),
     );
 
     setBreakPoint(editorInstance, function (bps: number[], _lineNum: number, _mode: 'add' | 'del') {

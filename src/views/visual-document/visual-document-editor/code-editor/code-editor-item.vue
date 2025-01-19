@@ -15,9 +15,9 @@
     <pane>
       <CodeEditor
         class="code-editor"
-        :code="model.code"
-        :language="model.language"
-        :breakpoints="model.breakpoints"
+        v-model:code="model.code"
+        v-model:language="model.language"
+        v-model:breakpoints="model.breakpoints"
       />
     </pane>
   </splitpanes>

@@ -1,4 +1,4 @@
-import { editor } from 'monaco-editor';
+import { editor, Range } from 'monaco-editor';
 import throttle from 'lodash.throttle';
 import { ElMessageBox } from 'element-plus';
 import type { onUpdateBP, EditorInstance } from './types';
@@ -40,7 +40,18 @@ export function setBreakPoint(editorInstance: EditorInstance, onUpdateBP?: onUpd
       if (existTBP) {
         // 存在拥有透明度的断点，点击设置断点
         const TBPIds = getBreakPointsIds(decorations, 'TBP'); // 删除存在透明度的断点
-        model.deltaDecorations(TBPIds, [getBreakPointOption(lineNumber, 'active')]);
+        model.deltaDecorations(TBPIds, [
+          {
+            range: new Range(lineNumber, 1, lineNumber, 1),
+            options: {
+              isWholeLine: true,
+              // className: "content",
+              glyphMarginClassName: 'breakpoint active',
+              stickiness: editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
+              glyphMarginHoverMessage: { value: '断点' },
+            },
+          },
+        ]);
         const allDecorations = model.getAllDecorations();
         onUpdateBP?.(getBreakPointLineNumber(allDecorations), lineNumber, 'add');
 
@@ -72,6 +83,7 @@ export function setBreakPoint(editorInstance: EditorInstance, onUpdateBP?: onUpd
           }
           const { lineNumber } = e.target.position;
           const decorations = model.getLineDecorations(lineNumber);
+          // {decorations}为什么是数组？因为一行可以有多个Decoration
           const existBP = existBreakPoint(decorations);
           if (!existBP) {
             // 不存在断点就可以显示存在透明度的断点
