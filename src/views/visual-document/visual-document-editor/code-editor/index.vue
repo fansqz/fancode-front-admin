@@ -125,6 +125,8 @@
             const nextTab = tabs[index + 1] || tabs[index - 1];
             if (nextTab) {
               activeName = nextTab.language;
+            } else {
+              activeName = '';
             }
           }
         });

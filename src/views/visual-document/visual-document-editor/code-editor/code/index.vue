@@ -50,7 +50,9 @@
     watch(
       () => code.value,
       (val) => {
-        editorInstance?.setValue(val);
+        if (code.value != editorInstance.getValue()) {
+          editorInstance?.setValue(val);
+        }
       },
     );
 
