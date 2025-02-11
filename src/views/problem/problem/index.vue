@@ -222,6 +222,7 @@
 
 <style scoped lang="scss">
   .container {
+    margin: 20px;
     display: flex;
     flex-direction: column;
     align-items: center; /*所有子元素都垂直居中了*/

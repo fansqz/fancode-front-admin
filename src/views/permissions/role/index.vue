@@ -174,5 +174,6 @@
 <style scoped lang="scss">
   .box-card {
     min-height: 100%;
+    margin: 40px;
   }
 </style>

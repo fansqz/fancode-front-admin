@@ -29,10 +29,10 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
+  import { ref } from 'vue';
   import BaseEditer from './base-editer.vue';
   import Case from './problem-case/index.vue';
-  const props = defineProps(['problemID']);
+  defineProps(['problemID']);
   const emit = defineEmits(['exit']);
   const activeIndex = ref('base-editer');
 
@@ -40,9 +40,6 @@
     activeIndex.value = key;
   };
 
-  onMounted(() => {
-    console.log(props);
-  });
   // closePage 关闭修改页面
   const closePage = () => {
     emit('exit');

@@ -1,4 +1,4 @@
-import SvgIcon from './Svgicon/index.vue';
+import SvgIcon from './svgicon/index.vue';
 import TextButton from './text-button/index.vue';
 import { App } from 'vue';
 // 引入element-plus提供的全部图标组件
