@@ -61,13 +61,9 @@
       }
     }
     .layout-header {
-      box-sizing: border-box;
       position: fixed;
       width: 100%;
-      height: $base-header-height;
-      background-color: $base-header-background;
       top: 0;
-      border-bottom: 1px solid $base-border-color;
     }
     .layout-main {
       box-sizing: border-box;

@@ -1,13 +1,20 @@
 <template>
-  <el-card class="box-card">
-    <div>欢迎回来哟</div>
-  </el-card>
+  <div class="box-card">
+    <div class="text">
+      <el-text size="large">欢迎回来哟</el-text>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts"></script>
 
 <style scoped lang="scss">
   .box-card {
-    min-height: 100%;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    .text {
+      padding: 10px;
+    }
   }
 </style>

@@ -35,20 +35,15 @@ router.beforeEach(async (to: any, _from: any, next: any) => {
   }
 
   // 获取用户名称，如果获取不到用户名称则进行获取
-  const username = userStore.username;
-  if (!username) {
-    try {
-      await userStore.userInfo();
-      // 等到用户信息加载完毕，异步路由注册以后再放行
-      next({ ...to, replace: true });
-    } catch (error) {
-      // 意味着token过期
-      userStore.userLogout();
-      next({ path: '/login', query: { redirect: to.path } });
-    }
-    return;
+  try {
+    await userStore.userInfo();
+    // 等到用户信息加载完毕，异步路由注册以后再放行
+    next();
+  } catch (error) {
+    // 意味着token过期
+    userStore.userLogout();
+    next({ path: '/login', query: { redirect: to.path } });
   }
-  next();
 });
 
 // 全局后置守卫

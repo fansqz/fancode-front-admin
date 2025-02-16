@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { defineStore } from 'pinia';
-import { reqLogin, reqUserInfo } from '@/api/auth';
+import { reqLogin } from '@/api/auth';
+import { reqAccountInfo } from '@/api/account';
 // 引入路由
 import { constantRoute, asyncRoute, anyRoute } from '@/router/routers';
 import router from '@/router';
 //@ts-ignore
 import cloneDeep from 'lodash/cloneDeep';
+import { reqGetURL } from '@/api/common';
 
 const useUserStore = defineStore('User', {
   state: (): any => {
@@ -32,8 +34,16 @@ const useUserStore = defineStore('User', {
       }
     },
     async userInfo() {
-      const result = await reqUserInfo();
+      const result = await reqAccountInfo();
       if (result.code == 200) {
+        let avatarPath = result.data.avatar;
+        // 读取头像
+        if (avatarPath != '') {
+          let result2 = await reqGetURL(avatarPath);
+          if (result2.code == 200) {
+            this.avatar = result2.data;
+          }
+        }
         this.username = result.data.username;
         this.email = result.data.email;
         this.sex = result.data.email;

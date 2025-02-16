@@ -1,9 +1,6 @@
 <template>
   <div class="tabbar">
     <Logo class="logo"></Logo>
-    <div class="tabbar-left">
-      <Breadcrumb class="menu-path"></Breadcrumb>
-    </div>
     <div class="tabbar-right">
       <Setting></Setting>
     </div>
@@ -12,29 +9,25 @@
 
 <script setup lang="ts">
   import Logo from '../logo/index.vue';
-  import Breadcrumb from './breadcrumb/index.vue';
   import Setting from './setting/index.vue';
 </script>
 
 <style scoped lang="scss">
   .tabbar {
     position: relative;
+    height: $base-header-height;
+    background-color: $base-header-background;
+    box-sizing: border-box;
+    border-bottom: 1px solid $base-border-color;
     width: 100%;
-    height: 100%;
+    top: 0px;
     .logo {
-      position: absolute;
+      display: block;
       height: $base-header-height;
-      width: 180px;
-      left: 0px;
+      width: 200px;
+      margin: 0px 20px;
     }
-    .tabbar_left {
-      position: absolute;
-      height: $base-header-height;
-      width: 30%;
-      left: $base-menu-width;
-      top: 0%;
-    }
-    .tabbar_right {
+    .tabbar-right {
       position: absolute;
       height: $base-header-height;
       width: 30%;
