@@ -6,13 +6,12 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>我的</el-dropdown-item>
-          <el-dropdown-item>设置</el-dropdown-item>
           <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
-    <img src="@/assets/vue.svg" style="width: 24px; height: 24px" class="user-image" />
+    <el-avatar v-if="getAvatar() != ''" :src="getAvatar()" class="avatar" />
+    <el-avatar v-if="getAvatar() == ''" class="avatar">s</el-avatar>
   </div>
 </template>
 
@@ -25,6 +24,10 @@
   const logout = () => {
     userStore.userLogout();
     $router.push({ path: '/login', query: { redirect: $route.path } });
+  };
+
+  const getAvatar = (): string => {
+    return userStore.token ? userStore.avatar : '';
   };
 </script>
 
@@ -39,8 +42,11 @@
     .user-dropdown {
       padding-right: 60px;
     }
-    .user-image {
-      padding: 10px;
+    .avatar {
+      margin-right: 10px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
     }
   }
 </style>
