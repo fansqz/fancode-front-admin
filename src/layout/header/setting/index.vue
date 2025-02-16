@@ -6,8 +6,6 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item>我的</el-dropdown-item>
-          <el-dropdown-item>设置</el-dropdown-item>
           <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </template>
