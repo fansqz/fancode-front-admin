@@ -35,9 +35,7 @@
       </el-form-item>
       <el-form-item label="支持的编程语言" label-width="auto">
         <el-checkbox-group v-model="problem.languages">
-          <el-checkbox :label="'c'">C</el-checkbox>
-          <el-checkbox :label="'java'">Java</el-checkbox>
-          <el-checkbox :label="'go'">Go</el-checkbox>
+          <el-checkbox v-for="item in supportedLanguages" :label="item"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="所属题库" label-width="auto">
@@ -66,6 +64,7 @@
   import { ElMessage } from 'element-plus';
   import { reqGetProblem, reqUpdateProblem } from '@/api/problem';
   import { reqSimpleProblemBankList } from '@/api/problem-bank';
+  import { supportedLanguages } from '@/constants/languages.ts';
 
   const props = defineProps(['problemID']);
   const emit = defineEmits(['submit']);
@@ -78,7 +77,7 @@
     difficulty: 1,
     enable: false,
     title: '',
-    languages: ['c', 'java', 'go'],
+    languages: supportedLanguages,
     description: '',
   });
 

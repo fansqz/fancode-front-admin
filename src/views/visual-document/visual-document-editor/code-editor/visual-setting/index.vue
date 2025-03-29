@@ -46,7 +46,7 @@
   import LinkList from './link-list.vue';
   import Graph from './graph.vue';
   import { VisualSetting } from '@/api/visual-document/type.ts';
-  import { descriptions } from '@/enum/description.ts';
+  import { descriptions } from '@/constants/description.ts';
   const model = defineModel<VisualSetting>({
     default: {
       type: descriptions.Array,
@@ -170,3 +170,4 @@
     }
   }
 </style>
+@/constants/description

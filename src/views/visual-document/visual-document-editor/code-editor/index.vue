@@ -48,20 +48,19 @@
   import { onMounted, reactive, ref } from 'vue';
   import type { TabPaneName } from 'element-plus';
   import useVisualDocumentStore from '@/store/modules/visual-document.ts';
-  import { descriptions } from '@/enum/description';
+  import { descriptions } from '@/constants/description';
   import CodeEditorItem from './code-editor-item.vue';
   import { defaultCodeMap } from './code/default-code';
-  import { languages } from '@/enum/languages';
+  import { languageConstants, supportedLanguages } from '@/constants/languages.ts';
 
   const visualDocumentStore = useVisualDocumentStore();
   let codeList = visualDocumentStore.codeList;
 
-  const supportedLanguage = [languages.C, languages.Java, languages.GO];
   const addVisualCode = reactive({
     title: '添加语言',
     visible: false,
-    optionalLanguage: [languages.C],
-    selectedLanguage: languages.C,
+    optionalLanguage: [languageConstants.C],
+    selectedLanguage: languageConstants.C,
   });
 
   const actionLanguageValue = ref('');
@@ -97,16 +96,16 @@
   const handleTabsEdit = (targetName: TabPaneName | undefined, action: 'remove' | 'add') => {
     if (action === 'add') {
       // 处理可选的语言
-      let optionalLanguage: languages[] = [];
-      for (let i = 0; i < supportedLanguage.length; i++) {
+      let optionalLanguage: languageConstants[] = [];
+      for (let i = 0; i < supportedLanguages.length; i++) {
         let isSelected = false;
         for (let j = 0; j < codeList.length; j++) {
-          if (codeList[j].language == supportedLanguage[i]) {
+          if (codeList[j].language == supportedLanguages[i]) {
             isSelected = true;
           }
         }
         if (!isSelected) {
-          optionalLanguage.push(supportedLanguage[i]);
+          optionalLanguage.push(supportedLanguages[i]);
         }
       }
       addVisualCode.optionalLanguage = optionalLanguage;
@@ -162,3 +161,4 @@
     }
   }
 </style>
+@/constants/description@/constants/languages

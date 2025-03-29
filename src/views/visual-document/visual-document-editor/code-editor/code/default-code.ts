@@ -1,4 +1,4 @@
-import { languages } from '@/enum/languages';
+import { languageConstants } from '@/constants/languages';
 
 const defaultCCode = `#include <stdio.h>
 int main() {
@@ -38,8 +38,8 @@ public class Main {
     }
 }`;
 
-export const defaultCodeMap = new Map<languages, string>([
-  [languages.C, defaultCCode],
-  [languages.GO, defaultGoCode],
-  [languages.Java, defaultJavaCode],
+export const defaultCodeMap = new Map<languageConstants, string>([
+  [languageConstants.C, defaultCCode],
+  [languageConstants.GO, defaultGoCode],
+  [languageConstants.Java, defaultJavaCode],
 ]);
