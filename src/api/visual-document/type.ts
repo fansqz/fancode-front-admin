@@ -1,4 +1,4 @@
-import { descriptions } from '@/enum/description.ts';
+import { descriptions } from '@/constants/description';
 
 export type VisualDocumentDirectoryResponse = BaseResponse & {
   data: VisualDocumentDirectory[];
