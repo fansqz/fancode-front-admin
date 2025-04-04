@@ -25,6 +25,11 @@
           <pre>{{ row.creatorName }}</pre>
         </template>
       </el-table-column>
+      <el-table-column label="启用" align="center">
+        <template v-slot="{ row }">
+          <el-text>{{ row.enable == true ? '是' : '否' }}</el-text>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="120px">
         <template v-slot="{ row }">
           <el-button type="primary" size="small" icon="Edit" @click="handlerUpdateBank(row.id)" />
