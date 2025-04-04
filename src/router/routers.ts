@@ -43,7 +43,7 @@ export const constantRoute: Readonly<RouteRecordRaw[]> = [
 ];
 
 // 异步路由
-export const asyncRoute = [
+export const asyncRoute: Readonly<RouteRecordRaw[]> = [
   {
     path: '/manage',
     component: () => import('@/layout/index.vue'),
@@ -53,14 +53,23 @@ export const asyncRoute = [
     },
     children: [
       {
-        path: '/manage/visual-document',
-        name: 'visual-document',
+        path: '/manage/visual-document/bank',
+        name: 'visual-document-bank',
         meta: {
           title: '可视化教程',
           icon: 'Reading',
           hidden: false,
         },
-        component: () => import('@/views/visual-document/index.vue'),
+        component: () => import('@/views/visual-document/bank/index.vue'),
+      },
+      {
+        path: '/manage/visual-document/:bankID',
+        name: 'visual-document',
+        meta: {
+          title: '可视化教程',
+          hidden: true,
+        },
+        component: () => import('@/views/visual-document/document/index.vue'),
       },
       // 题目管理
       {

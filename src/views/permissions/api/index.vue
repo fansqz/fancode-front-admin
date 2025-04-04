@@ -175,7 +175,8 @@
 
 <style scoped lang="scss">
   .box-card {
-    min-height: 100%;
+    min-height: calc(100% - 82px);
+    min-width: 800px;
     margin: 40px;
   }
 </style>

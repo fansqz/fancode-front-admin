@@ -39,6 +39,7 @@ router.beforeEach(async (to: any, _from: any, next: any) => {
     await userStore.userInfo();
     // 等到用户信息加载完毕，异步路由注册以后再放行
     next();
+    return;
   } catch (error) {
     // 意味着token过期
     userStore.userLogout();

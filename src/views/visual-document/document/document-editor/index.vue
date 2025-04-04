@@ -71,7 +71,8 @@
   const emit = defineEmits(['updatedTitle', 'handleDocumentNotFound', 'handleDocumentDelete']);
 
   const activeIndex = ref('document');
-  const { id, parentID, title, content, enable, codeList } = storeToRefs(visualDocumentStore);
+  const { bankID, id, parentID, title, content, enable, codeList } =
+    storeToRefs(visualDocumentStore);
   const inEditTitle = ref(false);
 
   // 获取document
@@ -82,6 +83,7 @@
       emit('handleDocumentNotFound');
     }
     if (result.code == 200) {
+      bankID.value = result.data.bankID;
       parentID.value = result.data.parentID;
       title.value = result.data.title;
       content.value = result.data.content;

@@ -7,6 +7,7 @@ export type VisualDocumentDirectoryResponse = BaseResponse & {
 export type VisualDocumentDirectory = {
   // 可视化节点
   id: number;
+  bankID: number;
   parentID: number;
   title: string;
   enable: boolean;
@@ -20,6 +21,7 @@ export type VisualDocumentResponse = BaseResponse & {
 
 export type VisualDocument = {
   id: number;
+  bankID: number;
   parentID: number;
   title: string;
   content: string;
@@ -29,6 +31,7 @@ export type VisualDocument = {
 };
 
 export type InsertVisualDocumentRequest = {
+  bankID: number;
   parentID: number;
   title: string;
   content: string;
