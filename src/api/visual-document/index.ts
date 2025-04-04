@@ -18,8 +18,10 @@ enum API {
 }
 
 // 获取可视化文档目录
-export const reqVisualDocumentDirectory = (): Promise<VisualDocumentDirectoryResponse> => {
-  return request.get(API.VISUAL_DOCUMENT_DIRECTORY_URL);
+export const reqVisualDocumentDirectory = (
+  bankID: number,
+): Promise<VisualDocumentDirectoryResponse> => {
+  return request.get(API.VISUAL_DOCUMENT_DIRECTORY_URL + '/' + bankID);
 };
 
 // 获取可视化文档

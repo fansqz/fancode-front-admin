@@ -53,6 +53,7 @@
       height: calc(100vh - $base-header-height);
       background: $base-menu-background;
       top: $base-header-height;
+      border-right: 1px solid $base-border-color;
       .scrollbar {
         position: fixed;
         width: $base-menu-width - 1px;

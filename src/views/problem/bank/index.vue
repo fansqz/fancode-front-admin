@@ -25,7 +25,9 @@
         <el-table-column label="序号" width="80px" align="center" type="index"></el-table-column>
         <el-table-column label="题库名称" align="center">
           <template v-slot="{ row }">
-            <TextButton @click="handlerProblemManage(row.id)" :text="row.name" />
+            <el-button @click="handlerProblemManage(row.id)" type="primary" link>{{
+              row.name
+            }}</el-button>
           </template>
         </el-table-column>
         <el-table-column label="题目数量" align="center">

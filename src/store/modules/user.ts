@@ -51,10 +51,6 @@ const useUserStore = defineStore('User', {
         this.loginName = result.data.loginName;
         const userAsyncRoute = filterAsyncRoute(cloneDeep(asyncRoute), result.data.menus);
         this.menuRoutes = [...constantRoute, ...userAsyncRoute, ...anyRoute];
-        // 注册异步路由
-        userAsyncRoute.forEach((route: any) => {
-          router.addRoute(route);
-        });
       } else {
         return Promise.reject(new Error(result.message));
       }

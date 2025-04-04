@@ -1,12 +1,19 @@
 <template>
   <div class="container">
-    <div class="root-node"
-      ><el-button link size="samll" class="button" @click="clickAddVisualDocument(0)"
+    <div class="root-node">
+      <el-button
+        class="back iconfont icon-back"
+        link
+        size="large"
+        @click="gotoBankList"
+      ></el-button>
+      <el-text class="bank-name" size="large">{{ bank.name }}</el-text>
+      <el-button link size="samll" class="button" @click="clickAddVisualDocument(0)"
         >+</el-button
       ></div
     >
     <el-tree
-      :data="data"
+      :data="direcotry"
       :props="props"
       highlight-current="true"
       :expand-on-click-node="false"
@@ -70,25 +77,43 @@
     reqUpdateVisualDocumentDirectory,
   } from '@/api/visual-document';
   import { onMounted, reactive, ref } from 'vue';
-  import VisualDocumentEditor from './visual-document-editor/index.vue';
-  import { defaultDocument } from './visual-document-editor/document-editor/default-document';
+  import VisualDocumentEditor from './document-editor/index.vue';
+  import { defaultDocument } from './document-editor/document-editor/default-document';
   import useVisualDocumentStore from '@/store/modules/visual-document';
+  import { reqVisualDocumentBank } from '@/api/visual-document-bank/index.ts';
+  import { useRoute } from 'vue-router';
+  import { useRouter } from 'vue-router';
   import { storeToRefs } from 'pinia';
-
+  const $route = useRoute();
+  let $router = useRouter();
   const visualDocumentStore = useVisualDocumentStore();
 
+  const convertToNumber = (input: string | string[]): number => {
+    let value: string;
+    if (Array.isArray(input)) {
+      value = input[0];
+    } else {
+      value = input;
+    }
+    return Number(value);
+  };
+
+  let bankID = convertToNumber($route.params.bankID);
   const { id } = storeToRefs(visualDocumentStore);
-  const data = ref<any[]>([]);
+  const direcotry = ref<any[]>([]);
+  const bank = reactive({
+    bankID: bankID,
+    name: '',
+  });
   const props = {
     children: 'children',
     label: 'title',
   };
-
   // 标记是否没有可视化文档数据
   const notVisualDocumentData = ref(false);
-
   // 添加可视化文档的数据
   const visualDocumentForAdd = reactive({
+    bankID: bankID,
     visible: false,
     parentID: 0,
     title: '',
@@ -121,8 +146,8 @@
   // 更新目录并选择第一篇文档
   const selectFirstDocument = async () => {
     await getDirectory();
-    if (data.value.length != 0) {
-      id.value = data.value[0].id;
+    if (direcotry.value.length != 0) {
+      id.value = direcotry.value[0].id;
     } else {
       // 目录无数据
       notVisualDocumentData.value = true;
@@ -132,6 +157,7 @@
   // 添加可视化文档
   const addVisualDocument = async () => {
     let result = await reqInsertVisualDocument({
+      bankID: visualDocumentForAdd.bankID,
       parentID: visualDocumentForAdd.parentID,
       title: visualDocumentForAdd.title,
       content: visualDocumentForAdd.content,
@@ -149,23 +175,34 @@
     visualDocumentForAdd.visible = false;
   };
 
+  // gotoBankList 返回题库列表
+  const gotoBankList = () => {
+    $router.push({ name: 'visual-document-bank', params: {} });
+  };
+
+  // 获取目录
   const getDirectory = async () => {
-    let result = await reqVisualDocumentDirectory();
+    let result = await reqVisualDocumentDirectory(bankID);
     if (result.code == 200) {
-      data.value = result.data;
+      direcotry.value = result.data;
     }
   };
 
   onMounted(async () => {
     await getDirectory();
-    // 如果id为0，那么选择第一篇文档
-    if (id.value == 0) {
-      if (data.value.length != 0) {
-        id.value = data.value[0].id;
+    // 如果id为0，或者store中存储的文档所属题库和当前页面不同，那么重新加载文档
+    if (id.value == 0 || bankID != visualDocumentStore.bankID) {
+      if (direcotry.value.length != 0) {
+        id.value = direcotry.value[0].id;
       } else {
         // 目录无数据
         notVisualDocumentData.value = true;
       }
+    }
+    // 读取读取知识库库
+    let result = await reqVisualDocumentBank(bankID);
+    if (result.code == 200) {
+      bank.name = result.data.name;
     }
   });
 </script>
@@ -177,25 +214,29 @@
     width: calc(100% - 20px);
     box-shadow: 0px 0px 10px rgb(220, 220, 220);
     border-radius: 5px;
+    min-width: 800px;
     .root-node {
-      position: absolute;
+      position: relative;
       top: 0px;
-      width: 200px;
+      width: 220px;
       height: 40px;
       border-right: 1px solid $base-border-color;
       border-bottom: 1px solid $base-border-color;
       box-sizing: border-box;
       display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
+      align-items: center; /* 竖直居中 */
+      .back {
+        width: 30px !important;
+      }
       .button {
-        margin-right: 6px;
+        position: absolute;
+        right: 6px;
       }
     }
     .directory-tree {
       position: absolute;
       top: 40px;
-      width: 200px;
+      width: 220px;
       height: calc(100% - 40px);
       border-right: 1px solid $base-border-color;
       box-sizing: border-box;
@@ -212,15 +253,15 @@
     }
     .editor {
       position: absolute;
-      width: calc(100% - 200px);
+      width: calc(100% - 220px);
       height: 100%;
       top: 0px;
-      left: 200px;
+      left: 220px;
       margin: 0px;
     }
     .not-record {
       position: absolute;
-      width: calc(100% - 200px);
+      width: calc(100% - 220px);
       height: 100%;
       top: 0px;
       left: 200px;
