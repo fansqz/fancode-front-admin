@@ -4,7 +4,6 @@ import { reqLogin } from '@/api/auth';
 import { reqAccountInfo } from '@/api/account';
 // 引入路由
 import { constantRoute, asyncRoute, anyRoute } from '@/router/routers';
-import router from '@/router';
 //@ts-ignore
 import cloneDeep from 'lodash/cloneDeep';
 import { reqGetURL } from '@/api/common';

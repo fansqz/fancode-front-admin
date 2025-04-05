@@ -23,7 +23,9 @@
     "@types/vue-router": "^2.0.0",
     "@vue/runtime-dom": "^3.5.13",
     "axios": "^1.7.9",
+    "babel-plugin-prismjs": "^2.1.0",
     "element-plus": "^2.9.3",
+    "highlight.js": "^11.11.1",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
@@ -41,7 +43,9 @@
     "stylelint-config-standard": "^37.0.0",
     "stylelint-order": "^6.0.4",
     "stylelint-scss": "^6.10.1",
+    "vite-plugin-prismjs": "^0.0.11",
     "vue": "^3.5.11",
+    "vue-codemirror": "^6.1.1",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
