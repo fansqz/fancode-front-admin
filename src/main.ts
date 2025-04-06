@@ -23,6 +23,7 @@ import '@/styles/index.scss';
 // markdowm
 import VueMarkdownEditor from '@kangc/v-md-editor';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
+import '@kangc/v-md-editor/lib/style/preview-html.css';
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 import Prism from 'prismjs';
@@ -33,6 +34,13 @@ const app = createApp(App);
 const initMarkdowmEditor = (app: any) => {
   VueMarkdownEditor.use(vuepressTheme, {
     Prism,
+  });
+  VueMarkdownEditor.xss.extend({
+    // 扩展白名单
+    whiteList: {
+      iframe: ['src', 'width', 'height', 'frameborder', 'allowfullscreen'],
+      source: [],
+    },
   });
   app.use(VueMarkdownEditor);
 };
