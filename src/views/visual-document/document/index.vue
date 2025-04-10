@@ -264,7 +264,7 @@
       width: calc(100% - 220px);
       height: 100%;
       top: 0px;
-      left: 200px;
+      left: 220px;
       margin: 0px;
       display: flex;
       flex-direction: column;
