@@ -8,4 +8,8 @@ export enum languageConstants {
   JavaScript = 'javascript',
 }
 
-export const supportedLanguages: languageConstants[] = [languageConstants.C, languageConstants.GO,languageConstants.CPP];
+export const supportedLanguages: languageConstants[] = [
+  languageConstants.C,
+  languageConstants.GO,
+  languageConstants.CPP,
+];
