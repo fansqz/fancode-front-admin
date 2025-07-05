@@ -91,9 +91,7 @@
       let list: any[] = [];
       for (let i = 0; i < result.data.codeList.length; i++) {
         const codeItem = result.data.codeList[i];
-        // 反序列化 setting 属性
         list.push({
-          visualSetting: JSON.parse(codeItem.visualSetting),
           code: codeItem.code,
           language: codeItem.language,
           breakpoints: codeItem.breakpoints,
@@ -133,7 +131,6 @@
         code: data.code,
         language: data.language,
         breakpoints: data.breakpoints,
-        visualSetting: JSON.stringify(data.visualSetting),
       });
     }
     let result = await reqUpdateVisualDocument({

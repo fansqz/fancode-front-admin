@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { VisualSetting } from '@/api/visual-document/type.ts';
 
 export type VisualDocument = {
   bankID: number;
@@ -28,7 +27,6 @@ export type VisualDocumentCode = {
   code: string;
   language: string;
   breakpoints: number[];
-  visualSetting: VisualSetting;
 };
 
 export default useVisualDocumentStore;
