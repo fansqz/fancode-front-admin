@@ -48,7 +48,6 @@
   import { onMounted, reactive, ref } from 'vue';
   import type { TabPaneName } from 'element-plus';
   import useVisualDocumentStore from '@/store/modules/visual-document.ts';
-  import { descriptions } from '@/constants/description';
   import CodeEditorItem from './code-editor-item.vue';
   import { defaultCodeMap } from './code/default-code';
   import { languageConstants, supportedLanguages } from '@/constants/languages.ts';
@@ -81,13 +80,6 @@
       code: defaultCode,
       language: addVisualCode.selectedLanguage,
       breakpoints: [],
-      visualSetting: {
-        type: descriptions.Array,
-        description: {
-          arrayName: 'arr',
-          pointNames: ['point1', 'point2'],
-        },
-      },
     });
     actionLanguageValue.value = addVisualCode.selectedLanguage;
     addVisualCode.visible = false;

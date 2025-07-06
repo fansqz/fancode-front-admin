@@ -12,33 +12,33 @@
         >+</el-button
       ></div
     >
-    <el-tree
-      :data="direcotry"
-      :props="props"
-      highlight-current="true"
-      :expand-on-click-node="false"
-      :current-node-key="id"
-      draggable
-      default-expand-all
-      node-key="id"
-      class="directory-tree"
-      indent="8"
-      @node-click="clickEditorVisualDocument"
-      @node-drag-end="handleUpdateDocumentParent"
-    >
-      <template #default="scope">
-        <div class="tree_item">
-          <el-text>{{ scope.node.label }}</el-text>
-          <el-button
-            link
-            size="samll"
-            class="button"
-            @click="clickAddVisualDocument(scope.node.data)"
-            >+</el-button
-          >
-        </div>
-      </template>
-    </el-tree>
+    <el-scrollbar class="directory-tree">
+      <el-tree
+        :data="direcotry"
+        :props="props"
+        highlight-current="true"
+        :expand-on-click-node="false"
+        :current-node-key="id"
+        draggable
+        node-key="id"
+        indent="8"
+        @node-click="clickEditorVisualDocument"
+        @node-drag-end="handleUpdateDocumentParent"
+      >
+        <template #default="scope">
+          <div class="tree_item">
+            <el-text>{{ scope.node.label }}</el-text>
+            <el-button
+              link
+              size="samll"
+              class="button"
+              @click="clickAddVisualDocument(scope.node.data)"
+              >+</el-button
+            >
+          </div>
+        </template>
+      </el-tree>
+    </el-scrollbar>
     <div v-if="!notVisualDocumentData" class="editor">
       <VisualDocumentEditor
         :key="id"
